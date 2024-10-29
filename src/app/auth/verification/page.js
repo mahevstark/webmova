@@ -4,6 +4,7 @@ import { useState } from "react";
 import signinbg from "../../../assets/signin-bg.png";
 import Callicon from "../../../assets/call-icon.svg";
 import Button from "../../../components/button/page";
+import Link from "next/link";
 
 export default function verification() {
   const [showPassword, setShowPassword] = useState(false);
@@ -93,7 +94,8 @@ export default function verification() {
                 <p className="text-green-700 font-semibold ">00:54</p>
                 <p className="text-gray-400 mt-1 ">Send again</p>
             </span>
-            <Button value="Verify" classname="py-3 px-3 w-full mt-6" />
+          
+            <Link href="/auth/create-password">   <Button value="Verify" classname="py-3 px-3 w-full mt-6" /></Link>
           </div>
         </div>
       </div>

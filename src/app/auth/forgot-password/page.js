@@ -4,7 +4,7 @@ import { useState } from 'react'
 import signinbg from '../../../assets/signin-bg.png'
 import Callicon from '../../../assets/call-icon.svg'
 import Button from '../../../components/button/page'
-
+import Link from 'next/link'
 export default function forgotpassword() {
   const [showPassword, setShowPassword] = useState(false)
 
@@ -54,7 +54,7 @@ export default function forgotpassword() {
               </span>
             </div>
             
-            <Button value="Send OTP" classname="py-3 px-3 w-full mt-6" />
+           <Link href="/auth/verification"> <Button value="Send OTP" classname="py-3 px-3 w-full mt-6" /></Link>
           </form>
         </div>
       </div>
