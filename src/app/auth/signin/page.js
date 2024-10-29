@@ -74,7 +74,7 @@ export default function signin() {
               </button>
             </div>
             <div className="text-right">
-              <a href="#" className="text-sm text-gray-400">Forgot Password?</a>
+              <a href="/auth/forgot-password" className="text-sm text-gray-400">Forgot Password?</a>
             </div>
             <Button value="sign in" classname="py-3 px-3 w-full" />
           </form>

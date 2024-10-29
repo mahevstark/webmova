@@ -3,9 +3,9 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import signinbg from '../../../assets/signin-bg.png'
-import Callicon from '../../../assets/call-icon.svg'
 import Keyicon from '../../../assets/key.svg'
 import Button from '../../../components/button/page'
+import Link from 'next/link'
 
 export default function createpassword() {
   const [showPassword, setShowPassword] = useState(false)
@@ -83,8 +83,10 @@ export default function createpassword() {
                 {showPassword ? <EyeOff className="h-5 w-5 text-gray-400" /> : <Eye className="h-5 w-5 text-gray-400" />}
               </button>
             </div>
-            
+            <Link href="/"> 
             <Button value="sign in" classname="py-3 px-3 w-full mt-6" />
+            </Link>
+         
           </form>
         </div>
       </div>

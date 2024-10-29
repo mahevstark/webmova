@@ -6,15 +6,15 @@ import Active from "../../assets/active.svg";
 import employees from "@/app/dashboard/employees/page";
 
 const menuItems = [
-  { name: "Dashboard", icon: Activity, href: "#", activeicon: Active },
+  { name: "Dashboard", icon: Activity, href: "/", activeicon: Active },
   { name: "Employees", icon: Activity, href: "/dashboard/employees", activeicon: Active },
   {
     name: "Transaction History",
     icon: Activity,
-    href: "#",
+    href: "/dashboard/transaction-history",
     activeicon: Active,
   },
-  { name: "Payment Request", icon: Activity, href: "#", activeicon: Active },
+  { name: "Payment Request", icon: Activity, href: "/dashboard/payment-request", activeicon: Active },
   { name: "Setting", icon: Activity, href: "#", activeicon: Active },
 ];
 
@@ -81,15 +81,15 @@ export default function Sidebar() {
           </ul>
         </nav>
         <div className="p-4">
-          <button
+         <Link href="/auth/signin"> <button
             className="flex items-center text-sm custom-p-color px-4 py-2 w-full font-semibold"
             onClick={() => {
-              /* Add logout functionality */
+            
             }}
           >
             <Active className="mr-3" />
             Logout
-          </button>
+          </button></Link>
         </div>
       </aside>
     </div>

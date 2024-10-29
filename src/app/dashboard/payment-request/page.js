@@ -168,6 +168,21 @@ export default function paymentrequest() {
                           >
                             View
                           </Button>
+
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-blue-500 font-semibold  border-none text-left hover:text-blue-500"
+                          >
+                            Accept
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-blue-500 font-semibold  border-none text-left hover:text-blue-500"
+                          >
+                            Decline
+                          </Button>
                         </div>
                       </TableCell>
                     </TableRow>

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
 import {
   Table,
   TableBody,
@@ -23,6 +24,7 @@ import {
 import { Search } from "lucide-react";
 import Active from "../../../assets/active-em.svg";
 import Nonactive from "../../../assets/nonactive.svg";
+import Link from "next/link";
 
 const employees = [
   {
@@ -225,13 +227,13 @@ export default function employee() {
                               ? "Deactivate"
                               : "Activate"}
                           </Button>
-                          <Button
+                        <Link href="/dashboard/employees/2">  <Button
                             variant="outline"
                             size="sm"
                             className="text-blue-500 font-semibold  border-none text-left hover:text-blue-500"
                           >
                             View
-                          </Button>
+                          </Button></Link>
                           <Button
                             variant="outline"
                             size="sm"
