@@ -1,3 +1,4 @@
+'use client'
 import Layout from "../../../../components/layout/layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,8 +12,10 @@ import {
 } from "@/components/ui/table";
 import Image from "next/image";
 import Dcard from "../../../../assets/card.png";
+import DeleteConfirmation from '../../../../pop-ups/delete-employee';
 import Link from "next/link";
 import { Switch } from "@/components/ui/switch";
+import { useState } from "react";
 
 export default function profile() {
   const employees = [
@@ -67,9 +70,29 @@ export default function profile() {
       action: "View",
     },
   ];
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const openDeleteDialog = () => {
+    setIsDeleteDialogOpen(true);
+  };
+
+  const closeDeleteDialog = () => {
+    setIsDeleteDialogOpen(false);
+  };
+
+  // Function to handle the delete action
+  const handleDelete = () => {
+   
+    closeDeleteDialog();
+  };
+  var page = "Employees";
 
   return (
-    <Layout>
+    <Layout page={page}> <DeleteConfirmation
+    isOpen={isDeleteDialogOpen}   // Pass state to control visibility
+    onClose={closeDeleteDialog}   // Function to close the dialog
+    onDelete={handleDelete}       // Function to handle the delete action
+  />
       <div className="px-4 sm:px-6 md:px-10">
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
@@ -93,11 +116,11 @@ export default function profile() {
                   Add Balance
                 </Button>
               </Link>{" "}
-              <Link href="#">
-                <Button className="button-border btn-txt-color bg-white hover:bg-white border ">
+             
+                <Button className="button-border btn-txt-color bg-white hover:bg-white border " onClick={openDeleteDialog}>
                   Delete Employee
                 </Button>
-              </Link>
+             
             </div>
           </div>
 

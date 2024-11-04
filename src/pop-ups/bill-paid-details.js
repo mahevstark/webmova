@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import Paid from "../assets/paid/paid.png";
 import Image from "next/image";
 
-export default function Component({ details, isOpen, onClose, request }) {
+export default function billpaid({ isOpen, onClose, bill }) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -30,32 +30,21 @@ export default function Component({ details, isOpen, onClose, request }) {
 
   return (
     <div
-      className={`absolute cls inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 transition-opacity   ${
+      className={`absolute billpaid inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 transition-opacity   ${
         isOpen ? "opacity-100 " : "opacity-0 "
       }`}
     >
       <Card className="w-full max-w-sm mx-auto bg-white ">
         <CardHeader className="text-center">
-          {!request && <Image src={Paid} alt="check" className="mx-auto" />}
-          {request === "transaction" && (
-            <Image src={Paid} alt="check" className="mx-auto" />
-          )}
+          <Image src={Paid} alt="check" className="mx-auto" />
 
-          {(request && (
-            <CardTitle className="text-2xl font-semibold">
-              ${details.amountSent}{" "}
-              {request === "transaction" ? "Added" : "Request Send for $5k "}
-            </CardTitle>
-          )) || (
-            <CardTitle className="text-2xl font-semibold">
-              ${details.amountSent.toLocaleString()}k Sent
-            </CardTitle>
-          )}
-          <p className="text-sm text-p font-medium mt-7">
+          <CardTitle className="text-2xl font-semibold">Bill Payed</CardTitle>
+
+          <p className="text-sm text-p text-center font-medium mt-7">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed gravida
             mi id purus
           </p>
-          <button className="btn-bg hover:bg-inherit rounded-xl text-black">
+          <button className="btn-bg hover:bg-current rounded-xl text-black">
             Details
           </button>
         </CardHeader>
@@ -64,40 +53,44 @@ export default function Component({ details, isOpen, onClose, request }) {
           <div className="space-y-2">
             <div className="flex justify-between">
               <span className="txt-detail">Sender Name</span>
-              <span className="txt-detail">{details.senderName}</span>
+              <span className="txt-detail">{bill.senderName}</span>
             </div>
             <div className="flex justify-between">
               <span className="txt-detail">Receiver Name</span>
-              <span className="txt-detail">{details.receiverName}</span>
+              <span className="txt-detail">{bill.receiverName}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="txt-detail">Bill ID</span>
+              <span className="txt-detail">{bill.billid}</span>
             </div>
             <div className="flex justify-between">
               <span className="txt-detail">Receiver Account Type</span>
-              <span className="txt-detail">{details.receiverAccountType}</span>
+              <span className="txt-detail">{bill.receiverAccountType}</span>
             </div>
-            {request === "transaction" && (
-              <div>
-                <p className="line-color">
-                  ---------------------------------------------------
-                </p>
-              </div>
-            )}
+            <div className="flex justify-between">
+              <span className="txt-detail">Date</span>
+              <span className="txt-detail">{bill.date}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="txt-detail">Time</span>
+              <span className="txt-detail">{bill.time}</span>
+            </div>
+            <div>
+              <p className="line-color">
+                ---------------------------------------------------
+              </p>
+            </div>
             <div className="flex justify-between">
               <span className="txt-detail">Amount Sent</span>
               <span className="txt-detail">
-                ${details.amountSent.toLocaleString()}
+                ${bill.amountSent.toLocaleString()}
               </span>
             </div>
-            {!request === "transaction" && (
-              <div>
-                <p className="line-color">
-                  ---------------------------------------------------
-                </p>
-              </div>
-            )}
+
             <div className="flex justify-between">
               <span className="txt-detail">Service Fee</span>
               <span className="txt-detail">
-                ${details.serviceFee.toLocaleString()}
+                ${bill.serviceFee.toLocaleString()}
               </span>
             </div>
           </div>

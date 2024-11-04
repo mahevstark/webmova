@@ -26,9 +26,10 @@ export default function SendMoney() {
     console.log("Form submitted:", formData);
     // Here you would typically send the data to your backend
   };
+  var page="Dashboard"
 
   return (
-    <Layout>
+    <Layout  page={page}>
       <div className="px-11">
       
         <h1 className="text-2xl font-semibold mb-4">Send Money</h1>

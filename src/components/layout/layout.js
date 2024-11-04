@@ -1,10 +1,10 @@
 import Header from "../header/page";
 import Sidebarlayout from "../side-bar-layout/page";
 
-const Layout = ({ children }) => {
+const Layout = ({ children ,page}) => {
   return (
     <div className="flex ">
-      <Sidebarlayout />
+      <Sidebarlayout page={page} />
 
       <div className="w-full ">
         <Header />

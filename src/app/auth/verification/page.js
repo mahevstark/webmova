@@ -1,17 +1,33 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import signinbg from "../../../assets/signin-bg.png";
-import Callicon from "../../../assets/call-icon.svg";
 import Button from "../../../components/button/page";
 import Link from "next/link";
 
-export default function verification() {
-  const [showPassword, setShowPassword] = useState(false);
+export default function Verification() {
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const inputRefs = useRef([]);
+
+  const handleChange = (value, index) => {
+    const newOtp = [...otp];
+    newOtp[index] = value.slice(0, 1); 
+    setOtp(newOtp);
+
+    
+    if (value && index < inputRefs.current.length - 1) {
+      inputRefs.current[index + 1].focus();
+    }
+  };
+
+  const handleBackspace = (e, index) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      inputRefs.current[index - 1].focus();
+    }
+  };
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
-      {/* Left side - Image and overlay text */}
       <div className="relative w-full md:w-1/2 bg-gray-900 h-1/2 md:h-full">
         <Image
           src={signinbg}
@@ -35,10 +51,9 @@ export default function verification() {
         </div>
       </div>
 
-      {/* Right side - Login form */}
-      <div className="w-full md:w-1/2 bg-white p-6 md:p-8 flex items-center justify-center ">
+      <div className="w-full md:w-1/2 bg-white p-6 md:p-8 flex items-center justify-center">
         <div className="w-full max-w-md text-center flex items-center justify-center flex-col">
-          <div className="text-center   pb-6">
+          <div className="text-center pb-6">
             <h2 className="text-2xl md:text-3xl font-semibold mb-6 md:mb-6 text-center">
               Verify your Number{" "}
             </h2>
@@ -47,55 +62,33 @@ export default function verification() {
               sollicitudin tincidunt{" "}
             </p>
           </div>
-          <div className="space-y-4 ">
+          <div className="space-y-4">
             <div className="flex gap-5 mx-auto pb-6">
-              <span className="flex items-center w-11 h-10 border-2 border-color-input rounded-lg p-2">
-                <input
-                  type="tel"
-                  className="w-full h-full border-0 outline-none focus:ring-0"
-                
-                />
-              </span>
-              <span className="flex items-center w-11 h-10 border-2 border-color-input rounded-lg p-2">
-                <input
-                  type="tel"
-                  className="w-full h-full border-0 outline-none focus:ring-0"
-                
-                />
-              </span>
-              <span className="flex items-center w-11 h-10 border-2 border-color-input rounded-lg p-2">
-                <input
-                  type="tel"
-                  className="w-full h-full border-0 outline-none focus:ring-0"
-                
-                />
-              </span> <span className="flex items-center w-11 h-10 border-2 border-color-input rounded-lg p-2">
-                <input
-                  type="tel"
-                  className="w-full h-full border-0 outline-none focus:ring-0"
-                
-                />
-              </span> <span className="flex items-center w-11 h-10 border-2 border-color-input rounded-lg p-2">
-                <input
-                  type="tel"
-                  className="w-full h-full border-0 outline-none focus:ring-0"
-                
-                />
-              </span> <span className="flex items-center w-11 h-10 border-2 border-color-input rounded-lg p-2">
-                <input
-                  type="tel"
-                  className="w-full h-full border-0 outline-none focus:ring-0"
-                
-                />
-              </span>
+              {otp.map((digit, index) => (
+                <span
+                  key={index}
+                  className="flex items-center w-11 h-10 border-2 border-color-input rounded-lg p-2"
+                >
+                  <input
+                    type="tel"
+                    value={digit}
+                    onChange={(e) => handleChange(e.target.value, index)}
+                    onKeyDown={(e) => handleBackspace(e, index)}
+                    ref={(el) => (inputRefs.current[index] = el)}
+                    className="w-full h-full border-0 outline-none focus:ring-0 text-center"
+                  />
+                </span>
+              ))}
             </div>
 
             <span>
-                <p className="text-green-700 font-semibold ">00:54</p>
-                <p className="text-gray-400 mt-1 ">Send again</p>
+              <p className="text-green-700 font-semibold">00:54</p>
+              <p className="text-gray-400 mt-1">Send again</p>
             </span>
-          
-            <Link href="/auth/create-password">   <Button value="Verify" classname="py-3 px-3 w-full mt-6" /></Link>
+
+            <Link href="/auth/create-password">
+              <Button value="Verify" classname="py-3 px-3 w-full mt-6" />
+            </Link>
           </div>
         </div>
       </div>

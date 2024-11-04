@@ -64,9 +64,10 @@ export default function Dashboard() {
       amount: "$500",
     },
   ];
+  var page="Dashboard"
 
   return (
-    <Layout>
+    <Layout page={page}>
      
       <div className="px-4 sm:px-6 md:px-10">
         

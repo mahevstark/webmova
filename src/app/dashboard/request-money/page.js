@@ -3,7 +3,7 @@ import Layout from "../../../components/layout/layout";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
+import Pin from '../../../pop-ups/pin';
 export default function requestmoney() {
   const [formData, setFormData] = useState({
     amount: "",
@@ -22,11 +22,12 @@ export default function requestmoney() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
-    // Here you would typically send the data to your backend
+   
   };
+  var page="Dashboard"
 
   return (
-    <Layout>
+    <Layout page={page}>
       <div className="px-11">
         <h1 className="text-2xl font-semibold mb-4">Payment Request</h1>
         <p className="text-gray-600 mb-6 text-sm">
@@ -76,12 +77,12 @@ export default function requestmoney() {
                 className="w-full p-2 border rounded-md mt-2"
               />
             </div>
-            <Button
-              type="submit"
-              className="button-background text-white font-semibold border rounded-lg w-full"
-            >
-              NEXT
-            </Button>
+            
+            <Pin
+          value="Next"
+          style="button-background text-white font-semibold border rounded-lg w-full mt-12  no-hover "
+          request="payment"
+        />
           </form>
         </div>
       </div>
