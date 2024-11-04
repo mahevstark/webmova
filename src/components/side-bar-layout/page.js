@@ -3,31 +3,57 @@ import { useState } from "react";
 import Link from "next/link";
 import Activity from "../../assets/Activity.svg";
 import Active from "../../assets/active.svg";
-import employees from "@/app/dashboard/employees/page";
 
 const menuItems = [
-  { name: "Dashboard", icon: Activity, href: "/", activeicon: Active },
-  { name: "Employees", icon: Activity, href: "/dashboard/employees", activeicon: Active },
+  {
+    name: "Dashboard",
+    icon: Activity,
+    href: "/",
+    activeicon: Active,
+    check: "Dashboard",
+  },
+  {
+    name: "Employees",
+    icon: Activity,
+    href: "/dashboard/employees",
+    activeicon: Active,
+    check: "Employees",
+  },
   {
     name: "Transaction History",
     icon: Activity,
     href: "/dashboard/transaction-history",
     activeicon: Active,
+    check: "transactionhistory",
   },
-  { name: "Payment Request", icon: Activity, href: "/dashboard/payment-request", activeicon: Active },
-  { name: "Setting", icon: Activity, href: "#", activeicon: Active },
+  {
+    name: "Payment Request",
+    icon: Activity,
+    href: "/dashboard/payment-request",
+    activeicon: Active,
+    check: "paymentrequest",
+  },
+  {
+    name: "Setting",
+    icon: Activity,
+    href: "/dashboard/settings/profile",
+    activeicon: Active,
+    check: "settings",
+  },
 ];
 
-export default function Sidebar() {
-  const [activeItem, setActiveItem] = useState("Dashboard");
+export default function Sidebar({ page }) {
+  const place = page;
+  const [activeItem, setActiveItem] = useState(page);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  console.log(place);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
   return (
-    <div className="flex relative">
+    <div className="flex relative items-start">
       {/* Toggle button for small screens */}
       <button
         className="block md:hidden p-4 text-gray-800"
@@ -60,16 +86,17 @@ export default function Sidebar() {
                 <Link
                   href={item.href}
                   className={`flex items-center px-4 py-4 rounded-lg text-sm ${
-                    activeItem === item.name
+                    activeItem === item.check
                       ? "text-white button-background font-semibold"
-                      : "custom-p-color hover:bg-gray-100 font-semibold"
+                      : "custom-p-color  hover:bg-gray-100 font-semibold"
                   }`}
                   onClick={() => {
-                    setActiveItem(item.name);
+                    // setActiveItem(item.name);
+                    setActiveItem(page);
                     setSidebarOpen(false); // Close sidebar after click on mobile
                   }}
                 >
-                  {activeItem === item.name ? (
+                  {activeItem === item.check ? (
                     <item.icon className="mr-3" />
                   ) : (
                     <item.activeicon className="mr-3" />
@@ -81,15 +108,16 @@ export default function Sidebar() {
           </ul>
         </nav>
         <div className="p-4">
-         <Link href="/auth/signin"> <button
-            className="flex items-center text-sm custom-p-color px-4 py-2 w-full font-semibold"
-            onClick={() => {
-            
-            }}
-          >
-            <Active className="mr-3" />
-            Logout
-          </button></Link>
+          <Link href="/auth/signin">
+            {" "}
+            <button
+              className="flex items-center text-sm custom-p-color px-4 py-2 w-full font-semibold"
+              onClick={() => {}}
+            >
+              <Active className="mr-3" />
+              Logout
+            </button>
+          </Link>
         </div>
       </aside>
     </div>

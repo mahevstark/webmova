@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
+import PaymentRequestPopup from '../../../pop-ups/payment-req-details' // Adjust the path as necessary
 
 const employees = [
   {
@@ -31,56 +32,31 @@ const employees = [
     time: "10:30 AM",
     type: "Credit",
     amount: "$500",
-    action: "View",
+    serviceFee: "$5", // Add service fee
   },
-  {
-    id: 2,
-    name: "Dummy name",
-    accountNumber: "0817239419528913",
-    day: "23-07-2024",
-    time: "2:15 PM",
-    type: "Debit",
-    amount: "$200",
-    action: "View",
-  },
-  {
-    id: 3,
-    name: "Dummy name",
-    accountNumber: "0817239419528913",
-    day: "23-07-2024",
-    time: "9:00 AM",
-    type: "Credit",
-    amount: "$750",
-    action: "View",
-  },
-  {
-    id: 4,
-    name: "Dummy name",
-    accountNumber: "0817239419528913",
-    day: "23-07-2024",
-    time: "3:45 PM",
-    type: "Debit",
-    amount: "$100",
-    action: "View",
-  },
-  {
-    id: 5,
-    name: "Dummy name",
-    accountNumber: "0817239419528913",
-    day: "23-07-2024",
-    time: "11:30 AM",
-    type: "Credit",
-    amount: "$300",
-    action: "View",
-  },
+  // Add more employee objects...
 ];
-export default function paymentrequest() {
+
+export default function PaymentRequest() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedData, setSelectedData] = useState(null);
+  
+  const page = "paymentrequest";
+
+  const handleView = (employee) => {
+    setSelectedData(employee); // Set the selected employee data
+    setIsOpen(true); // Open the popup
+  };
+
+  const handleClose = () => {
+    setIsOpen(false); // Close the popup
+  };
 
   return (
-    <Layout>
+    <Layout page={page}>
       <div className="container mx-auto px-4 sm:px-6 md:px-10 w-72 sm:w-full">
-        <h1 className="text-2xl font-semibold mb-4">Transection History</h1>
+        <h1 className="text-2xl font-semibold mb-4">Transaction History</h1>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
           <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
             <Select className="border-class-employee w-full sm:w-[180px]">
@@ -115,71 +91,44 @@ export default function paymentrequest() {
                 <TableHeader className="tb-col">
                   <TableRow>
                     <TableHead className=" sm:table-cell"></TableHead>
-                    <TableHead className="font-semibold text-black">
-                      Sender Name
-                    </TableHead>
-                    <TableHead className=" sm:table-cell font-semibold text-black">
-                      Receiver Name
-                    </TableHead>
-                    <TableHead className=" sm:table-cell font-semibold text-black">
-                      Account Number
-                    </TableHead>
-
-                    <TableHead className="font-semibold text-black">
-                      Amount
-                    </TableHead>
-                    <TableHead className=" sm:table-cell font-semibold text-black">
-                      Service Fee
-                    </TableHead>
-                    <TableHead className="font-semibold text-black">
-                      Action
-                    </TableHead>
+                    <TableHead className="font-semibold text-black">Sender Name</TableHead>
+                    <TableHead className=" sm:table-cell font-semibold text-black">Receiver Name</TableHead>
+                    <TableHead className=" sm:table-cell font-semibold text-black">Account Number</TableHead>
+                    <TableHead className="font-semibold text-black">Amount</TableHead>
+                    <TableHead className=" sm:table-cell font-semibold text-black">Service Fee</TableHead>
+                    <TableHead className="font-semibold text-black">Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {employees.map((employee) => (
-                    <TableRow
-                      key={employee.id}
-                      className="text-muted-foreground border-0"
-                    >
-                      <TableCell className=" sm:table-cell">
-                        {employee.id}
-                      </TableCell>
+                    <TableRow key={employee.id} className="text-muted-foreground border-0">
+                      <TableCell className=" sm:table-cell">{employee.id}</TableCell>
                       <TableCell>{employee.name}</TableCell>
-                      <TableCell className=" sm:table-cell">
-                        {employee.accountNumber}
-                      </TableCell>
-                      <TableCell className=" sm:table-cell">
-                        {employee.day}
-                      </TableCell>
-                      <TableCell className=" sm:table-cell">
-                        {employee.time}
-                      </TableCell>
-                      <TableCell className=" sm:table-cell">
-                        {employee.type}
-                      </TableCell>
-
+                      <TableCell className=" sm:table-cell">{employee.accountNumber}</TableCell>
+                      <TableCell className=" sm:table-cell">{employee.day}</TableCell>
+                      <TableCell className=" sm:table-cell">{employee.time}</TableCell>
+                      <TableCell className=" sm:table-cell">{employee.type}</TableCell>
                       <TableCell>
                         <div className="flex flex-col sm:flex-row ">
                           <Button
                             variant="outline"
                             size="sm"
-                            className="text-blue-500 font-semibold  border-none text-left hover:text-blue-500"
+                            className="text-blue-500 font-semibold border-none text-left hover:text-blue-500"
+                            onClick={() => handleView(employee)} // Pass employee data
                           >
                             View
                           </Button>
-
                           <Button
                             variant="outline"
                             size="sm"
-                            className="text-blue-500 font-semibold  border-none text-left hover:text-blue-500"
+                            className="text-blue-500 font-semibold border-none text-left hover:text-blue-500"
                           >
                             Accept
                           </Button>
                           <Button
                             variant="outline"
                             size="sm"
-                            className="text-blue-500 font-semibold  border-none text-left hover:text-blue-500"
+                            className="text-blue-500 font-semibold border-none text-left hover:text-blue-500"
                           >
                             Decline
                           </Button>
@@ -193,6 +142,24 @@ export default function paymentrequest() {
           </Card>
         </div>
       </div>
+
+      {/* Payment Request Popup */}
+      <PaymentRequestPopup
+        isOpen={isOpen}
+        onClose={handleClose}
+        onApprove={() => {
+          // Handle approval logic here
+          console.log("Approved", selectedData);
+          handleClose(); // Close the popup after approval
+        }}
+        onDecline={() => {
+          // Handle decline logic here
+          console.log("Declined", selectedData);
+          handleClose(); // Close the popup after decline
+        }}
+        data={selectedData} // Pass the selected data to the popup
+        setIsOpen={setIsOpen}
+      />
     </Layout>
   );
 }

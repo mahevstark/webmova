@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Paymentsent from '../../../pop-ups/completed'
 import {
   Table,
   TableBody,
@@ -21,7 +22,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
-
+const details = {
+  senderName: "John Doe",
+  receiverName: "Jane Smith",
+  receiverAccountType: "Savings",
+  amountSent: 500,
+  serviceFee: 15,
+  title:"Request Send for $5k"
+};
 const employees = [
   {
     id: 1,
@@ -76,9 +84,14 @@ const employees = [
 ];
 export default function transactionhistory() {
   const [searchTerm, setSearchTerm] = useState("");
+  var page="transactionhistory"
+  const [showExpertise, setShowExpertise] = useState(false);
+  const toggleExpertise = () => setShowExpertise(!showExpertise);
+
 
   return (
-    <Layout>
+    <Layout page={page}>
+      <Paymentsent isOpen={showExpertise} closeModal={toggleExpertise} details={details} request={"transaction"} />
       <div className="container mx-auto px-4 sm:px-6 md:px-10 w-72 sm:w-full">
         <h1 className="text-2xl font-semibold mb-4">Transection History</h1>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
@@ -170,8 +183,9 @@ export default function transactionhistory() {
                             variant="outline"
                             size="sm"
                             className="text-blue-500 font-semibold  border-none text-left hover:text-blue-500"
-                          >
+                            onClick={toggleExpertise}    >
                             View
+                          
                           </Button>
                         </div>
                       </TableCell>
