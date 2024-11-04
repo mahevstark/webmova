@@ -72,7 +72,7 @@ export default function Sidebar({ page }) {
 
       {/* Sidebar (hidden on small screens when not active) */}
       <aside
-        className={`bg-white w-80 min-h-screen flex flex-col text-center p-5 fixed md:static transition-transform duration-300 z-20 ${
+        className={`bg-white w-80 min-h-screen flex flex-col text-center p-5 fixed md:static transition-transform duration-300 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >

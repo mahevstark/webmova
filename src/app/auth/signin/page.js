@@ -6,7 +6,7 @@ import signinbg from '../../../assets/signin-bg.png'
 import Callicon from '../../../assets/call-icon.svg'
 import Keyicon from '../../../assets/key.svg'
 import Button from '../../../components/button/page'
-
+import Link from 'next/link';
 export default function signin() {
   const [showPassword, setShowPassword] = useState(false)
 
@@ -76,7 +76,7 @@ export default function signin() {
             <div className="text-right">
               <a href="/auth/forgot-password" className="text-sm text-gray-400">Forgot Password?</a>
             </div>
-            <Button value="sign in" classname="py-3 px-3 w-full" />
+         <Link href="/dashboard/">   <Button value="sign in" classname="py-3 px-3 mt-2 w-full" /></Link>
           </form>
         </div>
       </div>

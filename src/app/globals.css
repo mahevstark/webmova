@@ -42,6 +42,9 @@ color:#CCCCCC;
   color:#544af1;
 }
 
+.btn-backg{
+  background:#6C5DD3 ;
+}
 /*  border color  */
 
 .border-color-input{
@@ -102,7 +105,9 @@ color:#CCCCCC;
 .text-p{
   color:#8E8E93
 }
-
+.c-input{
+  width: 266px;
+}
 .btn-border{
   border-color:#646464;
   color:#646464;

@@ -56,7 +56,7 @@ export default function deleteaccount() {
 
             <div className="flex gap-2 ">
                 <input type="checkbox" />
-                <p  className="text-sm" style={{color:"#717171"}}>I accept <span className="btn-txt">Privacy policy</span> & <span>Terms of use</span></p>
+                <p  className="text-sm" style={{color:"#717171"}}>I accept <span className="btn-txt">Privacy policy</span> & <span className="btn-txt">Terms of use</span></p>
             </div>
          </div>
 
