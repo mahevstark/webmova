@@ -98,7 +98,7 @@ export default function addemployee({
       <InfoModal
         open={isModalOpen} // Controls visibility based on isModalOpen state
         onClose={handleCloseModal} // Close modal when InfoModal triggers onClose
-        title={"Employee Deleted"}
+        title={"Invitation Sent"}
       />
     </>
   );

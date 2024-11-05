@@ -103,7 +103,7 @@ export default function Dashboard() {
               <Image src={Dcard} alt="" className="" />
             </div>
 
-            <Card className="mt-4 w-full lg:w-1/2 border-0 shadow-none">
+            <Card className="mt-4 w-full lg:w-1/2 border-0 shadow-md">
               <CardHeader>
                 <CardTitle className="flex justify-between items-center">
                   <p className="btn-txt-color font-semibold text-lg">Stats</p>
@@ -120,11 +120,11 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>
                 <div className="flex justify-around items-center">
-                  <div className="flex gap-3 items-center">
+                  <div className="flex gap-3 items-center shadow-md px-5 pt-4 pb-4 rounded-lg ">
                     <p className="text-2xl font-bold text-gray-700">$500</p>
                     <p className="text-sm text-gray-700">Spending</p>
                   </div>
-                  <div className="flex justify-between items-center gap-3">
+                  <div className="flex justify-between items-center gap-3 shadow-md px-5 pt-4 pb-4 rounded-lg">
                     <p className="text-2xl font-bold">$50k</p>
                     <p className="text-sm text-muted-foreground">Remaining</p>
                   </div>

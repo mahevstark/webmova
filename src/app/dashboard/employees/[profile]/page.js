@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Layout from "../../../../components/layout/layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,11 +12,11 @@ import {
 } from "@/components/ui/table";
 import Image from "next/image";
 import Dcard from "../../../../assets/card.png";
-import DeleteConfirmation from '../../../../pop-ups/delete-employee';
+import DeleteConfirmation from "../../../../pop-ups/delete-employee";
 import Link from "next/link";
 import { Switch } from "@/components/ui/switch";
 import { useState } from "react";
-
+import Addbalance from "../../../../pop-ups/add-balance";
 export default function profile() {
   const employees = [
     {
@@ -82,17 +82,31 @@ export default function profile() {
 
   // Function to handle the delete action
   const handleDelete = () => {
-   
     closeDeleteDialog();
+  };
+  const [balance, setBalance] = useState(0);
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const handleAddBalance = (amount) => {
+    setBalance((prevBalance) => prevBalance + amount);
+    // Optionally, you can log the balance or perform other actions
+    console.log(`New balance: ${balance + amount}`);
   };
   var page = "Employees";
 
   return (
-    <Layout page={page}> <DeleteConfirmation
-    isOpen={isDeleteDialogOpen}   // Pass state to control visibility
-    onClose={closeDeleteDialog}   // Function to close the dialog
-    onDelete={handleDelete}       // Function to handle the delete action
-  />
+    <Layout page={page}>
+      {" "}
+      <DeleteConfirmation
+        isOpen={isDeleteDialogOpen} // Pass state to control visibility
+        onClose={closeDeleteDialog} // Function to close the dialog
+        onDelete={handleDelete} // Function to handle the delete action
+      />
+      <Addbalance
+        isOpen={isModalOpen}
+        onRequestClose={() => setModalOpen(false)}
+        onAddBalance={handleAddBalance}
+      />
       <div className="px-4 sm:px-6 md:px-10">
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
@@ -112,15 +126,19 @@ export default function profile() {
               </span>
               <Link href="#">
                 {" "}
-                <Button className="button-border btn-txt-color bg-white hover:bg-white border px-7">
+                <Button
+                  className="button-border btn-txt-color bg-white hover:bg-white border px-7"
+                  onClick={() => setModalOpen(true)}
+                >
                   Add Balance
                 </Button>
               </Link>{" "}
-             
-                <Button className="button-border btn-txt-color bg-white hover:bg-white border " onClick={openDeleteDialog}>
-                  Delete Employee
-                </Button>
-             
+              <Button
+                className="button-border btn-txt-color bg-white hover:bg-white border "
+                onClick={openDeleteDialog}
+              >
+                Delete Employee
+              </Button>
             </div>
           </div>
 

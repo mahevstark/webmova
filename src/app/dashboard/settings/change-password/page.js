@@ -130,9 +130,9 @@ export default function ChangePassword() {
 
               <button
                 onClick={handleDeleteMember} // Open modal on click
-                className="button-background text-white w-auto sm:w-8- font-semibold border rounded-lg mt-4 mx-auto p-2 no-hover"
+                className="button-background text-white w-auto sm:w-8- font-semibold border rounded-lg mt-11 mx-auto p-2 no-hover px-8 "
               >
-                Delete Member
+                UPDATE
               </button>
               
               {/* Info Modal */}
