@@ -139,7 +139,7 @@ export default function ChangePassword() {
               <InfoModal
                 open={isModalOpen} // Controls visibility based on isModalOpen state
                 onClose={handleCloseModal} // Close modal when InfoModal triggers onClose
-                title={"Employee Deleted"}
+                title={"Password Updated"}
               />
             </div>
           </div>
