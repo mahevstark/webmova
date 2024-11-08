@@ -1,11 +1,10 @@
-import localFont from "next/font/local";
 import { Nunito } from "next/font/google";  // Import Nunito from Google Fonts
 import "./globals.css";
 
 const nunito = Nunito({
   subsets: ["latin"],
   variable: "--font-nunito",
-  weight: ["400", "700"],  // Adjust weights as needed
+  weight: ["400", "700"],  
 });
 
 export const metadata = {
