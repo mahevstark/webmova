@@ -65,14 +65,14 @@ export default function Sidebar({ page }) {
       {/* Backdrop (visible only when sidebar is open on small screens) */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black opacity-50 z-10 md:hidden"
+          className="fixed z-10000  md:hidden"
           onClick={() => setSidebarOpen(false)}
         ></div>
       )}
 
       {/* Sidebar (hidden on small screens when not active) */}
       <aside
-        className={`bg-white w-80 min-h-screen flex flex-col text-center p-5 fixed md:static transition-transform duration-300 ${
+        className={`bg-white w-80 min-h-screen z-[1000000] flex flex-col text-center p-5 fixed md:static transition-transform duration-300 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
