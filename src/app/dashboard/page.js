@@ -108,7 +108,7 @@ export default function Dashboard() {
                 <CardTitle className="flex justify-between items-center">
                   <p className="btn-txt-color font-semibold text-lg">Stats</p>
                   <select
-                    className="border p-2 rounded-full font-medium btn-txt-color"
+                    className="border p-2 cursor-pointer rounded-full font-medium btn-txt-color"
                     style={{ background: "#cfccff69" }}
                   >
                     <option value="weekly">Weekly</option>

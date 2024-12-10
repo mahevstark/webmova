@@ -356,7 +356,7 @@ export default function TransactionHistory() {
                           <Button
                             variant="outline"
                             size="sm"
-                            className="text-blue-500 font-semibold border-none text-left hover:text-blue-500"
+                            className="text-blue-500 font-semibold border text-left hover:text-blue-500"
                             onClick={toggleExpertise}
                           >
                             View

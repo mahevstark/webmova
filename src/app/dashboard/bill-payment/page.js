@@ -55,7 +55,7 @@ export default function billpayment() {
         <div>
           <form
             onSubmit={handleSubmit}
-            className="space-y-6 w-full max-w-80 mx-auto"
+            className="space-y-6 w-full max-w-96 mx-auto border shadow-md px-12 py-5 rounded-md"
           >
             <div>
               <h2 className="text-lg font-semibold mb-5">Enter Bill Details</h2>
