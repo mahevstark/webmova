@@ -107,7 +107,7 @@ export default function profile() {
         onRequestClose={() => setModalOpen(false)}
         onAddBalance={handleAddBalance}
       />
-      <div className="px-4 sm:px-6 md:px-10">
+      <div className="  sm:px-6 md:px-10">
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
             <div className="flex items-center flex-col sm:flex-row sm:justify-between w-full sm:w-[38%] gap-2 sm:gap-0">
@@ -171,7 +171,7 @@ export default function profile() {
               </span>
             </div>
 
-            <Card className=" sm:w-full lg:w-1/2 border-0 shadow-none w-80  ">
+            <Card className=" sm:w-full lg:w-1/2 border px-5 py-3  shadow w-80  ">
               <CardHeader className="p-0">
                 <CardTitle className="flex justify-between items-center">
                   <p className="btn-txt-color font-semibold text-lg">Stats</p>
@@ -186,19 +186,19 @@ export default function profile() {
                   Showing Result of Jul 19-25
                 </p>
               </CardHeader>
-              <CardContent>
-                <div className="flex gap-2 justify-around items-center mt-8">
-                  <div className="flex gap-1 items-center flex-col">
+              <CardContent className="p-0 " >
+                <div className="flex gap-5  items-center mt-8 flex-col sm:flex-row ">
+                  <div className="flex gap-1 items-center flex-col border px-12 pt-2 shadow pb-2 rounded-lg">
                     <p className="text-2xl font-bold text-gray-600">$500</p>
                     <p className="text-sm text-gray-500">Balance</p>
                   </div>
-                  <div className="flex gap-1 justify-between items-center  flex-col">
+                  <div className="flex gap-1 justify-between items-center  flex-col border px-12 pt-2 shadow pb-2 rounded-lg">
                     <p className="text-2xl font-bold text-gray-600">$50k</p>
                     <p className="text-sm text-muted-foreground text-gray-500">
                       Spendings
                     </p>
                   </div>
-                  <div className="flex gap-1 justify-between items-center  flex-col">
+                  <div className="flex gap-1 justify-between items-center  flex-col border px-12 pt-2 shadow pb-2 rounded-lg">
                     <p className="text-2xl font-bold text-gray-600">$50k</p>
                     <p className="text-sm text-muted-foreground text-gray-500">
                       Receiving

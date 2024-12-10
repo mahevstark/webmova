@@ -6,8 +6,8 @@ import Button from "../../../components/button/page";
 import Link from "next/link";
 
 export default function Verification() {
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const inputRefs = useRef([]);
+  const [otp, setOtp] = React.useState(["", "", "", "", "", ""]);
+  const inputRefs = React.useRef([]);
 
   const handleChange = (value, index) => {
     const newOtp = [...otp];
