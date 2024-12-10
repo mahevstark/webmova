@@ -77,7 +77,12 @@ export default function Sidebar({ page }) {
         }`}
       >
         <div className="mt-3">
-          <h1 className="text-3xl font-bold text-gray-800">MOWA</h1>
+          <Link href="/">
+            {" "}
+            <h1 className="text-3xl font-bold text-gray-800 cursor-pointer">
+              MOWA
+            </h1>
+          </Link>
         </div>
         <nav className="flex-1 mt-9">
           <ul>

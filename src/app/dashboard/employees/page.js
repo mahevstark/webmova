@@ -201,7 +201,7 @@ export default function Employee() {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="text-blue-500 font-semibold border-none text-left"
+                          className="text-blue-500 font-semibold  text-left  border"
                         >
                           {employee.status === "Active"
                             ? "Deactivate"
@@ -211,7 +211,7 @@ export default function Employee() {
                           <Button
                             variant="outline"
                             size="sm"
-                            className="text-blue-500 font-semibold border-none text-left"
+                            className="text-blue-500 font-semibold border text-left"
                           >
                             View
                           </Button>
@@ -219,7 +219,7 @@ export default function Employee() {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="text-blue-500 font-semibold border-none text-left"
+                          className="text-blue-500 font-semibold border text-left"
                           onClick={() => openDeleteDialog(employee)}
                         >
                           Delete

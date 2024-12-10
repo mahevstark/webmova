@@ -42,9 +42,9 @@ export default function SendMoney() {
           {receiver ? (
             <Recieverdetail />
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6 w-full max-w-80 mx-auto">
+            <form onSubmit={handleSubmit} className="space-y-6 w-full max-w-80 mx-auto border shadow-md px-12 py-5 rounded-md">
               <div>
-                <h2 className="text-lg font-semibold mb-5">Enter Receiver Details</h2>
+                <h2 className="text-lg font-semibold mb-5 text-center">Enter Receiver Details</h2>
                 <textarea
                   cols="50"
                   rows="4"

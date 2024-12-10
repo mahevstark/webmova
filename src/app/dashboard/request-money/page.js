@@ -35,9 +35,9 @@ export default function requestmoney() {
           bibendum laoreet massa quis viverra.
         </p>
         <div>
-          <form onSubmit={handleSubmit} className="space-y-6 w-full max-w-80 mx-auto">
+          <form onSubmit={handleSubmit} className="space-y-6 w-full max-w-80 mx-auto border shadow-md px-12 py-5 rounded-md">
             <div>
-              <h2 className="text-lg font-semibold mb-5">Enter Request Amount</h2>
+              <h2 className="text-lg font-semibold mb-5 text-center">Enter Request Amount</h2>
               <textarea
                 cols="50"
                 rows="4"

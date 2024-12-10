@@ -311,11 +311,11 @@ export default function PaymentRequest() {
                       <TableCell className="sm:table-cell">{employee.time}</TableCell>
                       <TableCell className="sm:table-cell">{employee.type}</TableCell>
                       <TableCell>
-                        <div className="flex flex-col sm:flex-row ">
+                        <div className="flex flex-col sm:flex-row gap-3 ">
                           <Button
                             variant="outline"
                             size="sm"
-                            className="text-blue-500 font-semibold border-none text-left hover:text-blue-500"
+                            className="text-blue-500 font-semibold border text-left hover:text-blue-500"
                             onClick={() => handleView(employee)} // Pass employee data
                           >
                             View
@@ -323,14 +323,14 @@ export default function PaymentRequest() {
                           <Button
                             variant="outline"
                             size="sm"
-                            className="text-blue-500 font-semibold border-none text-left hover:text-blue-500"
+                            className="text-blue-500 font-semibold border text-left hover:text-blue-500"
                           >
                             Accept
                           </Button>
                           <Button
                             variant="outline"
                             size="sm"
-                            className="text-blue-500 font-semibold border-none text-left hover:text-blue-500"
+                            className="text-blue-500 font-semibold border text-left hover:text-blue-500"
                           >
                             Decline
                           </Button>
