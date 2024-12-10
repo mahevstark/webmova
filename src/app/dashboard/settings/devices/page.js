@@ -21,7 +21,7 @@ export default function manage() {
 >
       <div className="flex sm:flex-row flex-col ">
         <Layoutsettings />{" "}
-        <div className="mx-6 w-auto pt-4 sm:w-full space-y-8 mt-16 sm:mt-0 mb-12 sm:mb-8 pb-4 sm:pb-0 shadow-lg h-screen">
+        <div className="mx-6 w-auto  border rounded-md pt-4 sm:w-full space-y-8 mt-16 sm:mt-0 mb-12 sm:mb-8 pb-4 sm:pb-0 shadow-lg h-screen">
           <div className="flex px-6 items-center justify-between flex-col sm:flex-row">
             <h1 className="text-xl font-semibold text-black">Manage Devices</h1>
           </div>
@@ -55,7 +55,7 @@ export default function manage() {
 
                     <span>
                       {i.action ? (
-                        <p className="txt-detail font-semibold sm:mt-0 mt-5">
+                        <p className="txt-detail cursor-pointer font-semibold sm:mt-0 mt-5">
                           {i.action}
                         </p>
                       ) : null}

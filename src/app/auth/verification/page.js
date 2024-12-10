@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState, useRef } from "react";
+import { React, useState, useRef } from "react";
 import signinbg from "../../../assets/signin-bg.png";
 import Button from "../../../components/button/page";
 import Link from "next/link";
@@ -11,10 +11,9 @@ export default function Verification() {
 
   const handleChange = (value, index) => {
     const newOtp = [...otp];
-    newOtp[index] = value.slice(0, 1); 
+    newOtp[index] = value.slice(0, 1);
     setOtp(newOtp);
 
-    
     if (value && index < inputRefs.current.length - 1) {
       inputRefs.current[index + 1].focus();
     }

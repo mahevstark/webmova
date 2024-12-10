@@ -7,8 +7,8 @@ export default function profile() {
     <Layout page="settings">
       <div className="flex sm:flex-row flex-col ">
         <Layoutsettings page="profile" />{" "}
-        <div className="mx-6 w-auto pt-4 sm:w-full  space-y-8 mt-16 sm:mt-0 mb-12 sm:mb-0 pb-4 sm:pb-0 shadow-lg ">
-          <div className="flex px-6  items-center justify-between flex-col sm:flex-row">
+        <div className="mx-6 w-auto border rounded-md pt-4 sm:w-full  space-y-8 mt-16 sm:mt-0 mb-12 sm:mb-0 pb-4 sm:pb-0 shadow-lg ">
+          <div className="flex px-6   items-center justify-between flex-col sm:flex-row">
             <h1 className="text-xl font-semibold text-black">Profile</h1>
             <Link href="/dashboard/settings/profile/2"><button variant="outline" className="button-border btn-txt-color  text-white font-semibold border rounded-lg mt-4 px-4 p-2 no-hover">
               Edit Profile

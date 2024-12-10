@@ -75,7 +75,7 @@ export default function Dashboard() {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between w-full sm:w-[38%] gap-2 sm:gap-0">
               <h1 className="text-2xl font-semibold">Card</h1>
-              <h1 className="btn-txt-color font-semibold">Add New Card</h1>
+              <button  className="rounded-md font-semibold bg-[#544af1] text-white px-3 py-1">Add New Card</button>
             </div>
             <div className="flex flex-wrap gap-2">
               <Link href="/dashboard/send-money">
@@ -103,7 +103,7 @@ export default function Dashboard() {
               <Image src={Dcard} alt="" className="" />
             </div>
 
-            <Card className="mt-4 w-full lg:w-1/2 border-0 shadow-md">
+            <Card className="mt-4 w-full lg:w-1/2 shadow-md border">
               <CardHeader>
                 <CardTitle className="flex justify-between items-center">
                   <p className="btn-txt-color font-semibold text-lg">Stats</p>
@@ -120,11 +120,11 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>
                 <div className="flex justify-around items-center">
-                  <div className="flex gap-3 items-center shadow-md px-5 pt-4 pb-4 rounded-lg ">
+                  <div className="flex gap-3 items-center border shadow-md px-5 pt-4 pb-4 rounded-lg ">
                     <p className="text-2xl font-bold text-gray-700">$500</p>
                     <p className="text-sm text-gray-700">Spending</p>
                   </div>
-                  <div className="flex justify-between items-center gap-3 shadow-md px-5 pt-4 pb-4 rounded-lg">
+                  <div className="flex border justify-between items-center gap-3 shadow-md px-5 pt-4 pb-4 rounded-lg">
                     <p className="text-2xl font-bold">$50k</p>
                     <p className="text-sm text-muted-foreground">Remaining</p>
                   </div>
@@ -177,7 +177,7 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
-            <Card className="w-full lg:w-2/5 border-0">
+            <Card className="w-full lg:w-2/5 border mb-9">
               <CardHeader>
                 <CardTitle className="btn-txt-color font-semibold text-lg">
                   New Payment Request
