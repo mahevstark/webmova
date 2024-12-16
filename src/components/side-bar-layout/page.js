@@ -93,7 +93,7 @@ export default function Sidebar({ page }) {
                   className={`flex items-center px-4 py-4 rounded-lg text-sm ${
                     activeItem === item.check
                       ? "text-white button-background font-semibold"
-                      : "custom-p-color  hover:bg-gray-100 font-semibold"
+                      : "custom-p-color  hover:bg-[#544af1] hover:text-white font-semibold"
                   }`}
                   onClick={() => {
                     setActiveItem(page);
@@ -101,7 +101,7 @@ export default function Sidebar({ page }) {
                   }}
                 >
                   {activeItem === item.check ? (
-                    <item.icon className="mr-3" />
+                    <item.icon className="mr-3"  />
                   ) : (
                     <item.activeicon className="mr-3" />
                   )}
@@ -111,11 +111,11 @@ export default function Sidebar({ page }) {
             ))}
           </ul>
         </nav>
-        <div className="p-4">
+        <div className="p-4 ">
           <Link href="/auth/signin">
             {" "}
             <button
-              className="flex items-center text-sm custom-p-color px-4 py-2 w-full font-semibold"
+              className="flex hover:bg-gray-100  items-center text-sm custom-p-color px-4 py-3 rounded-xl w-full font-semibold"
               onClick={() => {}}
             >
               <Active className="mr-3" />

@@ -373,21 +373,23 @@ export default function TransactionHistory() {
 
         {/* Pagination Controls */}
         <div className="flex justify-between items-center mt-4">
-          <Button
+          <button
+            className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
             disabled={currentPage === 1}
             onClick={() => handlePageChange(currentPage - 1)}
           >
             Previous
-          </Button>
+          </button>
           <div>
             Page {currentPage} of {totalPages}
           </div>
-          <Button
+          <button
+            className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
             disabled={currentPage === totalPages}
             onClick={() => handlePageChange(currentPage + 1)}
           >
             Next
-          </Button>
+          </button>
         </div>
       </div>
     </Layout>

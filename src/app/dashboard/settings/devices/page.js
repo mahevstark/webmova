@@ -40,7 +40,7 @@ export default function manage() {
               {devices.map((i, key) => (
                 <div
                   key={key}
-                  className="flex items-center space-x-3 mt-4 sm:w-1/2 w-auto"
+                  className="flex items-center space-x-3 mt-4 sm:w-1/2 w-auto shadow-lg py-3 px-3 rounded-md"
                 >
                   <span>
                     <Image src={i.devicelogo} alt={"anc"} />
