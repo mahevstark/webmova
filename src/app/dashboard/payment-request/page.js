@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
-import PaymentRequestPopup from '../../../pop-ups/payment-req-details' // Adjust the path as necessary
+import PaymentRequestPopup from "../../../pop-ups/payment-req-details"; // Adjust the path as necessary
 
 const employees = [
   {
@@ -230,10 +230,10 @@ export default function PaymentRequest() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
-  
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // Define how many items per page
-  
+
   const handleView = (employee) => {
     setSelectedData(employee); // Set the selected employee data
     setIsOpen(true); // Open the popup
@@ -244,14 +244,17 @@ export default function PaymentRequest() {
   };
 
   // Filter employees based on search term (optional)
-  const filteredEmployees = employees.filter(employee =>
+  const filteredEmployees = employees.filter((employee) =>
     employee.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentEmployees = filteredEmployees.slice(indexOfFirstItem, indexOfLastItem);
+  const currentEmployees = filteredEmployees.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
 
   const totalPages = Math.ceil(filteredEmployees.length / itemsPerPage);
 
@@ -293,25 +296,50 @@ export default function PaymentRequest() {
                 <TableHeader className="tb-col">
                   <TableRow>
                     <TableHead className="sm:table-cell"></TableHead>
-                    <TableHead className="font-semibold text-black">Sender Name</TableHead>
-                    <TableHead className="sm:table-cell font-semibold text-black">Receiver Name</TableHead>
-                    <TableHead className="sm:table-cell font-semibold text-black">Account Number</TableHead>
-                    <TableHead className="font-semibold text-black">Amount</TableHead>
-                    <TableHead className="sm:table-cell font-semibold text-black">Service Fee</TableHead>
-                    <TableHead className="font-semibold text-black">Action</TableHead>
+                    <TableHead className="font-semibold text-black">
+                      Sender Name
+                    </TableHead>
+                    <TableHead className="sm:table-cell font-semibold text-black">
+                      Receiver Name
+                    </TableHead>
+                    <TableHead className="sm:table-cell font-semibold text-black">
+                      Account Number
+                    </TableHead>
+                    <TableHead className="font-semibold text-black">
+                      Amount
+                    </TableHead>
+                    <TableHead className="sm:table-cell font-semibold text-black">
+                      Service Fee
+                    </TableHead>
+                    <TableHead className="font-semibold text-black flex justify-center items-center">
+                      Action
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {currentEmployees.map((employee) => (
-                    <TableRow key={employee.id} className="text-muted-foreground border-0">
-                      <TableCell className="sm:table-cell">{employee.id}</TableCell>
+                    <TableRow
+                      key={employee.id}
+                      className="text-muted-foreground border-0"
+                    >
+                      <TableCell className="sm:table-cell">
+                        {employee.id}
+                      </TableCell>
                       <TableCell>{employee.name}</TableCell>
-                      <TableCell className="sm:table-cell">{employee.accountNumber}</TableCell>
-                      <TableCell className="sm:table-cell">{employee.day}</TableCell>
-                      <TableCell className="sm:table-cell">{employee.time}</TableCell>
-                      <TableCell className="sm:table-cell">{employee.type}</TableCell>
-                      <TableCell>
-                        <div className="flex flex-col sm:flex-row gap-3 ">
+                      <TableCell className="sm:table-cell">
+                        {employee.accountNumber}
+                      </TableCell>
+                      <TableCell className="sm:table-cell">
+                        {employee.day}
+                      </TableCell>
+                      <TableCell className="sm:table-cell">
+                        {employee.time}
+                      </TableCell>
+                      <TableCell className="sm:table-cell ">
+                        {employee.type}
+                      </TableCell>
+                      <TableCell >
+                        <div className="flex justify-end flex-col sm:flex-row gap-3 ">
                           <Button
                             variant="outline"
                             size="sm"
@@ -346,21 +374,23 @@ export default function PaymentRequest() {
 
         {/* Pagination Controls */}
         <div className="flex justify-between items-center mt-4">
-          <Button
+          <button
+            className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
             disabled={currentPage === 1}
             onClick={() => handlePageChange(currentPage - 1)}
           >
             Previous
-          </Button>
+          </button>
           <div>
             Page {currentPage} of {totalPages}
           </div>
-          <Button
+          <button
+            className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
             disabled={currentPage === totalPages}
             onClick={() => handlePageChange(currentPage + 1)}
           >
             Next
-          </Button>
+          </button>
         </div>
       </div>
 

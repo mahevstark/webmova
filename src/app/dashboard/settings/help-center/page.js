@@ -40,7 +40,7 @@ export default function helpcenter() {
               {devices.map((i, key) => (
                 <div
                   key={key}
-                  className="flex items-center space-x-3 mt-4 sm:w-1/2 w-auto"
+                  className="flex items-center space-x-3 mt-4 sm:w-1/2 w-auto shadow-lg py-3 px-4 rounded-md"
                 >
                   <span>
                     <Image src={i.logo} alt={"anc"} />

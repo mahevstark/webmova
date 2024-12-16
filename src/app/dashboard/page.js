@@ -80,16 +80,16 @@ export default function Dashboard() {
             <div className="flex flex-wrap gap-2">
               <Link href="/dashboard/send-money">
                 {" "}
-                <Button className="button-border btn-txt-color bg-white hover:bg-white border">
+                <Button className="button-border  btn-txt-color bg-white hover:text-white hover:bg-[#544af1] border">
                   Send Payment
                 </Button>
               </Link>{" "}
               <Link href="/dashboard/request-money">
-                <Button className="button-border btn-txt-color bg-white hover:bg-white border">
+                <Button className="button-border btn-txt-color bg-white  border hover:text-white hover:bg-[#544af1]">
                   Request Payment
                 </Button>
               </Link> <Link href="/dashboard/bill-payment">
-              <Button className="button-border btn-txt-color bg-white hover:bg-white border">
+              <Button className="button-border btn-txt-color bg-white border hover:text-white hover:bg-[#544af1]">
                 Bill Payment
               </Button> </Link>
             </div>
@@ -108,7 +108,7 @@ export default function Dashboard() {
                 <CardTitle className="flex justify-between items-center">
                   <p className="btn-txt-color font-semibold text-lg">Stats</p>
                   <select
-                    className="border p-2 cursor-pointer rounded-full font-medium btn-txt-color"
+                    className="border px-4 py-2 cursor-pointer rounded-full font-medium btn-txt-color"
                     style={{ background: "#cfccff69" }}
                   >
                     <option value="weekly">Weekly</option>

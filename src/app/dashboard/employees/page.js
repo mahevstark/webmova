@@ -159,7 +159,7 @@ export default function Employee() {
                   <TableHead className="hidden sm:table-cell font-semibold text-black">
                     Balance
                   </TableHead>
-                  <TableHead className="font-semibold text-black sm:pl-28">
+                  <TableHead className="font-semibold text-black  flex justify-center   items-center">
                     Action
                   </TableHead>
                 </TableRow>
@@ -197,7 +197,7 @@ export default function Employee() {
                       {employee.balance}
                     </TableCell>
                     <TableCell>
-                      <div className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3">
+                      <div className="flex  flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3">
                         <Button
                           variant="outline"
                           size="sm"
@@ -234,21 +234,23 @@ export default function Employee() {
         </Card>
 
         <div className="flex justify-between items-center mt-4">
-          <Button
+          <button
+          className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
             disabled={currentPage === 1}
             onClick={() => handlePageChange(currentPage - 1)}
           >
             Previous
-          </Button>
+          </button>
           <div>
             Page {currentPage} of {totalPages}
           </div>
-          <Button
+          <button 
+          className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
             disabled={currentPage === totalPages}
             onClick={() => handlePageChange(currentPage + 1)}
           >
             Next
-          </Button>
+          </button>
         </div>
       </div>
     </Layout>
