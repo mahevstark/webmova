@@ -94,8 +94,8 @@ export default function Settings({ page }) {
             className={cn(
               "flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors",
               isActive
-                ? "layout-active-color"
-                : "custom-p-color ",
+                ? "layout-active-color bg-[#efd34d] "
+                : "custom-p-color hover:bg-gray-200  ",
               link.isDanger && "text-destructive hover:bg-destructive/10"
             )}
           >
