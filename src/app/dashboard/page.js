@@ -69,11 +69,11 @@ export default function Dashboard() {
   return (
     <Layout page={page}>
      
-      <div className="px-4 sm:px-6 md:px-10">
+      <div className="  sm:px-6 md:px-10">
         
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between w-full sm:w-[38%] gap-2 sm:gap-0">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between  sm:w-[38%] gap-2 sm:gap-0">
               <h1 className="text-2xl font-semibold">Card</h1>
               <button  className="rounded-md font-semibold bg-[#544af1] text-white px-3 py-1">Add New Card</button>
             </div>
@@ -99,11 +99,11 @@ export default function Dashboard() {
             className="flex flex-col lg:flex-row justify-between gap-4 lg:gap-0"
             style={{ margin: 0 }}
           >
-            <div className="w-full lg:w-auto">
+            <div className="w-72 lg:w-auto ">
               <Image src={Dcard} alt="" className="" />
             </div>
 
-            <Card className="mt-4 w-full lg:w-1/2 shadow-md border">
+            <Card className="mt-4 w-72 sm:w-full lg:w-1/2 shadow-md border">
               <CardHeader>
                 <CardTitle className="flex justify-between items-center">
                   <p className="btn-txt-color font-semibold text-lg">Stats</p>
@@ -119,12 +119,12 @@ export default function Dashboard() {
                 </p>
               </CardHeader>
               <CardContent>
-                <div className="flex justify-around items-center">
-                  <div className="flex gap-3 items-center border shadow-md px-5 pt-4 pb-4 rounded-lg ">
+                <div className="flex justify-around  items-center flex-col sm:flex-row gap-5 sm:gap-auto">
+                  <div className="flex  gap-3 items-center border shadow-md px-4 sm:px-5 pt-4 pb-4 rounded-lg ">
                     <p className="text-2xl font-bold text-gray-700">$500</p>
                     <p className="text-sm text-gray-700">Spending</p>
                   </div>
-                  <div className="flex border justify-between items-center gap-3 shadow-md px-5 pt-4 pb-4 rounded-lg">
+                  <div className="flex border justify-between items-center px-4 gap-3 shadow-md sm:px-5 pt-4 pb-4 rounded-lg">
                     <p className="text-2xl font-bold">$50k</p>
                     <p className="text-sm text-muted-foreground">Remaining</p>
                   </div>
@@ -133,8 +133,8 @@ export default function Dashboard() {
             </Card>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-7">
-            <Card className="w-full lg:w-3/5 border-none shadow-none">
+          <div className="flex flex-col lg:flex-row gap-7 w-72 sm:w-auto">
+            <Card className="w-full  lg:w-3/5 border-none shadow-none">
               <CardHeader className="p-0">
                 <CardTitle className="btn-txt-color font-semibold text-lg">
                   Recent Employee Transactions
