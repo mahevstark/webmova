@@ -20,16 +20,17 @@ export default function ChangePassword() {
     setIsModalOpen(false); // Close the modal
   };
   setTimeout(() => {
-    handleCloseModal(); 
-  
+    handleCloseModal();
   }, 1000);
   return (
     <Layout page={"settings"}>
       <div className="flex sm:flex-row flex-col">
         <Layoutsettings />{" "}
-        <div className="mx-6 border rounded-md w-auto pt-4 sm:w-full space-y-8 mt-16 sm:mt-0 mb-12 sm:mb-8 pb-4 sm:pb-0 shadow-lg h-screen ">
+        <div className="mx-6 border rounded-md w-auto pt-4 sm:w-full space-y-8 mt-16 sm:mt-0 mb-12 sm:mb-8 pb-4 sm:pb-0 shadow-lg ">
           <div className="flex px-6 items-center justify-between flex-col sm:flex-row">
-            <h1 className="text-xl font-semibold text-black">Change Password</h1>
+            <h1 className="text-xl font-semibold text-black">
+              Change Password
+            </h1>
           </div>
           <hr className="custom-hr" />
           <div className="px-6" style={{ marginTop: "13px" }}>
@@ -102,7 +103,7 @@ export default function ChangePassword() {
               {/* Confirm Password Field */}
               <div className="relative mt-4 sm:w-1/2 w-auto">
                 <label htmlFor="confirm-password" className="sr-only">
-                Enter your Password
+                  Enter your Password
                 </label>
                 <span className="flex items-center gap-2 border border-color-input rounded-lg px-3 py-2 md:px-4 md:py-3 w-full">
                   <Keyicon />
@@ -134,7 +135,7 @@ export default function ChangePassword() {
               >
                 UPDATE
               </button>
-              
+
               {/* Info Modal */}
               <InfoModal
                 open={isModalOpen} // Controls visibility based on isModalOpen state
