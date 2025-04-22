@@ -17,16 +17,15 @@ const devices = [
 
 export default function manage() {
   return (
-    <Layout 	page={"settings"}
->
+    <Layout page={"settings"}>
       <div className="flex sm:flex-row flex-col ">
         <Layoutsettings />{" "}
-        <div className="mx-6 w-auto  border rounded-md pt-4 sm:w-full space-y-8 mt-16 sm:mt-0 mb-12 sm:mb-8 pb-4 sm:pb-0 shadow-lg h-screen">
+        <div className="mx-6 w-auto  border rounded-md pt-4 sm:w-full space-y-8 mt-16 sm:mt-0 mb-12 sm:mb-8 pb-4 sm:pb-0 shadow-lg ">
           <div className="flex px-6 items-center justify-between flex-col sm:flex-row">
             <h1 className="text-xl font-semibold text-black">Manage Devices</h1>
           </div>
           <hr className="custom-hr" />
-          <div className="px-6" style={{marginTop:'13px'}}>
+          <div className="px-6" style={{ marginTop: "13px" }}>
             <p className="settings-p">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
               bibendum laoreet massa quis viverra.Lorem ipsum dolor sit amet,

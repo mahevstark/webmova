@@ -16,7 +16,7 @@ export default function deleteaccount() {
     <Layout page={"settings"}>
       <div className="flex sm:flex-row flex-col ">
         <Layoutsettings />{" "}
-        <div className="mx-6 w-auto pt-4 border rounded-md sm:w-full space-y-8 mt-16 sm:mt-0 mb-12 sm:mb-8 pb-4 sm:pb-0 shadow-lg h-screen">
+        <div className="mx-6 w-auto pt-4 border rounded-md sm:w-full space-y-8 mt-16 sm:mt-0 mb-12 sm:mb-8 pb-4 sm:pb-0 shadow-lg ">
           <div className="flex px-6 items-center justify-between flex-col sm:flex-row">
             <h1 className="text-xl font-semibold text-black">Delete Account</h1>
           </div>
@@ -67,8 +67,16 @@ export default function deleteaccount() {
               <div className="flex gap-2 ">
                 <input type="checkbox" />
                 <p className="text-sm" style={{ color: "#717171" }}>
-                  I accept <span className="btn-txt"><Link href="/dashboard/settings/privacy-policy">Privacy policy</Link></span> & 
-                  <span className="btn-txt"><Link href="/dashboard/settings/terms">Terms of use</Link></span>
+                  I accept{" "}
+                  <span className="btn-txt">
+                    <Link href="/dashboard/settings/privacy-policy">
+                      Privacy policy
+                    </Link>
+                  </span>{" "}
+                  & 
+                  <span className="btn-txt">
+                    <Link href="/dashboard/settings/terms">Terms of use</Link>
+                  </span>
                 </p>
               </div>
             </div>
