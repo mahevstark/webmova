@@ -63,6 +63,20 @@ export default function Dashboard() {
       type: "Sent",
       amount: "$500",
     },
+    {
+      id: 8,
+      name: "Josh Kryston",
+      date: "25-07-2024",
+      type: "Sent",
+      amount: "$500",
+    },
+    {
+      id: 9,
+      name: "Josh Kryston",
+      date: "25-07-2024",
+      type: "Sent",
+      amount: "$500",
+    },
   ];
   var page = "Dashboard";
 
