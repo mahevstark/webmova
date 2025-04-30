@@ -160,7 +160,7 @@ export default function Component({ details, isOpen, onClose, request }) {
             onClick={handleDownload}
             className="w-auto mx-auto hover:bg-inherit btn-txt shadow-none font-semibold bg-none bg-inherit"
           >
-            Download Slip
+            Close
           </Button>
         </CardFooter>
       </Card>
