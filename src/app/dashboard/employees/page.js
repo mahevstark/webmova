@@ -1,7 +1,6 @@
 "use client";
-
 import Layout from "../../../components/layout/layout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -15,63 +14,62 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Search } from "lucide-react";
 import Active from "../../../assets/active-em.svg";
 import Nonactive from "../../../assets/nonactive.svg";
 import Link from "next/link";
+import GlobalApi from "@/lib/GlobalApi";
+import Cookies from "js-cookie";
+import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
 
-const employees = [
-  { id: 1, name: "John Doe", email: "john.doe@example.com", phone: "+987654323243", status: "Active", balance: "30k" },
-  { id: 2, name: "Jane Smith", email: "jane.smith@example.com", phone: "+987654323244", status: "Inactive", balance: "22k" },
-  { id: 3, name: "Michael Johnson", email: "michael.johnson@example.com", phone: "+987654323245", status: "Active", balance: "25k" },
-  { id: 4, name: "Emily Davis", email: "emily.davis@example.com", phone: "+987654323246", status: "Inactive", balance: "15k" },
-  { id: 5, name: "David Martinez", email: "david.martinez@example.com", phone: "+987654323247", status: "Active", balance: "40k" },
-  { id: 6, name: "Sarah Brown", email: "sarah.brown@example.com", phone: "+987654323248", status: "Inactive", balance: "12k" },
-  { id: 7, name: "James Wilson", email: "james.wilson@example.com", phone: "+987654323249", status: "Active", balance: "50k" },
-  { id: 8, name: "Linda Lee", email: "linda.lee@example.com", phone: "+987654323250", status: "Inactive", balance: "8k" },
-  { id: 9, name: "Daniel White", email: "daniel.white@example.com", phone: "+987654323251", status: "Active", balance: "28k" },
-  { id: 10, name: "Laura Harris", email: "laura.harris@example.com", phone: "+987654323252", status: "Inactive", balance: "18k" },
-  { id: 11, name: "Robert Clark", email: "robert.clark@example.com", phone: "+987654323253", status: "Active", balance: "45k" },
-  { id: 12, name: "Sophia Lewis", email: "sophia.lewis@example.com", phone: "+987654323254", status: "Inactive", balance: "5k" },
-  { id: 13, name: "William Walker", email: "william.walker@example.com", phone: "+987654323255", status: "Active", balance: "33k" },
-  { id: 14, name: "Olivia Scott", email: "olivia.scott@example.com", phone: "+987654323256", status: "Inactive", balance: "20k" },
-  { id: 15, name: "Benjamin Hall", email: "benjamin.hall@example.com", phone: "+987654323257", status: "Active", balance: "38k" },
-  { id: 16, name: "Mia Adams", email: "mia.adams@example.com", phone: "+987654323258", status: "Inactive", balance: "10k" },
-  { id: 17, name: "Ethan Nelson", email: "ethan.nelson@example.com", phone: "+987654323259", status: "Active", balance: "35k" },
-  { id: 18, name: "Chloe Carter", email: "chloe.carter@example.com", phone: "+987654323260", status: "Inactive", balance: "14k" },
-  { id: 19, name: "Alexander Perez", email: "alexander.perez@example.com", phone: "+987654323261", status: "Active", balance: "55k" },
-  { id: 20, name: "Amelia Roberts", email: "amelia.roberts@example.com", phone: "+987654323262", status: "Inactive", balance: "6k" }
-];
-
-
-var page = "Employees";
+const page = "Employees";
 
 export default function Employee() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isAddEmployeeDialogOpen, setIsAddEmployeeDialogOpen] = useState(false);
-  const [selectedEmployee, setSelectedEmployee] = useState(null); // To store the employee to delete
-  const [currentPage, setCurrentPage] = useState(1); // To store the current page
-  const itemsPerPage = 10; // Number of items per page
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [employees, setEmployees] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [deactivatingEmployees, setDeactivatingEmployees] = useState({});
+  const [activatingEmployees, setActivatingEmployees] = useState({});
 
-  // Function to open the delete confirmation dialog
+  const itemsPerPage = 10;
+
+  const token = Cookies.get("token");
+
+  const getUsers = async (page) => {
+    try {
+      setLoading(true);
+
+      const response = await GlobalApi.getAllUsers(token, page);
+      if (response?.success === true) {
+        setEmployees(response.data); // ✅ Replace the current list
+      } else {
+        console.log("Failed to fetch users");
+      }
+    } catch (error) {
+      console.log("Error while getting users", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getUsers(currentPage);
+  }, [currentPage]);
+
   const openDeleteDialog = (employee) => {
-    setSelectedEmployee(employee); // Set the employee to delete
+    setSelectedEmployee(employee);
     setIsDeleteDialogOpen(true);
   };
 
   const handleDelete = () => {
-    console.log("Item has been deleted:", selectedEmployee); // Log the deleted employee
-    // Add your delete logic here, such as making an API call
+    console.log("Item has been deleted:", selectedEmployee);
     setIsDeleteDialogOpen(false);
-    setSelectedEmployee(null); // Reset selected employee
+    setSelectedEmployee(null);
   };
 
   const handlePageChange = (pageNumber) => {
@@ -79,10 +77,9 @@ export default function Employee() {
   };
 
   const filteredEmployees = employees.filter((employee) =>
-    employee.name.toLowerCase().includes(searchTerm.toLowerCase())
+    employee.firstName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Pagination logic
   const indexOfLastEmployee = currentPage * itemsPerPage;
   const indexOfFirstEmployee = indexOfLastEmployee - itemsPerPage;
   const currentEmployees = filteredEmployees.slice(
@@ -91,6 +88,54 @@ export default function Employee() {
   );
 
   const totalPages = Math.ceil(filteredEmployees.length / itemsPerPage);
+
+  const deActuser = async (id) => {
+    try {
+      console.log("id", id);
+
+      setDeactivatingEmployees((prev) => ({ ...prev, [id]: true }));
+
+      const response = await GlobalApi.deActUser(id, token);
+
+      if (response?.success === true) {
+        toast("User DeActivated Successfully");
+
+        setEmployees((prev) =>
+          prev.map((emp) => (emp.id === id ? { ...emp, isActive: false } : emp))
+        );
+      } else {
+        toast(response?.message || "User DeActivation Failed. Try again");
+      }
+    } catch (error) {
+      console.log("error while deActivating user", error);
+      toast("Network Error");
+    } finally {
+      setDeactivatingEmployees((prev) => ({ ...prev, [id]: false }));
+    }
+  };
+
+  const Actuser = async (id) => {
+    try {
+      setActivatingEmployees((prev) => ({ ...prev, [id]: true }));
+
+      const response = await GlobalApi.ActUser(id, token);
+
+      if (response?.success === true) {
+        toast("User Activated Successfully");
+
+        setEmployees((prev) =>
+          prev.map((emp) => (emp.id === id ? { ...emp, isActive: false } : emp))
+        );
+      } else {
+        toast(response?.message || "User Activation Failed. Try again");
+      }
+    } catch (error) {
+      console.log("error while Activating user", error);
+      toast("Network Error");
+    } finally {
+      setActivatingEmployees((prev) => ({ ...prev, [id]: false }));
+    }
+  };
 
   return (
     <Layout page={page}>
@@ -107,16 +152,6 @@ export default function Employee() {
         <h1 className="text-2xl font-semibold mb-4">Employees</h1>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
           <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
-            <Select className="border-class-employee w-full sm:w-[180px]">
-              <SelectTrigger className="border-class-employee select-color font-medium">
-                <SelectValue placeholder="All Employees" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Employees</SelectItem>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="inactive">Inactive</SelectItem>
-              </SelectContent>
-            </Select>
             <div className="relative w-full">
               <Search
                 className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-600"
@@ -159,99 +194,153 @@ export default function Employee() {
                   <TableHead className="hidden sm:table-cell font-semibold text-black">
                     Balance
                   </TableHead>
-                  <TableHead className="font-semibold text-black  flex justify-center   items-center">
+                  <TableHead className="font-semibold text-black flex justify-center items-center">
                     Action
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {currentEmployees.map((employee) => (
-                  <TableRow
-                    key={employee.id}
-                    className="text-muted-foreground border-0"
-                  >
-                    <TableCell>{employee.name}</TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      {employee.email}
+                {currentEmployees.length === 0 && !loading ? (
+                  <TableRow>
+                    <TableCell colSpan={8} className="text-center">
+                      No data found.
                     </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      {employee.phone}
-                    </TableCell>
-                    <TableCell>
-                      <span
-                        className={`px-2 py-1 text-xs flex items-center gap-2 font-semibold ${
-                          employee.status === "Active"
-                            ? "active-status"
-                            : "text-red-700 gap-2"
-                        }`}
-                      >
-                        {employee.status === "Active" ? (
-                          <Active />
-                        ) : (
-                          <Nonactive />
-                        )}{" "}
-                        {employee.status}
-                      </span>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      {employee.balance}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex  flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="text-blue-500 font-semibold  text-left  border"
+                  </TableRow>
+                ) : (
+                  currentEmployees.map((employee, index) => (
+                    <TableRow
+                      key={employee.id || `employee-${index}`}
+                      className="text-muted-foreground border-0"
+                    >
+                      <TableCell>{`${employee.firstName} ${employee.lastName}`}</TableCell>
+                      <TableCell className="hidden sm:table-cell">
+                        {employee.email}
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">
+                        {employee.phoneNumber}
+                      </TableCell>
+                      <TableCell>
+                        <button
+                          className={`px-2 py-1 text-xs flex items-center gap-2 font-semibold ${
+                            employee.isActive
+                              ? "active-status"
+                              : "text-red-700 gap-2"
+                          }`}
                         >
-                          {employee.status === "Active"
-                            ? "Deactivate"
-                            : "Activate"}
-                        </Button>
-                        <Link href="/dashboard/employees/2">
+                          {employee.isActive ? <Active /> : <Nonactive />}{" "}
+                          {employee.isActive ? "Active" : "Inactive"}
+                        </button>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">
+                        {employee.balance || "N/A"}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3">
+                          {!employee?.isActive ? (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-blue-500 font-semibold text-left border"
+                              onClick={() => {
+                                Actuser(employee.id);
+                              }}
+                            >
+                              {activatingEmployees[employee.id]
+                                ? "Activating..."
+                                : "Activate"}
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-blue-500 font-semibold text-left border"
+                              onClick={() => {
+                                deActuser(employee.id);
+                              }}
+                            >
+                              {deactivatingEmployees[employee.id]
+                                ? "DeActivating..."
+                                : "DeActive"}
+                            </Button>
+                          )}
+                          <Link href={`/dashboard/employees/${employee.id}`}>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-blue-500 font-semibold border text-left"
+                            >
+                              View
+                            </Button>
+                          </Link>
                           <Button
                             variant="outline"
                             size="sm"
                             className="text-blue-500 font-semibold border text-left"
+                            onClick={() => openDeleteDialog(employee)}
                           >
-                            View
+                            Delete
                           </Button>
-                        </Link>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="text-blue-500 font-semibold border text-left"
-                          onClick={() => openDeleteDialog(employee)}
-                        >
-                          Delete
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </CardContent>
         </Card>
 
-        <div className="flex justify-between items-center mt-4">
-          <button
-          className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
-            disabled={currentPage === 1}
-            onClick={() => handlePageChange(currentPage - 1)}
-          >
-            Previous
-          </button>
-          <div>
-            Page {currentPage} of {totalPages}
+        {loading && !employees.length ? (
+          <div className="mx-auto flex justify-center items-center">
+            <Spinner />
           </div>
-          <button 
-          className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
-            disabled={currentPage === totalPages}
-            onClick={() => handlePageChange(currentPage + 1)}
-          >
-            Next
-          </button>
-        </div>
+        ) : employees.length === 0 ? (
+          <div>No data found </div>
+        ) : currentPage < totalPages ? (
+          <div className="flex justify-between items-center mt-4">
+            <button
+              className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+            >
+              Previous
+            </button>
+
+            <div>
+              Page {currentPage} of {totalPages}
+            </div>
+
+            <button
+              className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
+              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(currentPage + 1)}
+            >
+              Next
+            </button>
+          </div>
+        ) : (
+          <div className="flex justify-between items-center mt-4">
+            <button
+              className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+            >
+              Previous
+            </button>
+
+            <div>
+              Page {currentPage} of {totalPages}
+            </div>
+
+            <button
+              className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
+              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(currentPage + 1)}
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </Layout>
   );

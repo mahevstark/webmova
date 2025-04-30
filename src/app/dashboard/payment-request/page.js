@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
 import PaymentRequestPopup from "../../../pop-ups/payment-req-details"; // Adjust the path as necessary
+import GlobalApi from "@/lib/GlobalApi";
+import Cookies from "js-cookie";
 
 const employees = [
   {
@@ -255,13 +257,27 @@ export default function PaymentRequest() {
     indexOfFirstItem,
     indexOfLastItem
   );
+  const token = Cookies.get("token");
 
   const totalPages = Math.ceil(filteredEmployees.length / itemsPerPage);
+
+  const getReq = async () => {
+    try {
+      const resppnse = await GlobalApi.getPendingReq(token);
+      console.log("rr", resppnse);
+
+      if (resppnse?.success === true) {
+      } else {
+      }
+    } catch (error) {
+      console.log("error while getting req", error);
+    }
+  };
 
   return (
     <Layout page="paymentrequest">
       <div className="container mx-auto px-4 sm:px-6 md:px-10 w-72 sm:w-full pb-12">
-        <h1 className="text-2xl font-semibold mb-4">Transaction History</h1>
+        <h1 className="text-2xl font-semibold mb-4">Payment Requests</h1>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
           <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
             <Select className="border-class-employee w-full sm:w-[180px]">
@@ -338,7 +354,7 @@ export default function PaymentRequest() {
                       <TableCell className="sm:table-cell ">
                         {employee.type}
                       </TableCell>
-                      <TableCell >
+                      <TableCell>
                         <div className="flex justify-end flex-col sm:flex-row gap-3 ">
                           <Button
                             variant="outline"
@@ -348,7 +364,7 @@ export default function PaymentRequest() {
                           >
                             View
                           </Button>
-                          <Button
+                          {/* <Button
                             variant="outline"
                             size="sm"
                             className="text-blue-500 font-semibold border text-left hover:text-blue-500"
@@ -361,7 +377,7 @@ export default function PaymentRequest() {
                             className="text-blue-500 font-semibold border text-left hover:text-blue-500"
                           >
                             Decline
-                          </Button>
+                          </Button> */}
                         </div>
                       </TableCell>
                     </TableRow>

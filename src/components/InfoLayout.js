@@ -26,27 +26,112 @@
 // }
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Layoutsettings from "../pop-ups/layout-settings";
 import Layout from "../components/layout/layout";
 import { Button } from "@/components/ui/button";
 import { Pencil, Save, X } from "lucide-react";
+import { Spinner } from "./ui/spinner";
+import GlobalApi from "@/lib/GlobalApi";
+import { usePathname } from "next/navigation";
+import Cookies from "js-cookie";
+import { toast } from "sonner";
 
-export default function InfoLayout({ heading, content }) {
+export default function InfoLayout({ heading, content, loading }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [editedContent, setEditedContent] = useState(content);
+  const [editedContent, setEditedContent] = useState("");
   const [editedHeading, setEditedHeading] = useState(heading);
+  const pathname = usePathname();
 
-  const handleSave = () => {
-    // Here you would typically save the changes to your backend
-    // For now, we're just updating the local state
-    setIsEditing(false);
-    // You might want to add an API call here to save the changes
+  useEffect(() => {
+    setEditedContent(content?.content || "");
+    // const currentPage = {
+    //   id: content?.id,
+    //   heading,
+    //   path: pathname,
+    // };
+
+    // const existing = Cookies.get("pagesInfo");
+    // const pagesInfo = existing ? JSON.parse(existing) : {};
+
+    // pagesInfo[pathname] = currentPage;
+
+    // Cookies.set("pagesInfo", JSON.stringify(pagesInfo), { expires: 7 });
+  }, [content]);
+
+  const token = Cookies.get("token");
+  const [stloading, setloading] = useState(false);
+
+  const handleSave = async () => {
+    try {
+      // const pagesInfo = Cookies.get("pagesInfo");
+      // const parsedPages = pagesInfo ? JSON.parse(pagesInfo) : {};
+      // const page = parsedPages[pathname];
+
+      // console.log("page", page);
+      setloading(true);
+      let response;
+      content?.id
+        ? (response = await GlobalApi.EditStaticPaga(
+            {
+              id: content?.id,
+              heading: editedHeading,
+              content: editedContent,
+              slug: pathname.includes("privacy-policy")
+                ? "privacy-policy"
+                : pathname.includes("terms")
+                ? "terms-and-conditions"
+                : "about-app",
+            },
+            token
+          ))
+        : (response = await GlobalApi.createStaticpage({
+            title: editedHeading,
+            content: editedContent,
+            slug: pathname.includes("privacy-policy")
+              ? "privacy-policy"
+              : pathname.includes("terms")
+              ? "terms-and-conditions"
+              : "about-app",
+          }));
+
+      if (response?.success === true) {
+        setIsEditing(false);
+        toast("success", {
+          description: `${
+            pathname.includes("privacy-policy")
+              ? "privacy-policy"
+              : pathname.includes("terms")
+              ? "terms-and-conditions"
+              : "about-app"
+          } updated successfully`,
+        });
+        setloading(false);
+      } else {
+        setIsEditing(false);
+        setloading(false);
+        toast("error", {
+          description:
+            response?.message ||
+            `${
+              pathname.includes("privacy-policy")
+                ? "privacy-policy"
+                : pathname.includes("terms")
+                ? "terms-and-conditions"
+                : "about-app"
+            } updating failed`,
+        });
+      }
+    } catch (error) {
+      console.log("error in updating static page", error);
+      setIsEditing(false);
+      setloading(false);
+    }
   };
 
   const handleCancel = () => {
     setIsEditing(false);
-    setEditedContent(content);
+    setEditedContent(content?.content || "");
     setEditedHeading(heading);
   };
 
@@ -56,18 +141,10 @@ export default function InfoLayout({ heading, content }) {
         <Layoutsettings />{" "}
         <div className="mx-6 mt-12 border rounded-md py-4 w-auto sm:w-full space-y-8 sm:mt-0 sm:mb-8 pb-4 sm:pb-0 shadow-lg">
           <div className="flex px-6 items-center justify-between flex-col sm:flex-row">
-            {isEditing ? (
-              <input
-                type="text"
-                value={editedHeading}
-                onChange={(e) => setEditedHeading(e.target.value)}
-                className="text-xl font-semibold text-black bg-transparent border-b border-gray-300 focus:outline-none focus:border-black w-full sm:w-auto"
-              />
-            ) : (
-              <h1 className="text-xl font-semibold text-black">
-                {editedHeading}
-              </h1>
-            )}
+            <h1 className="text-xl font-semibold text-black">
+              {editedHeading}
+            </h1>
+
             <div className="mt-4 sm:mt-0">
               {isEditing ? (
                 <div className="flex space-x-2">
@@ -87,7 +164,7 @@ export default function InfoLayout({ heading, content }) {
                     className="flex items-center"
                   >
                     <Save className="h-4 w-4 mr-1" />
-                    Save
+                    {stloading ? "Saving..." : "Save"}
                   </Button>
                 </div>
               ) : (
@@ -98,7 +175,7 @@ export default function InfoLayout({ heading, content }) {
                   className="flex items-center"
                 >
                   <Pencil className="h-4 w-4 mr-1" />
-                  Edit
+                  {content?.id ? "Edit" : "Create"}
                 </Button>
               )}
             </div>
@@ -112,8 +189,12 @@ export default function InfoLayout({ heading, content }) {
               <textarea
                 value={editedContent}
                 onChange={(e) => setEditedContent(e.target.value)}
-                className="w-full h-64 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-black settings-p"
+                className="w-full h-64 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-black settings-p resize-none"
               />
+            ) : loading ? (
+              <div className="flex justify-center items-center min-h-[40vh]">
+                <Spinner />
+              </div>
             ) : (
               <p className="settings-p">{editedContent}</p>
             )}
