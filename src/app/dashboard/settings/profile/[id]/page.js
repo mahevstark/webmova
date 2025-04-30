@@ -1,10 +1,82 @@
+"use client";
 import Layout from "../../../../../components/layout/layout";
 import Layoutsettings from "../../../../../pop-ups/layout-settings";
 import msg from "../../../../../assets/msg.png";
 import Image from "next/image";
-import Button from "../../../../../components/button/page";
-import Link from "next/link";
+import GlobalApi from "@/lib/GlobalApi";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
+import Cookies from "js-cookie";
+import { toast } from "sonner";
 export default function editprofile() {
+  const router = useParams();
+  const id = router.id;
+  let userData = {};
+  const rout = useRouter();
+
+  try {
+    userData = JSON.parse(Cookies.get("userData") || "{}");
+  } catch (error) {
+    console.log("Failed to parse userData cookie:", error);
+  }
+  const [user, setUser] = useState({
+    fname: userData?.firstName || "",
+    lname: userData?.lastName || "",
+    email: userData?.email || "",
+    dob: userData?.dob || "",
+    address: userData?.permanentAddress || "",
+  });
+  const [loading, setloading] = useState(false);
+
+  const isValid = () => {
+    for (let key in user) {
+      if (!user[key] || user[key].trim() === "") {
+        return false;
+      }
+    }
+    return true;
+  };
+  const token = Cookies.get("token");
+
+  const updateUserData = async () => {
+    try {
+      if (!isValid) {
+        toast("All feilds are required.");
+        return;
+      }
+
+      setloading(true);
+
+      const response = await GlobalApi.UpdateProfile(id, user, token);
+
+      if (response?.success === true) {
+        setloading(false);
+        const existingUserData = JSON.parse(Cookies.get("userData") || "{}");
+        const updatedUserData = {
+          ...existingUserData,
+          firstName: user.fname,
+          lastName: user.lname,
+          email: user.email,
+          dob: user.dob,
+          permanentAddress: user.address,
+        };
+
+        Cookies.set("userData", JSON.stringify(updatedUserData), {
+          expires: 7,
+        });
+
+        toast("Profile Updated Successfully.");
+        rout.push("/dashboard/settings/profile");
+      } else {
+        setloading(false);
+        toast(response?.message || "Profile Updation Failed. please try again");
+      }
+    } catch (error) {
+      setloading(false);
+      console.log("error updating user profile data", error);
+      toast("Network Error.");
+    }
+  };
   return (
     <Layout page="settings">
       <div className="flex sm:flex-row flex-col ">
@@ -34,6 +106,10 @@ export default function editprofile() {
                     required
                     className="w-full focus:outline-none focus:ring-0 border-0 text-gray-400"
                     placeholder="Enter your First Name"
+                    value={user.fname}
+                    onChange={(e) =>
+                      setUser({ ...user, fname: e.target.value })
+                    }
                   />
                 </span>
               </div>
@@ -48,6 +124,10 @@ export default function editprofile() {
                     required
                     className="w-full focus:outline-none focus:ring-0 border-0 text-gray-400"
                     placeholder="Enter your Last Name"
+                    value={user.lname}
+                    onChange={(e) =>
+                      setUser({ ...user, lname: e.target.value })
+                    }
                   />
                 </span>
               </div>
@@ -63,6 +143,10 @@ export default function editprofile() {
                     required
                     className="w-full focus:outline-none focus:ring-0 border-0 text-gray-400"
                     placeholder="Enter your Email"
+                    value={user.email}
+                    onChange={(e) =>
+                      setUser({ ...user, email: e.target.value })
+                    }
                   />
                 </span>
               </div>
@@ -78,6 +162,8 @@ export default function editprofile() {
                     required
                     className="w-full focus:outline-none focus:ring-0 border-0 text-gray-400"
                     placeholder="DD/MM/YYYY"
+                    value={user.dob}
+                    onChange={(e) => setUser({ ...user, dob: e.target.value })}
                   />
                 </span>
               </div>
@@ -93,15 +179,21 @@ export default function editprofile() {
                     required
                     className="w-full focus:outline-none focus:ring-0 border-0 text-gray-400"
                     placeholder="Enter your Permanent Address"
+                    value={user.address}
+                    onChange={(e) =>
+                      setUser({ ...user, address: e.target.value })
+                    }
                   />
                 </span>
               </div>
               <div className="mx-auto">
                 {" "}
-               <Link href="/dashboard/settings/profile"> <Button
-                  value="UPDATE"
-                  classname="py-2 px-12 w-auto mt-9 mx-auto mb-4"
-                /></Link>
+                <button
+                  className="py-2 text-white px-12 w-auto mt-9 mx-auto mb-4 button-background rounded-lg"
+                  onClick={updateUserData}
+                >
+                  {loading ? "Updating...." : "Update"}
+                </button>
               </div>
             </div>
           </div>

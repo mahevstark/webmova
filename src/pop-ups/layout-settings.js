@@ -27,16 +27,16 @@ export default function Settings({ page }) {
       icon: User,
       label: "Profile",
     },
-    {
-      href: "/dashboard/settings/notification-settings",
-      icon: Bell,
-      label: "Notification Settings",
-    },
-    {
-      href: "/dashboard/settings/wallet",
-      icon: Shield,
-      label: "Secure your Wallet",
-    },
+    // {
+    //   href: "/dashboard/settings/notification-settings",
+    //   icon: Bell,
+    //   label: "Notification Settings",
+    // },
+    // {
+    //   href: "/dashboard/settings/wallet",
+    //   icon: Shield,
+    //   label: "Secure your Wallet",
+    // },
     {
       href: "/dashboard/settings/change-password",
       icon: Key,
@@ -52,11 +52,11 @@ export default function Settings({ page }) {
       icon: ScrollText,
       label: "Terms & Conditions",
     },
-    {
-      href: "/dashboard/settings/devices",
-      icon: LayoutGrid,
-      label: "Manage Devices",
-    },
+    // {
+    //   href: "/dashboard/settings/devices",
+    //   icon: LayoutGrid,
+    //   label: "Manage Devices",
+    // },
     {
       href: "/dashboard/settings/about",
       icon: Info,
@@ -67,11 +67,11 @@ export default function Settings({ page }) {
       icon: HelpCircle,
       label: "Help Center",
     },
-    {
-      href: "/dashboard/settings/languages",
-      icon: Globe,
-      label: "Language",
-    },
+    // {
+    //   href: "/dashboard/settings/languages",
+    //   icon: Globe,
+    //   label: "Language",
+    // },
     {
       href: "/dashboard/settings/webApp-settings",
       icon: LayoutGrid,

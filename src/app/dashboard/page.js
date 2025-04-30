@@ -64,20 +64,20 @@ export default function Dashboard() {
       amount: "$500",
     },
   ];
-  var page="Dashboard"
+  var page = "Dashboard";
 
   return (
     <Layout page={page}>
-     
       <div className="  sm:px-6 md:px-10">
-        
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between  sm:w-[38%] gap-2 sm:gap-0">
               <h1 className="text-2xl font-semibold">Card</h1>
-              <button  className="rounded-md font-semibold bg-[#544af1] text-white px-3 py-1">Add New Card</button>
+              <button className="rounded-md font-semibold bg-[#544af1] text-white px-3 py-1">
+                Add New Card
+              </button>
             </div>
-            <div className="flex flex-wrap gap-2">
+            {/* <div className="flex flex-wrap gap-2">
               <Link href="/dashboard/send-money">
                 {" "}
                 <Button className="button-border  btn-txt-color bg-white hover:text-white hover:bg-[#544af1] border">
@@ -92,7 +92,7 @@ export default function Dashboard() {
               <Button className="button-border btn-txt-color bg-white border hover:text-white hover:bg-[#544af1]">
                 Bill Payment
               </Button> </Link>
-            </div>
+            </div> */}
           </div>
 
           <div

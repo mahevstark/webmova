@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Image from "next/image";
 import Avatar from "../../assets/Avatar.png";
 import React, { useRef } from "react";
@@ -22,7 +22,7 @@ export default function Header() {
       {/* Right section with avatar and name */}
       <span className="flex space-x-3">
         {/* Avatar with rounded-full to create a circular image */}
-        <span>
+        {/* <span>
           <Image
             src={Avatar}
             alt="User Avatar"
@@ -31,11 +31,9 @@ export default function Header() {
             className="rounded-full"
             onClick={handleClick}
           />
-        </span>
+        </span> */}
         <span className="flex flex-col">
-          <p className="font-bold text-gray-800" >
-            Tynisha Obey
-          </p>
+          <p className="font-bold text-gray-800">Tynisha Obey</p>
           <input
             ref={fileInputRef}
             type="file"

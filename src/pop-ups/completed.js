@@ -15,6 +15,8 @@ import Image from "next/image";
 export default function Component({ details, isOpen, onClose, request }) {
   const [isVisible, setIsVisible] = useState(false);
 
+  console.log("details", details);
+
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
@@ -37,124 +39,128 @@ export default function Component({ details, isOpen, onClose, request }) {
       <Card className="w-full max-w-sm mx-auto bg-white mt-7 ">
         <CardHeader className="text-center">
           {!request && <Image src={Paid} alt="check" className="mx-auto" />}
-          {request === "transaction" ||request==="balance" && (
-            <Image src={Paid} alt="check" className="mx-auto" />
-          )}
+          {request === "transaction" ||
+            (request === "balance" && (
+              <Image src={Paid} alt="check" className="mx-auto" />
+            ))}
 
           {(request && (
             <CardTitle className="text-2xl font-semibold">
-        {request === "balance" 
-  ? "Bill paid" 
-  : request === "transaction" 
-    ? `Added $${details.amountSent}` 
-    : "Request Send for $5k"}
-
+              {request === "balance"
+                ? "Bill paid"
+                : request === "transaction"
+                ? `Transaction ${details?.name}`
+                : "Request Send for $5k"}
             </CardTitle>
-          ))  || (
+          )) || (
             <CardTitle className="text-2xl font-semibold">
               ${details.amountSent.toLocaleString()}k Sent
             </CardTitle>
-          ) 
-    
-          }
+          )}
           <p className="text-sm text-p font-medium mt-7">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed gravida
             mi id purus
           </p>
           <button className="btn-bg hover:bg-inherit rounded-xl text-black">
-            Details
+            Details of Transaction
           </button>
         </CardHeader>
 
-    
-        {
-  request === "balance" ? (
-    <CardContent>
-      <div className="space-y-2 ">
-        <div className="flex justify-between">
-          <span className="txt-detail">Sender Name</span>
-          <span className="txt-detail">{details.senderName}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="txt-detail">Receiver Name</span>
-          <span className="txt-detail">{details.receiverName}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="txt-detail">Bill ID</span>
-          <span className="txt-detail">{details.billid}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="txt-detail">Receiver Account Type</span>
-          <span className="txt-detail">{details.receiverAccountType}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="txt-detail">Date</span>
-          <span className="txt-detail">{details.date}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="txt-detail">Time</span>
-          <span className="txt-detail">{details.time}</span>
-        </div>
-          <div>
-            <p className="line-color">---------------------------------------------------</p>
-          </div>
-        
-        <div className="flex justify-between">
-          <span className="txt-detail">Amount Sent</span>
-          <span className="txt-detail">${details.amountSent.toLocaleString()}</span>
-        </div>
-      
-        <div className="flex justify-between">
-          <span className="txt-detail">Service Fee</span>
-          <span className="txt-detail">${details.serviceFee.toLocaleString()}</span>
-        </div>
-      </div>
-    </CardContent>
-  ) : (
-    <CardContent>
-      <div className="space-y-2">
-        <div className="flex justify-between">
-          <span className="txt-detail">Sender Name</span>
-          <span className="txt-detail">{details.senderName}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="txt-detail">Receiver Name</span>
-          <span className="txt-detail">{details.receiverName}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="txt-detail">Receiver Account Type</span>
-          <span className="txt-detail">{details.receiverAccountType}</span>
-        </div>
-        {request === "transaction" && (
-          <div>
-            <p className="line-color">---------------------------------------------------</p>
-          </div>
-        )}
-        <div className="flex justify-between">
-          <span className="txt-detail">Amount Sent</span>
-          <span className="txt-detail">${details.amountSent.toLocaleString()}</span>
-        </div>
-        {request !== "transaction" && (
-          <div>
-            <p className="line-color">---------------------------------------------------</p>
-          </div>
-        )}
-        <div className="flex justify-between">
-          <span className="txt-detail">Service Fee</span>
-          <span className="txt-detail">${details.serviceFee.toLocaleString()}</span>
-        </div>
-      </div>
-    </CardContent>
-  )
-}
+        {request === "balance" ? (
+          <CardContent>
+            <div className="space-y-2 ">
+              <div className="flex justify-between">
+                <span className="txt-detail">Sender Name</span>
+                <span className="txt-detail">{details.senderName}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="txt-detail">Receiver Name</span>
+                <span className="txt-detail">{details.receiverName}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="txt-detail">Bill ID</span>
+                <span className="txt-detail">{details.billid}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="txt-detail">Receiver Account Type</span>
+                <span className="txt-detail">
+                  {details.receiverAccountType}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="txt-detail">Date</span>
+                <span className="txt-detail">{details.date}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="txt-detail">Time</span>
+                <span className="txt-detail">{details.time}</span>
+              </div>
+              <div>
+                <p className="line-color">
+                  ---------------------------------------------------
+                </p>
+              </div>
 
-    
+              <div className="flex justify-between">
+                <span className="txt-detail">Amount Sent</span>
+                <span className="txt-detail">${details.amountSent}</span>
+              </div>
+
+              <div className="flex justify-between">
+                <span className="txt-detail">Service Fee</span>
+                <span className="txt-detail">${details.serviceFee}</span>
+              </div>
+            </div>
+          </CardContent>
+        ) : (
+          <CardContent>
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span className="txt-detail">Sender Name</span>
+                <span className="txt-detail">{details?.name}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="txt-detail">Account Number</span>
+                <span className="txt-detail truncate">
+                  {details?.accountNumber}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="txt-detail">Payment Type</span>
+                <span className="txt-detail">{details?.type}</span>
+              </div>
+              {request === "transaction" && (
+                <div>
+                  <p className="line-color">
+                    ---------------------------------------------------
+                  </p>
+                </div>
+              )}
+              <div className="flex justify-between">
+                <span className="txt-detail">Amount Sent</span>
+                <span className="txt-detail">{details?.amount}</span>
+              </div>
+              {request !== "transaction" && (
+                <div>
+                  <p className="line-color">
+                    ---------------------------------------------------
+                  </p>
+                </div>
+              )}
+              <div className="flex justify-between">
+                <span className="txt-detail">Time</span>
+                <span className="txt-detail">{details?.time}</span>
+              </div>
+            </div>
+          </CardContent>
+        )}
+
         <CardFooter>
           <Button
             onClick={handleDownload}
             className="w-auto mx-auto hover:bg-inherit btn-txt shadow-none font-semibold bg-none bg-inherit"
           >
-            Download Slip
+            Close
           </Button>
         </CardFooter>
       </Card>

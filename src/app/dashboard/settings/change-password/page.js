@@ -5,23 +5,59 @@ import Keyicon from "../../../../assets/key.svg";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import InfoModal from "../../../../pop-ups/info";
+import GlobalApi from "@/lib/GlobalApi";
+import { toast } from "sonner";
+import Cookies from "js-cookie";
 
 export default function ChangePassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const [newpass, setnewpass] = useState("");
+  const [oldpass, setoldpass] = useState("");
 
   const handleDeleteMember = () => {
-    setIsModalOpen(true); // Open the modal when the button is clicked
+    updateP();
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false); // Close the modal
   };
-  setTimeout(() => {
-    handleCloseModal();
-  }, 1000);
+
+  const [loading, setloading] = useState(false);
+
+  const updateP = async () => {
+    try {
+      const data = JSON.parse(Cookies.get("userData"));
+
+      setloading(true);
+      const response = await GlobalApi.changePass(data?.id, oldpass, newpass);
+
+      if (response?.success === true) {
+        toast("Password changed successfully.");
+        setIsModalOpen(true);
+        setnewpass("");
+        setoldpass("");
+
+        setTimeout(() => {
+          handleCloseModal();
+        }, 1000);
+
+        setloading(false);
+      } else {
+        toast(
+          response?.message || "Password changing failed. please try again "
+        );
+        setloading(false);
+      }
+    } catch (error) {
+      setloading(false);
+      toast("Network Error.");
+      console.log("error while updating password", error);
+      setloading(false);
+    }
+  };
+
   return (
     <Layout page={"settings"}>
       <div className="flex sm:flex-row flex-col">
@@ -56,6 +92,9 @@ export default function ChangePassword() {
                     required
                     className="w-full focus:outline-none focus:ring-0 border-0 placeholder-gray-400 text-gray-400"
                     placeholder="Enter your Current Password"
+                    onChange={(e) => {
+                      setoldpass(e.target.value);
+                    }}
                   />
                 </span>
                 <button
@@ -85,6 +124,9 @@ export default function ChangePassword() {
                     required
                     className="w-full focus:outline-none focus:ring-0 border-0 placeholder-gray-400 text-gray-400"
                     placeholder="Create New Password"
+                    onChange={(e) => {
+                      setnewpass(e.target.value);
+                    }}
                   />
                 </span>
                 <button
@@ -101,7 +143,7 @@ export default function ChangePassword() {
               </div>
 
               {/* Confirm Password Field */}
-              <div className="relative mt-4 sm:w-1/2 w-auto">
+              {/* <div className="relative mt-4 sm:w-1/2 w-auto">
                 <label htmlFor="confirm-password" className="sr-only">
                   Enter your Password
                 </label>
@@ -114,6 +156,9 @@ export default function ChangePassword() {
                     required
                     className="w-full focus:outline-none focus:ring-0 border-0 placeholder-gray-400 text-gray-400"
                     placeholder="Enter your Password"
+                    onChange={(e) => {
+                      setoldpass(e);
+                    }}
                   />
                 </span>
                 <button
@@ -127,13 +172,13 @@ export default function ChangePassword() {
                     <Eye className="h-5 w-5 text-gray-400" />
                   )}
                 </button>
-              </div>
+              </div> */}
 
               <button
                 onClick={handleDeleteMember} // Open modal on click
                 className="button-background text-white w-auto sm:w-8- font-semibold border rounded-lg mt-11 mx-auto p-2 no-hover px-8 "
               >
-                UPDATE
+                {loading ? "Updating..." : "UPDATE"}
               </button>
 
               {/* Info Modal */}

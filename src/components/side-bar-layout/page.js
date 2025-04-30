@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Activity from "../../assets/Activity.svg";
 import Active from "../../assets/active.svg";
+import Cookies from "js-cookie";
 
 const menuItems = [
   {
@@ -46,6 +47,10 @@ export default function Sidebar({ page }) {
   const place = page;
   const [activeItem, setActiveItem] = useState(page);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const handlelogout = () => {
+    Cookies.remove("userData");
+    Cookies.remove("token");
+  };
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -123,7 +128,9 @@ export default function Sidebar({ page }) {
           <Link href="/auth/signin">
             <button
               className="flex hover:bg-gray-100 items-center text-sm custom-p-color px-4 py-3 rounded-xl w-full font-semibold"
-              onClick={() => {}}
+              onClick={() => {
+                handlelogout();
+              }}
             >
               <Active className="mr-3" />
               Logout
