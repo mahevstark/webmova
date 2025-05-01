@@ -116,7 +116,7 @@ export default function WebAppsettings() {
       <div className="flex sm:flex-row flex-col">
         <Layoutsettings page="profile" />
 
-        <div className="mx-6 w-auto border rounded-md pt-4 sm:w-full space-y-8 mt-16 sm:mt-0 mb-12 sm:mb-0 pb-4 sm:pb-0 shadow-lg">
+        <div className="mx-6 w-auto border rounded-md pt-4 sm:w-full space-y-8 mt-16 sm:mt-0 mb-12 sm:mb-0 pb-4 sm:pb-0 shadow-lg xl:pb-8">
           {getLoad ? (
             <div className="flex justify-center items-center w-full h-[40vh]">
               <Spinner size={40} />
@@ -147,10 +147,8 @@ export default function WebAppsettings() {
               <hr />
               <div className="px-6" style={{ marginTop: "13px" }}>
                 <p className="settings-p">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Maecenas bibendum laoreet massa quis viverra.Lorem ipsum dolor
-                  sit amet, consectetur adipiscing elit. Maecenas bibendum
-                  laoreet massa quis viverra.
+                  Manage how your web app behaves. Customize features,
+                  preferences, and notifications to suit your needs.
                 </p>
 
                 <div className="space-y-6">

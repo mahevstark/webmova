@@ -71,10 +71,8 @@ export default function ChangePassword() {
           <hr className="custom-hr" />
           <div className="px-6" style={{ marginTop: "13px" }}>
             <p className="settings-p">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
-              bibendum laoreet massa quis viverra.Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit. Maecenas bibendum laoreet massa quis
-              viverra.
+              Keep your account secure by updating your password regularly.
+              Choose a strong, unique password.
             </p>
 
             {/* Current Password Field */}

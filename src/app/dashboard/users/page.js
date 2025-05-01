@@ -166,12 +166,12 @@ export default function Employee() {
               />
             </div>
           </div>
-          <Button
+          {/* <Button
             className="button-border btn-txt-color bg-white hover:bg-white border"
             onClick={() => setIsAddEmployeeDialogOpen(true)}
           >
             Add Employee
-          </Button>
+          </Button> */}
         </div>
 
         <Card className="border-none shadow-none p-0 mt-5 mb-5">
@@ -263,7 +263,7 @@ export default function Employee() {
                                 : "DeActive"}
                             </Button>
                           )}
-                          <Link href={`/dashboard/employees/${employee.id}`}>
+                          <Link href={`/dashboard/users/${employee.id}`}>
                             <Button
                               variant="outline"
                               size="sm"
@@ -294,8 +294,6 @@ export default function Employee() {
           <div className="mx-auto flex justify-center items-center">
             <Spinner />
           </div>
-        ) : employees.length === 0 ? (
-          <div>No data found </div>
         ) : currentPage < totalPages ? (
           <div className="flex justify-between items-center mt-4">
             <button

@@ -14,9 +14,9 @@ const menuItems = [
     check: "Dashboard",
   },
   {
-    name: "Employees",
+    name: "Users",
     icon: Activity,
-    href: "/dashboard/employees",
+    href: "/dashboard/users",
     activeicon: Active,
     check: "Employees",
   },

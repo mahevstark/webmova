@@ -141,10 +141,8 @@ export default function helpcenter() {
           <hr className="custom-hr" />
           <div className="px-6" style={{ marginTop: "13px" }}>
             <p className="settings-p">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
-              bibendum laoreet massa quis viverra.Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit. Maecenas bibendum laoreet massa quis
-              viverra.
+              Add, remove, or update help articles to keep your support content
+              relevant and up to date.
             </p>
           </div>
           <div className="flex px-6 flex-col" style={{ marginTop: "18px" }}>

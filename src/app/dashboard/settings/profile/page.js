@@ -39,9 +39,9 @@ export default function profile() {
   };
   return (
     <Layout page="settings">
-      <div className="flex sm:flex-row flex-col ">
+      <div className="flex sm:flex-row flex-col">
         <Layoutsettings page="profile" />{" "}
-        <div className="mx-6 w-auto border rounded-md pt-4 sm:w-full  space-y-8 mt-16 sm:mt-0 mb-12 sm:mb-0 pb-4 sm:pb-0 shadow-lg ">
+        <div className="mx-6 w-auto border rounded-md pt-4 sm:w-full  space-y-8 mt-16 sm:mt-0 mb-12 sm:mb-0 sm:pb-0 xl:pb-12 shadow-lg ">
           <div className="flex px-6   items-center justify-between flex-col sm:flex-row">
             <h1 className="text-xl font-semibold text-black">Profile</h1>
             <Link href={`/dashboard/settings/profile/${userData?.id}`}>
