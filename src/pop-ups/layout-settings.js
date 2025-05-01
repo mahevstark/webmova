@@ -22,11 +22,11 @@ export default function Settings({ page }) {
   const pathname = usePathname();
 
   const links = [
-    {
-      href: "/dashboard/settings/profile",
-      icon: User,
-      label: "Profile",
-    },
+    // {
+    //   href: "/dashboard/settings/profile",
+    //   icon: User,
+    //   label: "Profile",
+    // },
     // {
     //   href: "/dashboard/settings/notification-settings",
     //   icon: Bell,
@@ -77,12 +77,12 @@ export default function Settings({ page }) {
       icon: LayoutGrid,
       label: "WebApp Settings",
     },
-    {
-      href: "/dashboard/settings/delete-account",
-      icon: LogOut,
-      label: "Delete Account",
-      isDanger: true,
-    },
+    // {
+    //   href: "/dashboard/settings/delete-account",
+    //   icon: LogOut,
+    //   label: "Delete Account",
+    //   isDanger: true,
+    // },
   ];
 
   return (

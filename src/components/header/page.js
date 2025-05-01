@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Avatar from "../../assets/Avatar.png";
 import React, { useRef } from "react";
+import Cookies from "js-cookie";
 
 export default function Header() {
   const fileInputRef = useRef(null);
@@ -9,11 +10,18 @@ export default function Header() {
   const handleClick = () => {
     fileInputRef.current.click();
   };
+
+  const userdata = JSON.parse(Cookies.get("userData"));
+
+  console.log(userdata);
+
   return (
     <div className="flex shadow-md justify-between px-10 w-full pt-4 pb-4 border-b mb-8 sticky top-0 bg-white z-10">
       {/* Left section with greeting and subtext */}
       <span>
-        <p className="font-semibold text-xl text-gray-800">Hi, Tynisha!</p>
+        <p className="font-semibold text-xl text-gray-800">
+          Hi, {userdata?.firstName} {userdata?.lastName}
+        </p>
         <p className="text-sm text-gray-500">
           Let’s check your Dashboard today
         </p>
@@ -33,13 +41,11 @@ export default function Header() {
           />
         </span> */}
         <span className="flex flex-col">
-          <p className="font-bold text-gray-800">Tynisha Obey</p>
-          <input
-            ref={fileInputRef}
-            type="file"
-            style={{ display: "none" }} // Hide the input
-          />
-          <p className="text-sm text-gray-500">KATRING</p>
+          <p className="font-bold text-gray-800">
+            {userdata?.firstName} {userdata?.lastName}
+          </p>
+          <input ref={fileInputRef} type="file" style={{ display: "none" }} />
+          <p className="text-sm text-gray-500">{userdata?.email}</p>
         </span>
       </span>
     </div>

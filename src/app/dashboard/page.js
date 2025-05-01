@@ -85,12 +85,12 @@ export default function Dashboard() {
       <div className="  sm:px-6 md:px-10">
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between  sm:w-[38%] gap-2 sm:gap-0">
+            {/* <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between  sm:w-[38%] gap-2 sm:gap-0">
               <h1 className="text-2xl font-semibold">Card</h1>
               <button className="rounded-md font-semibold bg-[#544af1] text-white px-3 py-1">
                 Add New Card
               </button>
-            </div>
+            </div> */}
             {/* <div className="flex flex-wrap gap-2">
               <Link href="/dashboard/send-money">
                 {" "}
@@ -113,9 +113,9 @@ export default function Dashboard() {
             className="flex flex-col lg:flex-row justify-between gap-4 lg:gap-0"
             style={{ margin: 0 }}
           >
-            <div className="w-72 lg:w-auto ">
+            {/* <div className="w-72 lg:w-auto ">
               <Image src={Dcard} alt="" className="" />
-            </div>
+            </div> */}
 
             <Card className="mt-4 w-72 sm:w-full lg:w-1/2 shadow-md border">
               <CardHeader>
@@ -201,7 +201,7 @@ export default function Dashboard() {
                 <div className="flex flex-col gap-6 h-80 overflow-y-auto">
                   {[1, 2, 3].map((i) => (
                     <div key={i} className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="flex justify-between gap-4">
                         <p className="text-sm text-black">
                           Receiver: Kiraa Buri
                         </p>
@@ -210,14 +210,14 @@ export default function Dashboard() {
                         </p>
                       </div>
                       <p className="text-sm text-black">Sender: Kiraa Buri</p>
-                      <div className="flex gap-4">
+                      {/* <div className="flex gap-4">
                         <Button className="button-border btn-txt-color bg-white hover:bg-white border rounded-lg w-full sm:w-32">
                           Decline
                         </Button>
                         <Button className="button-border bg-white button-background text-white border rounded-lg w-full sm:w-32">
                           Accept
                         </Button>
-                      </div>
+                      </div> */}
                     </div>
                   ))}
                 </div>

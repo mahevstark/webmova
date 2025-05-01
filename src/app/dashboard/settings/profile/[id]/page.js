@@ -87,24 +87,22 @@ export default function editprofile() {
           </div>
           <hr />
           <div className="px-6">
-            <p className="settings-p" style={{ marginTop: "13px" }}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
-              bibendum laoreet massa quis viverra.Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit. Maecenas bibendum laoreet massa quis
-              viverra.
+            <p className="settings-p">
+              Update your personal information to keep your account details
+              current and personalized.
             </p>
 
-            <div className="mt-7 flex flex-col gap-3">
+            <div className="mt-4 flex flex-col gap-3">
               <div>
                 <p className="text-sm mb-3 settings-p">First Name</p>
                 <span className="flex items-center gap-2 border border-color-input rounded-lg px-3 py-1 md:px-4 md:py-2 sm:w-96 w-auto">
-                  <Image src={msg} alt="" />
+                  {/* <Image src={msg} alt="" /> */}
                   <input
                     id="phone"
                     name="phone"
                     type="tel"
                     required
-                    className="w-full focus:outline-none focus:ring-0 border-0 text-gray-400"
+                    className="w-full focus:outline-none text-black focus:ring-0 border-0 placeholder:text-gray-400"
                     placeholder="Enter your First Name"
                     value={user.fname}
                     onChange={(e) =>
@@ -116,13 +114,13 @@ export default function editprofile() {
               <div>
                 <p className="text-sm mb-3 settings-p">Last Name</p>
                 <span className="flex items-center gap-2 border border-color-input rounded-lg px-3 py-1 md:px-4 md:py-2 sm:w-96 w-auto">
-                  <Image src={msg} alt="" />
+                  {/* <Image src={msg} alt="" /> */}
                   <input
                     id="phone"
                     name="phone"
                     type="tel"
                     required
-                    className="w-full focus:outline-none focus:ring-0 border-0 text-gray-400"
+                    className="w-full focus:outline-none focus:ring-0 border-0 text-black placeholder:text-gray-400"
                     placeholder="Enter your Last Name"
                     value={user.lname}
                     onChange={(e) =>
@@ -135,13 +133,13 @@ export default function editprofile() {
               <div>
                 <p className="text-sm mb-3 settings-p">Email</p>
                 <span className="flex items-center gap-2 border border-color-input rounded-lg px-3 py-1 md:px-4 md:py-2 sm:w-96 w-auto">
-                  <Image src={msg} alt="" />
+                  {/* <Image src={msg} alt="" /> */}
                   <input
                     id="phone"
                     name="phone"
                     type="tel"
                     required
-                    className="w-full focus:outline-none focus:ring-0 border-0 text-gray-400"
+                    className="w-full focus:outline-none focus:ring-0 border-0 text-black placeholder:text-gray-400"
                     placeholder="Enter your Email"
                     value={user.email}
                     onChange={(e) =>
@@ -154,13 +152,13 @@ export default function editprofile() {
               <div>
                 <p className="text-sm mb-3 settings-p">Date of Birth</p>
                 <span className="flex items-center gap-2 border border-color-input rounded-lg px-3 py-1 md:px-4 md:py-2 sm:w-96 ">
-                  <Image src={msg} alt="" />
+                  {/* <Image src={msg} alt="" /> */}
                   <input
                     id="phone"
                     name="phone"
                     type="tel"
                     required
-                    className="w-full focus:outline-none focus:ring-0 border-0 text-gray-400"
+                    className="w-full focus:outline-none focus:ring-0 border-0 text-black placeholder:text-gray-400"
                     placeholder="DD/MM/YYYY"
                     value={user.dob}
                     onChange={(e) => setUser({ ...user, dob: e.target.value })}
@@ -171,13 +169,13 @@ export default function editprofile() {
               <div>
                 <p className="text-sm mb-3 settings-p">Permanent Address</p>
                 <span className="flex items-center gap-2 border border-color-input rounded-lg px-3 py-1 md:px-4 md:py-2 sm:w-96 w-auto">
-                  <Image src={msg} alt="" />
+                  {/* <Image src={msg} alt="" /> */}
                   <input
                     id="phone"
                     name="phone"
                     type="tel"
                     required
-                    className="w-full focus:outline-none focus:ring-0 border-0 text-gray-400"
+                    className="w-full focus:outline-none focus:ring-0 border-0 text-black placeholder:text-gray-400"
                     placeholder="Enter your Permanent Address"
                     value={user.address}
                     onChange={(e) =>
