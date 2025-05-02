@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import InfoLayout from "@/components/InfoLayout";
 import GlobalApi from "@/lib/GlobalApi";
 import { Spinner } from "@/components/ui/spinner";
+export const dynamic = "force-dynamic";
 
 export default function privacypolicy() {
   const [loading, setloading] = useState(false);

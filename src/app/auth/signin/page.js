@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
+import { useUser } from "@/app/provider/UserProvider";
 
 export default function signin() {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,6 +20,7 @@ export default function signin() {
   const [pass, setpass] = useState(null);
   const router = useRouter();
 
+  const { setlogin } = useUser();
   const login = async (e) => {
     e.preventDefault();
     try {
@@ -30,12 +32,7 @@ export default function signin() {
         setloading(false);
         toast("Login Success");
 
-        Cookies.set("userData", JSON.stringify(response?.data?.user), {
-          expires: 7,
-        });
-        Cookies.set("token", response?.data?.token, {
-          expires: 7,
-        });
+        setlogin(response?.data?.user, response?.data?.token);
 
         setTimeout(() => {
           router.push("/dashboard");

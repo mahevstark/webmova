@@ -91,8 +91,6 @@ export default function Employee() {
 
   const deActuser = async (id) => {
     try {
-      console.log("id", id);
-
       setDeactivatingEmployees((prev) => ({ ...prev, [id]: true }));
 
       const response = await GlobalApi.deActUser(id, token);

@@ -37,7 +37,7 @@ const menuItems = [
   {
     name: "Setting",
     icon: Activity,
-    href: "/dashboard/settings/profile",
+    href: "/dashboard/settings/change-password",
     activeicon: Active,
     check: "settings",
   },
