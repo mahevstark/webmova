@@ -8,6 +8,7 @@ import InfoModal from "../../../../pop-ups/info";
 import GlobalApi from "@/lib/GlobalApi";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
+import { useUser } from "@/app/provider/UserProvider";
 
 export default function ChangePassword() {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,6 +17,7 @@ export default function ChangePassword() {
   const [newpass, setnewpass] = useState("");
   const [oldpass, setoldpass] = useState("");
 
+  const { user } = useUser();
   const handleDeleteMember = () => {
     updateP();
   };
@@ -28,10 +30,8 @@ export default function ChangePassword() {
 
   const updateP = async () => {
     try {
-      const data = JSON.parse(Cookies.get("userData"));
-
       setloading(true);
-      const response = await GlobalApi.changePass(data?.id, oldpass, newpass);
+      const response = await GlobalApi.changePass(user?.id, oldpass, newpass);
 
       if (response?.success === true) {
         toast("Password changed successfully.");
@@ -62,7 +62,7 @@ export default function ChangePassword() {
     <Layout page={"settings"}>
       <div className="flex sm:flex-row flex-col">
         <Layoutsettings />{" "}
-        <div className="mx-6 border rounded-md w-auto pt-4 sm:w-full space-y-8 mt-16 sm:mt-0 mb-12 sm:mb-8 pb-4 sm:pb-0 shadow-lg ">
+        <div className="mx-6 border rounded-md w-auto pt-4 sm:w-full space-y-8 mt-16 sm:mt-0 mb-12 sm:mb-8 pb-4 sm:pb-0 shadow-lg xl:pb-8">
           <div className="flex px-6 items-center justify-between flex-col sm:flex-row">
             <h1 className="text-xl font-semibold text-black">
               Change Password

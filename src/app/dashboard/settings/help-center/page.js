@@ -12,6 +12,8 @@ import { useEffect, useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
 import Cookies from "js-cookie";
 
+export const dynamic = "force-dynamic";
+
 export default function helpcenter() {
   const [loadhelpdata, sethelploaddata] = useState(false);
   const [isEditing, setIsEditing] = useState(false);

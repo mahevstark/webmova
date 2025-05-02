@@ -1,6 +1,7 @@
 import { Nunito } from "next/font/google"; // Import Nunito from Google Fonts
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { UserProvider } from "./provider/UserProvider";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -23,9 +24,11 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className={`${nunito.variable} antialiased`}>
-        {children}
+        <UserProvider>
+          {children}
 
-        <Toaster />
+          <Toaster />
+        </UserProvider>
       </body>
     </html>
   );

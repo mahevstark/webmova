@@ -45,18 +45,6 @@ export default function InfoLayout({ heading, content, loading }) {
 
   useEffect(() => {
     setEditedContent(content?.content || "");
-    // const currentPage = {
-    //   id: content?.id,
-    //   heading,
-    //   path: pathname,
-    // };
-
-    // const existing = Cookies.get("pagesInfo");
-    // const pagesInfo = existing ? JSON.parse(existing) : {};
-
-    // pagesInfo[pathname] = currentPage;
-
-    // Cookies.set("pagesInfo", JSON.stringify(pagesInfo), { expires: 7 });
   }, [content]);
 
   const token = Cookies.get("token");
@@ -64,11 +52,6 @@ export default function InfoLayout({ heading, content, loading }) {
 
   const handleSave = async () => {
     try {
-      // const pagesInfo = Cookies.get("pagesInfo");
-      // const parsedPages = pagesInfo ? JSON.parse(pagesInfo) : {};
-      // const page = parsedPages[pathname];
-
-      // console.log("page", page);
       setloading(true);
       let response;
       content?.id
