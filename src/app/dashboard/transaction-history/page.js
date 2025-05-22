@@ -58,26 +58,28 @@ export default function TransactionHistory() {
         return;
       }
 
-      let response;
-      s === "approved"
-        ? (response = await GlobalApi.getApprTransactions(token))
-        : (response = await GlobalApi.getUnAprTransactions(token));
+      const data = JSON.parse(localStorage.getItem("userData"));
+
+      const response = await GlobalApi.getTransactions(token, data?.id, s);
+
+      console.log("my data", response?.data?.recentTransactions);
 
       if (response?.success === true) {
-        const formatted = response?.data?.map((txn) => {
+        const formatted = response?.data?.recentTransactions?.map((txn) => {
           const date = new Date(txn.timestamp);
           return {
             id: txn.id,
-            name: `User ${txn.userId}`, // Replace with actual name if available
+            name: `User ${txn.id}`, // Replace with actual name if available
             accountNumber: txn.transactionId || "N/A",
             day: date.toLocaleDateString(),
             time: date.toLocaleTimeString([], {
               hour: "2-digit",
               minute: "2-digit",
             }),
-            type: txn.actions === "DEPOSIT" ? "Credit" : "Debit",
+            type: txn.action,
             amount: `$${txn.amount}`,
             action: "View",
+            currency: txn?.currency || "USA",
           };
         });
         setEmployee(formatted);
@@ -151,8 +153,9 @@ export default function TransactionHistory() {
                 <SelectValue placeholder="Filter Transactions" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="approved">Approved</SelectItem>
-                <SelectItem value="unapproved">Unapproved</SelectItem>
+                <SelectItem value="weekly">Weekly</SelectItem>
+                <SelectItem value="monthly">Monthly</SelectItem>
+                <SelectItem value="yearly">Yearly</SelectItem>
               </SelectContent>
             </Select>
             <div className="relative w-full">
@@ -176,7 +179,9 @@ export default function TransactionHistory() {
               <Table className="p-0">
                 <TableHeader className="tb-col">
                   <TableRow>
-                    <TableHead className="sm:table-cell"></TableHead>
+                    <TableHead className="sm:table-cel font-semibold text-blackl">
+                      User ID
+                    </TableHead>
                     <TableHead className="font-semibold text-black">
                       Name
                     </TableHead>
@@ -195,16 +200,20 @@ export default function TransactionHistory() {
                     <TableHead className="sm:table-cell font-semibold text-black">
                       Amount
                     </TableHead>
-                    <TableHead className="font-semibold text-black">
-                      Action
+
+                    <TableHead className="sm:table-cell font-semibold text-black">
+                      Currency
                     </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {currentEmployees.length === 0 && !loading ? (
                     <TableRow>
-                      <TableCell colSpan={8} className="text-center">
-                        No data found.
+                      <TableCell
+                        colSpan={8}
+                        className="text-center text-lg font-base text-gray-500"
+                      >
+                        No Recent Transactions found.
                       </TableCell>
                     </TableRow>
                   ) : (
@@ -232,17 +241,8 @@ export default function TransactionHistory() {
                         <TableCell className="sm:table-cell">
                           {employee.amount}
                         </TableCell>
-                        <TableCell>
-                          <div className="flex flex-col sm:flex-row">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="text-blue-500 font-semibold border text-left hover:text-blue-500"
-                              onClick={() => toggleExpertise(employee)}
-                            >
-                              View
-                            </Button>
-                          </div>
+                        <TableCell className="sm:table-cell">
+                          {employee.currency}
                         </TableCell>
                       </TableRow>
                     ))
@@ -259,7 +259,7 @@ export default function TransactionHistory() {
             <Spinner />
           </div>
         ) : (
-          currentEmployees.length > 0 && (
+          currentEmployees.length > 9 && (
             <div className="flex justify-between items-center mt-4">
               <button
                 className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"

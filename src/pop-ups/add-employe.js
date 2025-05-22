@@ -10,40 +10,39 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
 import InfoModal from "./info";
 import { CalendarIcon, PhoneIcon } from "lucide-react";
-import { format } from "date-fns";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+// import { format } from "date-fns";
+// import { Calendar } from "@/components/ui/calendar";
+// import {
+//   Popover,
+//   PopoverContent,
+//   PopoverTrigger,
+// } from "@/components/ui/popover";
+// import { cn } from "@/lib/utils";
 import GlobalApi from "@/lib/GlobalApi";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 
-export default function AddEmployee({ isOpen, onClose, onDelete, setIsOpen }) {
+export default function AddEmployee({
+  isOpen,
+  onClose,
+
+  employee,
+}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     phoneNumber: "",
-    password: "",
-    permanentAddress: "",
-    dob: undefined,
-    isAdmin: false,
-    role: "STANDARD",
-    pin: "",
   });
   const [errors, setErrors] = useState({});
 
@@ -61,33 +60,6 @@ export default function AddEmployee({ isOpen, onClose, onDelete, setIsOpen }) {
     }
   };
 
-  const handleCheckboxChange = (checked) => {
-    setFormData({
-      ...formData,
-      isAdmin: checked,
-    });
-  };
-
-  const handleRoleChange = (value) => {
-    setFormData({
-      ...formData,
-      role: value,
-    });
-  };
-
-  const handleDateChange = (date) => {
-    setFormData({
-      ...formData,
-      dob: date,
-    });
-    if (errors.dob) {
-      setErrors({
-        ...errors,
-        dob: "",
-      });
-    }
-  };
-
   const validateForm = () => {
     const newErrors = {};
 
@@ -99,13 +71,11 @@ export default function AddEmployee({ isOpen, onClose, onDelete, setIsOpen }) {
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Email is invalid";
     }
-    if (!formData.phoneNumber.trim())
+    if (!formData.phoneNumber.trim()) {
       newErrors.phoneNumber = "Phone number is required";
-    if (!formData.password.trim()) newErrors.password = "Password is required";
-    if (!formData.permanentAddress.trim())
-      newErrors.permanentAddress = "Address is required";
-    if (!formData.dob) newErrors.dob = "Date of birth is required";
-    if (!formData.pin) newErrors.pin = "PIN is required";
+    } else if (!/^\+?[0-9]{7,15}$/.test(formData.phoneNumber.trim())) {
+      newErrors.phoneNumber = "Invalid phone number format";
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -126,72 +96,59 @@ export default function AddEmployee({ isOpen, onClose, onDelete, setIsOpen }) {
   };
 
   const [loading, setloading] = useState(false);
-  const token = Cookies.get("token");
   const registerUser = async () => {
     try {
       setloading(true);
+      const token = Cookies.get("token");
 
-      const response = await GlobalApi.registerEmp(formData);
+      const data = JSON.parse(localStorage.getItem("userData"));
+
+      const response = await GlobalApi.registerEmp(
+        formData,
+        token,
+        data?.business?.id
+      );
 
       if (response?.success === true) {
+        employee();
+        toast("Employee Added Successfully");
+        onClose();
+        setloading(false);
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          phoneNumber: "",
+        });
       } else {
         setloading(false);
         toast(
           response?.message ||
-            "User with this Email or Firstname exists. Please use a different one"
+            "User with this Email Firstname or Phonenumber exists. Please use a different one"
         );
+        setloading(false);
+        onClose();
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          phoneNumber: "",
+        });
       }
     } catch (error) {
       console.log("error while registering user ", error);
       setloading(false);
       toast("Network Error");
+      setloading(false);
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phoneNumber: "",
+      });
+      onClose();
     }
   };
-
-  // const regBus = async (id) => {
-  //   try {
-  //     let comp = "Example";
-  //     const response = await GlobalApi.RegBusn(id, comp);
-
-  //     if (response?.success === true) {
-  //       registerEmpl(response?.data?.id);
-  //     } else {
-  //       setloading(false);
-  //     }
-  //   } catch (error) {
-  //     console.log("error while registering bussiness ", error);
-  //     setloading(false);
-  //     toast("Network Error");
-  //   }
-  // };
-
-  // const registerEmpl = async (id) => {
-  //   try {
-  //     const response = await GlobalApi.registerEmp(formData, token, id);
-  //     console.log("rr by me r", response);
-
-  //     if (response?.success === true) {
-  //       toast("Employee Created Successfully.");
-  //       setloading(false);
-
-  //       handleOpenModal();
-
-  //       setTimeout(() => {
-  //         handleCloseModal();
-  //         onClose();
-  //       }, 2000);
-  //     } else {
-  //       setloading(false);
-  //       toast(
-  //         response?.message || "Error while adding Employee. Please try again"
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.log("error while registering user ", error);
-  //     setloading(false);
-  //     toast("Network Error");
-  //   }
-  // };
 
   return (
     <>
@@ -225,6 +182,7 @@ export default function AddEmployee({ isOpen, onClose, onDelete, setIsOpen }) {
                       <Label htmlFor="firstName">First Name</Label>
                       <Input
                         id="firstName"
+                        placeholder="first Name"
                         name="firstName"
                         value={formData.firstName}
                         onChange={handleInputChange}
@@ -243,6 +201,7 @@ export default function AddEmployee({ isOpen, onClose, onDelete, setIsOpen }) {
                       <Input
                         id="lastName"
                         name="lastName"
+                        placeholder="last Name"
                         value={formData.lastName}
                         onChange={handleInputChange}
                         className={errors.lastName ? "border-red-500" : ""}
@@ -261,6 +220,7 @@ export default function AddEmployee({ isOpen, onClose, onDelete, setIsOpen }) {
                         id="email"
                         name="email"
                         type="email"
+                        placeholder="Email"
                         value={formData.email}
                         onChange={handleInputChange}
                         className={errors.email ? "border-red-500" : ""}
@@ -276,7 +236,6 @@ export default function AddEmployee({ isOpen, onClose, onDelete, setIsOpen }) {
                     <div>
                       <Label htmlFor="phoneNumber">Phone Number</Label>
                       <div className="flex items-center gap-2 border border-input rounded-md px-3 py-2 md:px-4 md:py-2 w-full">
-                        <PhoneIcon className="h-4 w-4 text-gray-500" />
                         <input
                           id="phoneNumber"
                           name="phoneNumber"
@@ -284,7 +243,7 @@ export default function AddEmployee({ isOpen, onClose, onDelete, setIsOpen }) {
                           value={formData.phoneNumber}
                           onChange={handleInputChange}
                           className="w-full focus:outline-none focus:ring-0 border-0"
-                          placeholder="Enter Phone Number"
+                          placeholder="Phone Number"
                         />
                       </div>
                       {errors.phoneNumber && (
@@ -294,7 +253,7 @@ export default function AddEmployee({ isOpen, onClose, onDelete, setIsOpen }) {
                       )}
                     </div>
 
-                    {/* Password */}
+                    {/* Password
                     <div>
                       <Label htmlFor="password">Password</Label>
                       <Input
@@ -313,7 +272,7 @@ export default function AddEmployee({ isOpen, onClose, onDelete, setIsOpen }) {
                     </div>
 
                     {/* Permanent Address */}
-                    <div>
+                    {/* <div>
                       <Label htmlFor="permanentAddress">
                         Permanent Address
                       </Label>
@@ -331,9 +290,9 @@ export default function AddEmployee({ isOpen, onClose, onDelete, setIsOpen }) {
                           {errors.permanentAddress}
                         </p>
                       )}
-                    </div>
+                    </div> */}
 
-                    <div>
+                    {/* <div>
                       <Label htmlFor="pin">Transaction PIN</Label>
                       <Input
                         id="pin"
@@ -347,10 +306,10 @@ export default function AddEmployee({ isOpen, onClose, onDelete, setIsOpen }) {
                           {errors.pin}
                         </p>
                       )}
-                    </div>
+                    </div> */}
 
                     {/* Date of Birth */}
-                    <div>
+                    {/* <div>
                       <Label htmlFor="dob">Date of Birth</Label>
                       <Popover>
                         <PopoverTrigger asChild>
@@ -382,10 +341,10 @@ export default function AddEmployee({ isOpen, onClose, onDelete, setIsOpen }) {
                           {errors.dob}
                         </p>
                       )}
-                    </div>
+                    </div> */}
 
                     {/* Role */}
-                    <div>
+                    {/* <div>
                       <Label htmlFor="role">Role</Label>
                       <Select
                         value={formData.role}
@@ -400,7 +359,7 @@ export default function AddEmployee({ isOpen, onClose, onDelete, setIsOpen }) {
                           <SelectItem value="BUSINESS">Business</SelectItem>
                         </SelectContent>
                       </Select>
-                    </div>
+                    </div> */}
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-center gap-4 px-6 py-4">

@@ -31,6 +31,24 @@ export default function signin() {
       if (response?.success === true) {
         setloading(false);
         toast("Login Success");
+        console.log("user data", response?.data?.user);
+
+        const userData = response?.data?.user;
+
+        console.log("user data", userData);
+
+        // Cookies.set("userData", JSON.stringify(userData), { expires: 7 });
+
+        // const raw = Cookies.get("userData");
+
+        // try {
+        //   const parsed = JSON.parse(raw);
+        //   console.log(parsed);
+        // } catch (error) {
+        //   console.error("Failed to parse userData:", error);
+        // }
+
+        // return;
 
         setlogin(response?.data?.user, response?.data?.token);
 
@@ -135,14 +153,18 @@ export default function signin() {
                 )}
               </button>
             </div>
-            {/* <div className="text-right">
-              <a href="/auth/forgot-password" className="text-sm text-gray-400">
-                Forgot Password?
-              </a>
-            </div>{" "} */}
+            <div className="  text-right text-base  text-black">
+              Have an Account?{" "}
+              <Link
+                href="/auth/signup"
+                className="text-base text-gray-400 font-semibold "
+              >
+                Signup now
+              </Link>
+            </div>
             <Button
               value={loading ? "Signing in..." : "Sign in"}
-              classname="py-3 px-3 mt-2 w-full"
+              classname="py-3 px-3  w-full"
             />
           </form>
         </div>

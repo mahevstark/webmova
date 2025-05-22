@@ -49,12 +49,16 @@ export default function ChangePassword() {
           response?.message || "Password changing failed. please try again "
         );
         setloading(false);
+        setnewpass("");
+        setoldpass("");
       }
     } catch (error) {
       setloading(false);
       toast("Network Error.");
       console.log("error while updating password", error);
       setloading(false);
+      setnewpass("");
+      setoldpass("");
     }
   };
 
@@ -89,6 +93,7 @@ export default function ChangePassword() {
                     type={showPassword ? "text" : "password"}
                     required
                     className="w-full focus:outline-none focus:ring-0 border-0 placeholder-gray-400 text-gray-400"
+                    value={oldpass}
                     placeholder="Enter your Current Password"
                     onChange={(e) => {
                       setoldpass(e.target.value);
@@ -120,6 +125,7 @@ export default function ChangePassword() {
                     name="new-password"
                     type={showNewPassword ? "text" : "password"}
                     required
+                    value={newpass}
                     className="w-full focus:outline-none focus:ring-0 border-0 placeholder-gray-400 text-gray-400"
                     placeholder="Create New Password"
                     onChange={(e) => {

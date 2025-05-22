@@ -1,6 +1,6 @@
 "use client";
 
-import { useState ,useEffect} from "react";
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -9,25 +9,44 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import InfoModal from "./info";
+import GlobalApi from "@/lib/GlobalApi";
+import Cookies from "js-cookie";
 
 export default function DeleteConfirmation({
   isOpen,
   onClose,
   onDelete,
-  setIsOpen,
+  selectedEmployee,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setloading] = useState(false);
+  console.log("selectedEmployee", selectedEmployee);
 
-  const handleDelete = () => {
-    // Perform the delete action
-    onDelete(); 
-    handleOpenModal(); // Open InfoModal after deletion
+  const handleDelete = async () => {
+    try {
+      setloading(true);
+      const token = Cookies.get("token");
+      const response = await GlobalApi.deleteEmployee(
+        token,
+        selectedEmployee?.id
+      );
 
-    // Automatically close the InfoModal after 3 seconds
-    setTimeout(() => {
-      handleCloseModal(); 
-      onClose(); // Close DeleteConfirmation after InfoModal closes
-    }, 1000);
+      if (response?.success === true) {
+        setloading(false);
+        handleCloseModal();
+        onClose();
+        onDelete();
+      } else {
+        handleCloseModal();
+        onClose();
+      }
+    } catch (error) {
+      console.log("error while deleting Employee", error);
+
+      setloading(false);
+      handleCloseModal();
+      onClose();
+    }
   };
 
   const handleOpenModal = () => {
@@ -42,7 +61,9 @@ export default function DeleteConfirmation({
     <>
       {isOpen && (
         <div
-          className={`fixed inset-0 cls bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0"}`}
+          className={`fixed inset-0 cls bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-300 ${
+            isOpen ? "opacity-100" : "opacity-0"
+          }`}
           onClick={onClose} // Clicking on the overlay will close the popup
         >
           <div
@@ -74,7 +95,7 @@ export default function DeleteConfirmation({
                   onClick={handleDelete} // Call handleDelete to perform the deletion
                   className="button-background text-white w-80 font-semibold border rounded-lg mt-4 mx-auto p-2 no-hover"
                 >
-                  Delete Member
+                  {loading ? "Almost there..." : " Delete Member"}
                 </button>
               </CardFooter>
             </Card>

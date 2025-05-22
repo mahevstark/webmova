@@ -15,8 +15,10 @@ import Dcard from "../../../../assets/card.png";
 import DeleteConfirmation from "../../../../pop-ups/delete-employee";
 import Link from "next/link";
 import { Switch } from "@/components/ui/switch";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import Addbalance from "../../../../pop-ups/add-balance";
+import GlobalApi from "@/lib/GlobalApi";
+import Cookies from "js-cookie";
 export default function profile() {
   const employees = [
     {
@@ -88,11 +90,72 @@ export default function profile() {
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleAddBalance = (amount) => {
+    console.log("aaaaa", amount);
+
     setBalance((prevBalance) => prevBalance + amount);
-    // Optionally, you can log the balance or perform other actions
+
     console.log(`New balance: ${balance + amount}`);
   };
   var page = "Employees";
+
+  const [employee, setEmployee] = useState(null);
+
+  const [req, setReq] = useState([]);
+
+  const [loading, setloading] = useState(false);
+
+  const getrequests = async () => {
+    try {
+      const data = JSON.parse(localStorage.getItem("userData"));
+
+      console.log("login data", data);
+
+      const token = Cookies.get("token");
+      console.log(token);
+
+      console.log("my employee", employee);
+
+      setloading(true);
+      const response = await GlobalApi.getPaymentRequests(
+        data?.business?.id,
+        1,
+        10,
+        employee?.id
+      );
+
+      console.log("response by page", response);
+
+      if (response?.success === true) {
+        setReq(response?.requests);
+        setloading(false);
+      } else {
+        setReq([]);
+        setloading(false);
+      }
+    } catch (error) {
+      console.log("error while getting employee req", error);
+
+      setReq([]);
+      setloading(false);
+    }
+  };
+
+  useEffect(() => {
+    const stored = sessionStorage.getItem("selectedEmployee");
+    console.log("stored", JSON.parse(stored));
+
+    if (stored) {
+      setEmployee(JSON.parse(stored));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (employee) {
+      getrequests();
+    }
+  }, [employee]);
+
+  if (!employee && loading) return <div>Loading...</div>;
 
   return (
     <Layout page={page}>
@@ -106,6 +169,7 @@ export default function profile() {
         isOpen={isModalOpen}
         onRequestClose={() => setModalOpen(false)}
         onAddBalance={handleAddBalance}
+        employee={employee}
       />
       <div className="  sm:px-6 md:px-10">
         <div className="space-y-6">
@@ -114,16 +178,16 @@ export default function profile() {
               <h1 className="text-2xl font-semibold">Employee Profile </h1>
             </div>
             <div className="flex flex-wrap gap-4">
-              <span className="flex text-sm items-center gap-2">
+              {/* <span className="flex text-sm items-center gap-2">
                 <p className="btn-txt-color font-medium">Payment Request</p>
                 <p className="custom-p-color">NO</p>
                 <Switch className="" />
-              </span>
-              <span className="flex text-sm items-center gap-2">
+              </span> */}
+              {/* <span className="flex text-sm items-center gap-2">
                 <p className="btn-txt-color font-medium">Status:</p>
                 <p className="custom-p-color">Active:</p>
                 <Switch className="" />
-              </span>
+              </span> */}
               <Link href="#">
                 {" "}
                 <Button
@@ -133,12 +197,12 @@ export default function profile() {
                   Add Balance
                 </Button>
               </Link>{" "}
-              <Button
+              {/* <Button
                 className="button-border btn-txt-color bg-white hover:bg-white border "
                 onClick={openDeleteDialog}
               >
                 Delete Employee
-              </Button>
+              </Button> */}
             </div>
           </div>
 
@@ -150,24 +214,39 @@ export default function profile() {
                 </h1>
                 <span className="flex gap-2">
                   <p className=" text-muted-foreground">Name: </p>
-                  <p className="text-gray-800">Jahanzaib Shoaib</p>
+                  <p className="text-gray-800">
+                    {employee?.user?.firstName || "Employee Name"}{" "}
+                    {employee?.user?.lastName}{" "}
+                  </p>
                 </span>
                 <span className="flex gap-2">
                   <p className=" text-muted-foreground">Contact Number: </p>
-                  <p className="text-gray-600">+12345678345</p>
+                  <p className="text-gray-600">
+                    {employee?.user?.phoneNumber || "Contact Number"}
+                  </p>
                 </span>
                 <span className="flex gap-2">
-                  <p className=" text-muted-foreground">Mail: </p>
-                  <p className="text-gray-600">abc@gmail.com</p>
+                  <p className=" text-muted-foreground">EMail: </p>
+                  <p className="text-gray-600">
+                    {employee?.user?.email || "Email"}
+                  </p>
                 </span>
                 <span className="flex gap-2">
+                  <p className=" text-muted-foreground">Status: </p>
+                  <p className="text-gray-600">
+                    {employee?.user?.isActive ? "Active" : "InActive"}
+                  </p>
+                </span>
+                {/* <span className="flex gap-2">
                   <p className=" text-muted-foreground">DoB: </p>
-                  <p className="text-gray-600">12-01-1990</p>
+                  <p className="text-gray-600">{employee?.user?.dob}</p>
                 </span>
                 <span className="flex gap-2">
                   <p className=" text-muted-foreground">Address: </p>
-                  <p className="text-gray-600"> House #134 Topaz Block</p>
-                </span>
+                  <p className="text-gray-600">
+                    {employee?.user?.permanentAddress}
+                  </p>
+                </span> */}
               </span>
             </div>
 
@@ -175,35 +254,39 @@ export default function profile() {
               <CardHeader className="p-0">
                 <CardTitle className="flex justify-between items-center">
                   <p className="btn-txt-color font-semibold text-lg">Stats</p>
-                  <select
+                  {/* <select
                     className="border p-2 rounded-full font-medium btn-txt-color"
                     style={{ background: "#cfccff69" }}
                   >
                     <option value="weekly">Weekly</option>
-                  </select>
+                  </select> */}
                 </CardTitle>
                 <p className="text-sm text-muted-foreground">
-                  Showing Result of Jul 19-25
+                  Showing Recent Results
                 </p>
               </CardHeader>
-              <CardContent className="p-0 " >
-                <div className="flex gap-5  items-center mt-8 flex-col sm:flex-row ">
+              <CardContent className="p-0 ">
+                <div className="flex gap-5 justify-center  items-center mt-8 flex-col sm:flex-row ">
                   <div className="flex gap-1 items-center flex-col border px-12 pt-2 shadow pb-2 rounded-lg">
-                    <p className="text-2xl font-bold text-gray-600">$500</p>
+                    <p className="text-2xl font-bold text-gray-600">
+                      ${employee?.wallet?.balance + balance || 0}.00
+                    </p>
                     <p className="text-sm text-gray-500">Balance</p>
                   </div>
                   <div className="flex gap-1 justify-between items-center  flex-col border px-12 pt-2 shadow pb-2 rounded-lg">
-                    <p className="text-2xl font-bold text-gray-600">$50k</p>
+                    <p className="text-2xl font-bold text-gray-600">
+                      {employee?.wallet?.type || "Wallet Type"}
+                    </p>
                     <p className="text-sm text-muted-foreground text-gray-500">
-                      Spendings
+                      Wallet Type
                     </p>
                   </div>
-                  <div className="flex gap-1 justify-between items-center  flex-col border px-12 pt-2 shadow pb-2 rounded-lg">
+                  {/* <div className="flex gap-1 justify-between items-center  flex-col border px-12 pt-2 shadow pb-2 rounded-lg">
                     <p className="text-2xl font-bold text-gray-600">$50k</p>
                     <p className="text-sm text-muted-foreground text-gray-500">
                       Receiving
                     </p>
-                  </div>
+                  </div> */}
                 </div>
               </CardContent>
             </Card>
@@ -212,29 +295,29 @@ export default function profile() {
           <div className="flex flex-col lg:flex-row gap-7 ">
             <Card className="border-none shadow-none p-0 mt-5 mb-5 w-full">
               <h1 className="btn-txt-color font-semibold text-xl mb-6">
-                Transection History
+                Payment requests
               </h1>
               <CardContent className="p-0 overflow-x-auto w-80 sm:w-full">
                 <Table className="p-0">
                   <TableHeader className="tb-col">
                     <TableRow>
-                      <TableHead className=" sm:table-cell"></TableHead>
+                      <TableHead className="sm:table-cell"></TableHead>
                       <TableHead className="font-semibold text-black">
-                        Name
+                        Receiver Name
                       </TableHead>
-                      <TableHead className=" sm:table-cell font-semibold text-black">
-                        Account Number
+                      <TableHead className="sm:table-cell font-semibold text-black">
+                        Sender Name
                       </TableHead>
-                      <TableHead className=" sm:table-cell font-semibold text-black">
+                      <TableHead className="sm:table-cell font-semibold text-black">
                         Day
                       </TableHead>
                       <TableHead className="font-semibold text-black">
                         Time
                       </TableHead>
-                      <TableHead className=" sm:table-cell font-semibold text-black">
+                      <TableHead className="sm:table-cell font-semibold text-black">
                         Type
                       </TableHead>
-                      <TableHead className=" sm:table-cell font-semibold text-black">
+                      <TableHead className="sm:table-cell font-semibold text-black">
                         Amount
                       </TableHead>
                       <TableHead className="font-semibold text-black">
@@ -243,44 +326,54 @@ export default function profile() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {employees.map((employee) => (
-                      <TableRow
-                        key={employee.id}
-                        className="text-muted-foreground border-0"
-                      >
-                        <TableCell className=" sm:table-cell">
-                          {employee.id}
-                        </TableCell>
-                        <TableCell>{employee.name}</TableCell>
-                        <TableCell className=" sm:table-cell">
-                          {employee.accountNumber}
-                        </TableCell>
-                        <TableCell className=" sm:table-cell">
-                          {employee.day}
-                        </TableCell>
-                        <TableCell className=" sm:table-cell">
-                          {employee.time}
-                        </TableCell>
-                        <TableCell className=" sm:table-cell">
-                          {employee.type}
-                        </TableCell>
-                        <TableCell className=" sm:table-cell">
-                          {employee.amount}
-                        </TableCell>
-
-                        <TableCell>
-                          <div className="flex flex-col sm:flex-row ">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="text-blue-500 font-semibold  border-none text-left hover:text-blue-500"
-                            >
-                              View
-                            </Button>
-                          </div>
+                    {!req?.length > 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={8} className="text-center h-32">
+                          <p className="text-muted-foreground font-semibold">
+                            No Payment requests made yet
+                          </p>
                         </TableCell>
                       </TableRow>
-                    ))}
+                    ) : (
+                      req?.map((request) => (
+                        <TableRow
+                          key={request.id}
+                          className="text-muted-foreground border-0"
+                        >
+                          <TableCell className="sm:table-cell">
+                            {request?.id}
+                          </TableCell>
+                          <TableCell>{request?.employee?.firstName}</TableCell>
+                          <TableCell className="sm:table-cell">
+                            {request.accountNumber}
+                          </TableCell>
+                          <TableCell className="sm:table-cell">
+                            {request.day}
+                          </TableCell>
+                          <TableCell className="sm:table-cell">
+                            {request.time}
+                          </TableCell>
+                          <TableCell className="sm:table-cell">
+                            {request.type}
+                          </TableCell>
+                          <TableCell className="sm:table-cell">
+                            {request?.amount}
+                          </TableCell>
+
+                          <TableCell>
+                            <div className="flex flex-col sm:flex-row ">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="text-blue-500 font-semibold border-none text-left hover:text-blue-500"
+                              >
+                                View
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
                   </TableBody>
                 </Table>
               </CardContent>

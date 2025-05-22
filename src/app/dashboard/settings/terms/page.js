@@ -31,7 +31,7 @@ export default function terms() {
   return (
     <InfoLayout
       heading={"Terms & Conditions"}
-      content={content}
+      content={content?.content}
       loading={loading}
     />
   );

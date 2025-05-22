@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import Layout from "../../../components/layout/layout";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -24,27 +24,30 @@ export default function SendMoney() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
-    // Here you would typically send the data to your backend
   };
-  var page="Dashboard"
+  var page = "Dashboard";
 
   return (
-    <Layout  page={page}>
+    <Layout page={page}>
       <div className="px-11">
-      
         <h1 className="text-2xl font-semibold mb-4">Send Money</h1>
         <p className="text-gray-600 mb-6 text-sm">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
           bibendum laoreet massa quis viverra.
         </p>
-       
+
         <div>
           {receiver ? (
             <Recieverdetail />
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6 w-full max-w-80 mx-auto border shadow-md px-12 py-5 rounded-md">
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-6 w-full max-w-80 mx-auto border shadow-md px-12 py-5 rounded-md"
+            >
               <div>
-                <h2 className="text-lg font-semibold mb-5 text-center">Enter Receiver Details</h2>
+                <h2 className="text-lg font-semibold mb-5 text-center">
+                  Enter Receiver Details
+                </h2>
                 <textarea
                   cols="50"
                   rows="4"
@@ -56,7 +59,10 @@ export default function SendMoney() {
                 ></textarea>
               </div>
               <div>
-                <label htmlFor="accountNumber" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="accountNumber"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Account Number
                 </label>
                 <Input
@@ -69,7 +75,10 @@ export default function SendMoney() {
                 />
               </div>
               <div>
-                <label htmlFor="bankName" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="bankName"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Bank Name
                 </label>
                 <Input
@@ -80,9 +89,8 @@ export default function SendMoney() {
                   onChange={handleChange}
                   className="w-full p-2 border rounded-md mt-2"
                 />
-              </div>  
+              </div>
 
-             
               <Button
                 type="submit"
                 className="button-background text-white font-semibold border rounded-lg w-full no-hover"

@@ -30,6 +30,10 @@ export default function about() {
     getPolicy();
   }, []);
   return (
-    <InfoLayout heading={"About App"} content={content} loading={loading} />
+    <InfoLayout
+      heading={"About App"}
+      content={content?.content}
+      loading={loading}
+    />
   );
 }
