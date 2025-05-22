@@ -11,8 +11,11 @@ export const UserProvider = ({ children }) => {
 
     useEffect(() => {
         try {
-            const storedUser = Cookies.get('userData');
+            const storedUser = localStorage.getItem('userData');
             const storedToken = Cookies.get('token');
+
+            console.log('token', token);
+
 
             if (storedUser) {
                 setUser(JSON.parse(storedUser));
@@ -31,9 +34,11 @@ export const UserProvider = ({ children }) => {
 
     const setlogin = (userData, tokenValue) => {
         try {
-            console.log('setting up data');
-            Cookies.set('userData', JSON.stringify(userData), { expires: 7 });
+
+            localStorage.setItem('userData', JSON.stringify(userData));
             Cookies.set('token', tokenValue, { expires: 7 });
+
+
             setUser(userData);
             setToken(tokenValue);
         } catch (error) {
@@ -42,7 +47,7 @@ export const UserProvider = ({ children }) => {
     };
 
     const logout = () => {
-        Cookies.remove('userData');
+        localStorage.removeIteme('userData');
         Cookies.remove('token');
         setUser(null);
         setToken(null);

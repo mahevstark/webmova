@@ -1,7 +1,7 @@
 "use client";
 
 import Layout from "../../../components/layout/layout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,7 @@ import { Search } from "lucide-react";
 import PaymentRequestPopup from "../../../pop-ups/payment-req-details"; // Adjust the path as necessary
 import GlobalApi from "@/lib/GlobalApi";
 import Cookies from "js-cookie";
+import { Spinner } from "@/components/ui/spinner";
 
 const employees = [
   {
@@ -232,6 +233,8 @@ export default function PaymentRequest() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
+  const [requests, setRequests] = useState([]);
+  const [loading, setloading] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // Define how many items per page
@@ -246,7 +249,7 @@ export default function PaymentRequest() {
   };
 
   // Filter employees based on search term (optional)
-  const filteredEmployees = employees.filter((employee) =>
+  const filteredEmployees = requests.filter((employee) =>
     employee.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -259,18 +262,36 @@ export default function PaymentRequest() {
   );
   const token = Cookies.get("token");
 
-  const totalPages = Math.ceil(filteredEmployees.length / itemsPerPage);
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredEmployees.length / itemsPerPage)
+  );
 
   const getReq = async () => {
     try {
-      const resppnse = await GlobalApi.getPendingReq(token);
-      console.log("rr", resppnse);
+      console.log("token", token);
 
-      if (resppnse?.success === true) {
+      const response = await GlobalApi.getPendingReq(token);
+      console.log("rr", response);
+
+      if (response?.success === true) {
+        setRequests(response?.data);
       } else {
+        setRequests([]);
       }
     } catch (error) {
       console.log("error while getting req", error);
+      setRequests([]);
+    }
+  };
+  console.log("rr", requests);
+
+  useEffect(() => {
+    getReq();
+  }, []);
+  const handlePageChange = (pageNumber) => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
     }
   };
 
@@ -333,55 +354,54 @@ export default function PaymentRequest() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {currentEmployees.map((employee) => (
-                    <TableRow
-                      key={employee.id}
-                      className="text-muted-foreground border-0"
-                    >
-                      <TableCell className="sm:table-cell">
-                        {employee.id}
-                      </TableCell>
-                      <TableCell>{employee.name}</TableCell>
-                      <TableCell className="sm:table-cell">
-                        {employee.accountNumber}
-                      </TableCell>
-                      <TableCell className="sm:table-cell">
-                        {employee.day}
-                      </TableCell>
-                      <TableCell className="sm:table-cell">
-                        {employee.time}
-                      </TableCell>
-                      <TableCell className="sm:table-cell ">
-                        {employee.type}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex justify-end flex-col sm:flex-row gap-3 ">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-blue-500 font-semibold border text-left hover:text-blue-500"
-                            onClick={() => handleView(employee)} // Pass employee data
-                          >
-                            View
-                          </Button>
-                          {/* <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-blue-500 font-semibold border text-left hover:text-blue-500"
-                          >
-                            Accept
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-blue-500 font-semibold border text-left hover:text-blue-500"
-                          >
-                            Decline
-                          </Button> */}
-                        </div>
+                  {currentEmployees?.length > 0 ? (
+                    currentEmployees.map((employee) => (
+                      <TableRow
+                        key={employee.id}
+                        className="text-muted-foreground border-0"
+                      >
+                        <TableCell className="sm:table-cell">
+                          {employee.id}
+                        </TableCell>
+                        <TableCell>{employee.name}</TableCell>
+                        <TableCell className="sm:table-cell">
+                          {employee.accountNumber}
+                        </TableCell>
+                        <TableCell className="sm:table-cell">
+                          {employee.day}
+                        </TableCell>
+                        <TableCell className="sm:table-cell">
+                          {employee.time}
+                        </TableCell>
+                        <TableCell className="sm:table-cell">
+                          {employee.type}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex justify-end flex-col sm:flex-row gap-3">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-blue-500 font-semibold border text-left hover:text-blue-500"
+                              onClick={() => handleView(employee)}
+                            >
+                              View
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : loading ? (
+                    <Spinner />
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        colSpan={7}
+                        className="text-center py-6 text-muted-foreground"
+                      >
+                        No Payment Requests yet
                       </TableCell>
                     </TableRow>
-                  ))}
+                  )}
                 </TableBody>
               </Table>
             </CardContent>
@@ -389,25 +409,27 @@ export default function PaymentRequest() {
         </div>
 
         {/* Pagination Controls */}
-        <div className="flex justify-between items-center mt-4">
-          <button
-            className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
-            disabled={currentPage === 1}
-            onClick={() => handlePageChange(currentPage - 1)}
-          >
-            Previous
-          </button>
-          <div>
-            Page {currentPage} of {totalPages}
+        {currentEmployees.length > 0 && !loading && (
+          <div className="flex justify-between items-center mt-4">
+            <button
+              className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+            >
+              Previous
+            </button>
+            <div>
+              Page {currentPage} of {totalPages}
+            </div>
+            <button
+              className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
+              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(currentPage + 1)}
+            >
+              Next
+            </button>
           </div>
-          <button
-            className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
-            disabled={currentPage === totalPages}
-            onClick={() => handlePageChange(currentPage + 1)}
-          >
-            Next
-          </button>
-        </div>
+        )}
       </div>
 
       {/* Payment Request Popup */}

@@ -30,10 +30,11 @@ export default function privacypolicy() {
   useEffect(() => {
     getPolicy();
   }, []);
+
   return (
     <InfoLayout
       heading={"Privacy Policy"}
-      content={content}
+      content={content?.content}
       loading={loading}
     />
   );

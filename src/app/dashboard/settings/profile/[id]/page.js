@@ -1,8 +1,6 @@
 "use client";
 import Layout from "../../../../../components/layout/layout";
 import Layoutsettings from "../../../../../pop-ups/layout-settings";
-import msg from "../../../../../assets/msg.png";
-import Image from "next/image";
 import GlobalApi from "@/lib/GlobalApi";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -15,7 +13,8 @@ export default function editprofile() {
   const rout = useRouter();
 
   try {
-    userData = JSON.parse(Cookies.get("userData") || "{}");
+    userData = JSON.parse(localStorage.getItem("userData") || "{}");
+    console.log("uu", userData);
   } catch (error) {
     console.log("Failed to parse userData cookie:", error);
   }
@@ -51,7 +50,9 @@ export default function editprofile() {
 
       if (response?.success === true) {
         setloading(false);
-        const existingUserData = JSON.parse(Cookies.get("userData") || "{}");
+        const existingUserData = JSON.parse(
+          localStorage.getItem("userData") || "{}"
+        );
         const updatedUserData = {
           ...existingUserData,
           firstName: user.fname,
@@ -60,10 +61,7 @@ export default function editprofile() {
           dob: user.dob,
           permanentAddress: user.address,
         };
-
-        Cookies.set("userData", JSON.stringify(updatedUserData), {
-          expires: 7,
-        });
+        localStorage.setItem("userData", JSON.stringify(updatedUserData));
 
         toast("Profile Updated Successfully.");
         rout.push("/dashboard/settings/profile");

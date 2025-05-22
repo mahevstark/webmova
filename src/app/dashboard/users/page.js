@@ -22,6 +22,7 @@ import GlobalApi from "@/lib/GlobalApi";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
+import { useRouter } from "next/navigation";
 
 const page = "Employees";
 
@@ -42,11 +43,14 @@ export default function Employee() {
 
   const getUsers = async (page) => {
     try {
+      const user = JSON.parse(localStorage.getItem("userData"));
+
       setLoading(true);
 
-      const response = await GlobalApi.getAllUsers(token, page);
+      const response = await GlobalApi.getAllUsers(user?.business?.id, token);
+
       if (response?.success === true) {
-        setEmployees(response.data); // ✅ Replace the current list
+        setEmployees(response?.data);
       } else {
         console.log("Failed to fetch users");
       }
@@ -55,6 +59,10 @@ export default function Employee() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchemployee = () => {
+    getUsers(currentPage);
   };
 
   useEffect(() => {
@@ -68,6 +76,7 @@ export default function Employee() {
 
   const handleDelete = () => {
     console.log("Item has been deleted:", selectedEmployee);
+    getUsers();
     setIsDeleteDialogOpen(false);
     setSelectedEmployee(null);
   };
@@ -76,18 +85,18 @@ export default function Employee() {
     setCurrentPage(pageNumber);
   };
 
-  const filteredEmployees = employees.filter((employee) =>
-    employee.firstName.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredEmployees = employees?.filter((employee) =>
+    employee?.user?.firstName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const indexOfLastEmployee = currentPage * itemsPerPage;
   const indexOfFirstEmployee = indexOfLastEmployee - itemsPerPage;
-  const currentEmployees = filteredEmployees.slice(
+  const currentEmployees = filteredEmployees?.slice(
     indexOfFirstEmployee,
     indexOfLastEmployee
   );
 
-  const totalPages = Math.ceil(filteredEmployees.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredEmployees?.length / itemsPerPage);
 
   const deActuser = async (id) => {
     try {
@@ -95,12 +104,12 @@ export default function Employee() {
 
       const response = await GlobalApi.deActUser(id, token);
 
+      console.log("deactivnagting", response);
+
       if (response?.success === true) {
         toast("User DeActivated Successfully");
 
-        setEmployees((prev) =>
-          prev.map((emp) => (emp.id === id ? { ...emp, isActive: false } : emp))
-        );
+        getUsers();
       } else {
         toast(response?.message || "User DeActivation Failed. Try again");
       }
@@ -117,13 +126,12 @@ export default function Employee() {
       setActivatingEmployees((prev) => ({ ...prev, [id]: true }));
 
       const response = await GlobalApi.ActUser(id, token);
+      console.log("rr by activating", response);
 
       if (response?.success === true) {
         toast("User Activated Successfully");
 
-        setEmployees((prev) =>
-          prev.map((emp) => (emp.id === id ? { ...emp, isActive: false } : emp))
-        );
+        getUsers();
       } else {
         toast(response?.message || "User Activation Failed. Try again");
       }
@@ -135,16 +143,28 @@ export default function Employee() {
     }
   };
 
+  const router = useRouter();
+
+  const handleViewClick = (employee) => {
+    sessionStorage.setItem("selectedEmployee", JSON.stringify(employee));
+
+    router.push(`/dashboard/users/${employee.id}`, {
+      employee,
+    });
+  };
+
   return (
     <Layout page={page}>
       <AddEmploye
         isOpen={isAddEmployeeDialogOpen}
         onClose={() => setIsAddEmployeeDialogOpen(false)}
+        employee={fetchemployee}
       />
       <DeleteConfirmation
         isOpen={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
         onDelete={handleDelete}
+        selectedEmployee={selectedEmployee}
       />
       <div className="container mx-auto px-4 sm:px-6 md:px-10 pb-12">
         <h1 className="text-2xl font-semibold mb-4">Employees</h1>
@@ -164,12 +184,12 @@ export default function Employee() {
               />
             </div>
           </div>
-          {/* <Button
+          <Button
             className="button-border btn-txt-color bg-white hover:bg-white border"
             onClick={() => setIsAddEmployeeDialogOpen(true)}
           >
             Add Employee
-          </Button> */}
+          </Button>
         </div>
 
         <Card className="border-none shadow-none p-0 mt-5 mb-5">
@@ -198,43 +218,50 @@ export default function Employee() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {currentEmployees.length === 0 && !loading ? (
+                {currentEmployees?.length === 0 && !loading ? (
                   <TableRow>
-                    <TableCell colSpan={8} className="text-center">
-                      No data found.
+                    <TableCell
+                      colSpan={8}
+                      className="text-center text-lg font-base text-gray-500"
+                    >
+                      No Employee found.
                     </TableCell>
                   </TableRow>
                 ) : (
-                  currentEmployees.map((employee, index) => (
+                  currentEmployees?.map((employee, index) => (
                     <TableRow
                       key={employee.id || `employee-${index}`}
                       className="text-muted-foreground border-0"
                     >
-                      <TableCell>{`${employee.firstName} ${employee.lastName}`}</TableCell>
+                      <TableCell>{`${employee?.user?.firstName} ${employee?.user?.lastName}`}</TableCell>
                       <TableCell className="hidden sm:table-cell">
-                        {employee.email}
+                        {employee?.user?.email}
                       </TableCell>
                       <TableCell className="hidden sm:table-cell">
-                        {employee.phoneNumber}
+                        {employee?.user?.phoneNumber}
                       </TableCell>
                       <TableCell>
                         <button
                           className={`px-2 py-1 text-xs flex items-center gap-2 font-semibold ${
-                            employee.isActive
+                            employee?.user?.isActive
                               ? "active-status"
                               : "text-red-700 gap-2"
                           }`}
                         >
-                          {employee.isActive ? <Active /> : <Nonactive />}{" "}
-                          {employee.isActive ? "Active" : "Inactive"}
+                          {employee?.user?.isActive ? (
+                            <Active />
+                          ) : (
+                            <Nonactive />
+                          )}{" "}
+                          {employee?.user?.isActive ? "Active" : "Inactive"}
                         </button>
                       </TableCell>
                       <TableCell className="hidden sm:table-cell">
-                        {employee.balance || "N/A"}
+                        {employee?.wallet?.balance}
                       </TableCell>
                       <TableCell>
                         <div className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3">
-                          {!employee?.isActive ? (
+                          {!employee?.user?.isActive ? (
                             <Button
                               variant="outline"
                               size="sm"
@@ -266,6 +293,9 @@ export default function Employee() {
                               variant="outline"
                               size="sm"
                               className="text-blue-500 font-semibold border text-left"
+                              onClick={() => {
+                                handleViewClick(employee);
+                              }}
                             >
                               View
                             </Button>
@@ -288,54 +318,34 @@ export default function Employee() {
           </CardContent>
         </Card>
 
-        {loading && !employees.length ? (
+        {loading ? (
           <div className="mx-auto flex justify-center items-center">
             <Spinner />
           </div>
-        ) : currentPage < totalPages ? (
-          <div className="flex justify-between items-center mt-4">
-            <button
-              className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
-              disabled={currentPage === 1}
-              onClick={() => handlePageChange(currentPage - 1)}
-            >
-              Previous
-            </button>
-
-            <div>
-              Page {currentPage} of {totalPages}
-            </div>
-
-            <button
-              className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
-              disabled={currentPage === totalPages}
-              onClick={() => handlePageChange(currentPage + 1)}
-            >
-              Next
-            </button>
-          </div>
         ) : (
-          <div className="flex justify-between items-center mt-4">
-            <button
-              className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
-              disabled={currentPage === 1}
-              onClick={() => handlePageChange(currentPage - 1)}
-            >
-              Previous
-            </button>
+          employees?.length > 9 && (
+            <div className="flex justify-between items-center mt-4">
+              <button
+                className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
+                disabled={currentPage === 1 || employees.length < 10}
+                onClick={() => handlePageChange(currentPage - 1)}
+              >
+                Previous
+              </button>
 
-            <div>
-              Page {currentPage} of {totalPages}
+              <div>
+                Page {currentPage} of {totalPages}
+              </div>
+
+              <button
+                className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
+                disabled={currentPage === totalPages || employees.length < 10}
+                onClick={() => handlePageChange(currentPage + 1)}
+              >
+                Next
+              </button>
             </div>
-
-            <button
-              className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
-              disabled={currentPage === totalPages}
-              onClick={() => handlePageChange(currentPage + 1)}
-            >
-              Next
-            </button>
-          </div>
+          )
         )}
       </div>
     </Layout>

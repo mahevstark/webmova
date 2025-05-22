@@ -14,7 +14,7 @@ const menuItems = [
     check: "Dashboard",
   },
   {
-    name: "Users",
+    name: "Employees",
     icon: Activity,
     href: "/dashboard/users",
     activeicon: Active,
@@ -27,13 +27,13 @@ const menuItems = [
     activeicon: Active,
     check: "transactionhistory",
   },
-  {
-    name: "Payment Request",
-    icon: Activity,
-    href: "/dashboard/payment-request",
-    activeicon: Active,
-    check: "paymentrequest",
-  },
+  // {
+  //   name: "Payment Request",
+  //   icon: Activity,
+  //   href: "/dashboard/payment-request",
+  //   activeicon: Active,
+  //   check: "paymentrequest",
+  // },
   {
     name: "Setting",
     icon: Activity,

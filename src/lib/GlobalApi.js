@@ -29,12 +29,12 @@ const login = async (phn, pass) => {
   }
 };
 
-const getAllUsers = async (token) => {
+const getAllUsers = async (id, token) => {
   try {
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: "admin/all-users",
+      url: `business/${id}/employees`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -43,33 +43,8 @@ const getAllUsers = async (token) => {
     console.log("config", config);
 
     const response = await axiosClient.request(config);
-    console.log("rr", response);
+    console.log("rr by client", response);
 
-    return response?.data;
-  } catch (error) {
-    console.log("error while fetching users ", error?.response?.data?.message);
-    return error?.response?.data;
-  }
-};
-
-const deActUser = async (id, token) => {
-  try {
-    let data = JSON.stringify({
-      userId: id,
-    });
-
-    let config = {
-      method: "post",
-      maxBodyLength: Infinity,
-      url: "admin/deactivate-user",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      data: data,
-    };
-
-    const response = await axiosClient.request(config);
     return response?.data;
   } catch (error) {
     console.log("error while fetching users ", error?.response?.data?.message);
@@ -80,13 +55,13 @@ const deActUser = async (id, token) => {
 const ActUser = async (id, token) => {
   try {
     let data = JSON.stringify({
-      userId: id,
+      status: "ACTIVE",
     });
 
     let config = {
-      method: "post",
+      method: "PATCH",
       maxBodyLength: Infinity,
-      url: "admin/activate-user",
+      url: `business/employee/${id}/status`,
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -95,53 +70,61 @@ const ActUser = async (id, token) => {
     };
 
     const response = await axiosClient.request(config);
-    console.log("rr", response);
-
     return response?.data;
   } catch (error) {
-    console.log("error while fetching users ", error);
+    console.log(
+      "error while activating users ",
+      error?.response?.data?.message
+    );
     return error?.response?.data;
   }
 };
 
-const getApprTransactions = async (token) => {
+const deActUser = async (id, token) => {
   try {
+    let data = JSON.stringify({
+      status: "INACTIVE",
+    });
+
     let config = {
-      method: "get",
+      method: "PATCH",
       maxBodyLength: Infinity,
-      url: "admin/approved-transactions",
+      url: `business/employee/${id}/status`,
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
-    };
-
-    const response = await axiosClient.request(config);
-
-    return response?.data;
-  } catch (error) {
-    console.log("error while fetching req ", error?.response?.data?.message);
-    return error?.response?.data;
-  }
-};
-
-const getUnAprTransactions = async (token) => {
-  try {
-    let config = {
-      method: "get",
-      maxBodyLength: Infinity,
-      url: "admin/unapproved-transactions",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      data: data,
     };
 
     const response = await axiosClient.request(config);
     return response?.data;
   } catch (error) {
     console.log(
-      "error while fetching unappr req ",
+      "error while deActivating users ",
       error?.response?.data?.message
     );
+    return error?.response?.data;
+  }
+};
+
+const getTransactions = async (token, id, filter) => {
+  try {
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: `wallet/transaction-stats/${id}/${filter}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axiosClient.request(config);
+
+    return response?.data;
+  } catch (error) {
+    console.log("error while fetching transactions ", error);
     return error?.response?.data;
   }
 };
@@ -168,6 +151,7 @@ const registerEmp = async (formdata, token, id) => {
     };
 
     const response = await axiosClient.request(config);
+
     return response?.data;
   } catch (error) {
     console.log("error while creating Employee ", error);
@@ -413,15 +397,21 @@ const UpdateProfile = async (id, user, token) => {
   }
 };
 
-const getPendingReq = async (token) => {
+const getPendingReq = async (token, id, amount) => {
   try {
+    const data = {
+      employeeId: login_data?.user?.id,
+      amount: amount,
+      description: "Employee Requested Payment",
+    };
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: "payment/pending-requests",
+      url: "business/pending-requests",
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      data,
     };
 
     const response = await axiosClient.request(config);
@@ -431,13 +421,107 @@ const getPendingReq = async (token) => {
     return error?.response?.data;
   }
 };
+
+const getPaymentRequests = async (bid, p, lim, eid) => {
+  try {
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: `business/payment-requests?businessId=${bid}&status=&page=${p}&limit=${lim}&employeeId=${eid}`,
+      headers: {},
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while getting employee req ", error);
+    return error?.response?.data;
+  }
+};
+
+const addBalance = async (formData, token) => {
+  try {
+    let data = JSON.stringify({
+      fromWalletId: formData?.fromWalletId,
+      walletId: formData?.walletId,
+      toWalletId: formData?.toWalletId,
+      amount: formData?.amount,
+      pin: formData?.pin,
+      userId: formData?.userId,
+    });
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "wallet/send-money",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while getting employee req ", error);
+    return error?.response?.data;
+  }
+};
+
+const deleteEmployee = async (token, id) => {
+  try {
+    let config = {
+      method: "delete",
+      maxBodyLength: Infinity,
+      url: `business/employee/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    const response = await axiosClient.request(config);
+
+    return response?.data;
+  } catch (error) {
+    console.log("error while deleting employee ", error);
+    return error?.response?.data;
+  }
+};
+
+const deleteAccount = async (token, password, phoneNumber, userId) => {
+  try {
+    const data = {
+      password,
+      phoneNumber,
+      userId,
+    };
+    let config = {
+      method: "delete",
+      maxBodyLength: Infinity,
+      url: "user/delete-user-request",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      data: data,
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while deleting account ", error);
+    return error?.response?.data;
+  }
+};
+
 export default {
   login,
   getAllUsers,
   deActUser,
   ActUser,
-  getApprTransactions,
-  getUnAprTransactions,
+  getTransactions,
   registerEmp,
   getReq,
   getAppSettings,
@@ -450,4 +534,8 @@ export default {
   changePass,
   UpdateProfile,
   getPendingReq,
+  getPaymentRequests,
+  addBalance,
+  deleteEmployee,
+  deleteAccount,
 };
