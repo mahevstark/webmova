@@ -47,7 +47,10 @@ export const UserProvider = ({ children }) => {
     };
 
     const logout = () => {
-        localStorage.removeIteme('userData');
+        localStorage.removeItem('emailtoSignup')
+        localStorage.removeItem('userData')
+
+
         Cookies.remove('token');
         setUser(null);
         setToken(null);

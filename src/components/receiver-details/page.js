@@ -5,16 +5,31 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Pin from '../../pop-ups/pin'
+import Pin from "../../pop-ups/pin";
+import { Button } from "../ui/button";
+import { useEffect, useState } from "react";
+export default function receiverdetails({
+  selectedUser,
+  amount,
+  handleBackToAmount,
+}) {
+  const [details, setdetails] = useState([]);
 
-export default function receiverdetails() {
-  const details = [
-    { label: "Sender Name", value: "Jahanzaib" },
-    { label: "Receiver Name", value: "Miran butt" },
-    { label: "Receiver Account Type", value: "Mowa" },
-    { label: "Amount sent", value: "$500" },
-    { label: "Service Fee", value: "$0" },
-  ];
+  useEffect(() => {
+    if (selectedUser) {
+      setdetails([
+        { label: "Sender Name", value: selectedUser.firstName },
+        {
+          label: "Receiver Name",
+          value: selectedUser.firstName + " " + selectedUser.lastName,
+        },
+        { label: "Receiver Account Type", value: "Stripe" },
+        { label: "Amount sent", value: amount },
+        { label: "Service Fee", value: "$0" },
+      ]);
+    }
+  }, [selectedUser, amount]);
+  console.log("selectedUser", selectedUser);
 
   return (
     <Card className="w-full max-w-sm mx-auto border-0 shadow-none ">
@@ -37,10 +52,18 @@ export default function receiverdetails() {
           ))}
         </div>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex items-center justify-center gap-4">
+        <Button
+          onClick={handleBackToAmount}
+          className="text-blue-500 bg-transparent border border-blue-500 hover:bg-blue-50"
+        >
+          ← Back to Amount
+        </Button>
         <Pin
           value="Confirm"
-          style="button-background text-white font-semibold border rounded-lg w-full mt-12  no-hover "
+          style="button-background text-white font-semibold border rounded-lg w-full   no-hover "
+          selectedUser={selectedUser}
+          amount={amount}
         />
       </CardFooter>
     </Card>

@@ -11,13 +11,18 @@ import {
 import { Button } from "@/components/ui/button";
 import Paid from "../assets/paid/paid.png";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 
-export default function Component({ details, isOpen, onClose, request }) {
+export default function Component({ paymentData, isOpen, onClose, request }) {
   const [isVisible, setIsVisible] = useState(false);
-
-  console.log("details", details);
-
+  const router = useRouter();
+  const pathname = usePathname();
+  const [senderName, setSenderName] = useState("");
   useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("userData"));
+
+    setSenderName(data?.firstName);
+
     if (isOpen) {
       setIsVisible(true);
     }
@@ -26,7 +31,10 @@ export default function Component({ details, isOpen, onClose, request }) {
   const handleDownload = () => {
     // Handle download logic here
     setIsVisible(false);
+    pathname === "/dashboard/send-money" && router.push("/dashboard");
   };
+
+  console.log("v", pathname);
 
   if (!isVisible) return null;
 
@@ -47,14 +55,14 @@ export default function Component({ details, isOpen, onClose, request }) {
           {(request && (
             <CardTitle className="text-2xl font-semibold">
               {request === "balance"
-                ? "Bill paid"
+                ? "Balance Added"
                 : request === "transaction"
                 ? `Transaction ${details?.name}`
                 : "Request Send for $5k"}
             </CardTitle>
           )) || (
             <CardTitle className="text-2xl font-semibold">
-              ${details.amountSent.toLocaleString()}k Sent
+              ${paymentData.transferAmount} Sent
             </CardTitle>
           )}
           <p className="text-sm text-p font-medium mt-7">
@@ -71,30 +79,39 @@ export default function Component({ details, isOpen, onClose, request }) {
             <div className="space-y-2 ">
               <div className="flex justify-between">
                 <span className="txt-detail">Sender Name</span>
-                <span className="txt-detail">{details.senderName}</span>
+                <span className="txt-detail">{senderName}</span>
               </div>
               <div className="flex justify-between">
                 <span className="txt-detail">Receiver Name</span>
-                <span className="txt-detail">{details.receiverName}</span>
+                <span className="txt-detail">
+                  {paymentData.employee?.user?.firstName}
+                </span>
               </div>
-              <div className="flex justify-between">
+              {/* <div className="flex justify-between">
                 <span className="txt-detail">Bill ID</span>
                 <span className="txt-detail">{details.billid}</span>
-              </div>
+              </div> */}
               <div className="flex justify-between">
                 <span className="txt-detail">Receiver Account Type</span>
-                <span className="txt-detail">
-                  {details.receiverAccountType}
-                </span>
+                <span className="txt-detail">Stripe</span>
               </div>
               <div className="flex justify-between">
                 <span className="txt-detail">Date</span>
-                <span className="txt-detail">{details.date}</span>
+                <span className="txt-detail">
+                  {" "}
+                  {new Date(paymentData?.payment?.createdAt).toLocaleString(
+                    "en-US",
+                    {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }
+                  )}
+                </span>
               </div>
-              <div className="flex justify-between">
-                <span className="txt-detail">Time</span>
-                <span className="txt-detail">{details.time}</span>
-              </div>
+
               <div>
                 <p className="line-color">
                   ---------------------------------------------------
@@ -103,12 +120,14 @@ export default function Component({ details, isOpen, onClose, request }) {
 
               <div className="flex justify-between">
                 <span className="txt-detail">Amount Sent</span>
-                <span className="txt-detail">${details.amountSent}</span>
+                <span className="txt-detail">
+                  ${paymentData?.payment?.transferAmount}
+                </span>
               </div>
 
               <div className="flex justify-between">
                 <span className="txt-detail">Service Fee</span>
-                <span className="txt-detail">${details.serviceFee}</span>
+                <span className="txt-detail">$0</span>
               </div>
             </div>
           </CardContent>
@@ -117,17 +136,17 @@ export default function Component({ details, isOpen, onClose, request }) {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="txt-detail">Sender Name</span>
-                <span className="txt-detail">{details?.name}</span>
+                <span className="txt-detail">{senderName}</span>
               </div>
               <div className="flex justify-between">
                 <span className="txt-detail">Account Number</span>
                 <span className="txt-detail truncate">
-                  {details?.accountNumber}
+                  {paymentData?.stripeAccountId}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="txt-detail">Payment Type</span>
-                <span className="txt-detail">{details?.type}</span>
+                <span className="txt-detail">Standard</span>
               </div>
               {request === "transaction" && (
                 <div>
@@ -138,7 +157,9 @@ export default function Component({ details, isOpen, onClose, request }) {
               )}
               <div className="flex justify-between">
                 <span className="txt-detail">Amount Sent</span>
-                <span className="txt-detail">{details?.amount}</span>
+                <span className="txt-detail">
+                  {paymentData?.transferAmount}
+                </span>
               </div>
               {request !== "transaction" && (
                 <div>
@@ -149,7 +170,15 @@ export default function Component({ details, isOpen, onClose, request }) {
               )}
               <div className="flex justify-between">
                 <span className="txt-detail">Time</span>
-                <span className="txt-detail">{details?.time}</span>
+                <span className="txt-detail">
+                  {new Date(paymentData?.createdAt).toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </span>
               </div>
             </div>
           </CardContent>
