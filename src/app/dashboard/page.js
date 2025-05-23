@@ -99,22 +99,22 @@ export default function Dashboard() {
               </button>
             </div>
             <div className="flex flex-wrap gap-2">
-              {/* <Link href="/dashboard/users">
+              <Link href="/dashboard/send-money">
                 {" "}
                 <Button className="button-border  btn-txt-color bg-white hover:text-white hover:bg-[#544af1] border">
                   Send Payment
                 </Button>
-              </Link>{" "} */}
-              {/* <Link href="/dashboard/request-money">
+              </Link>{" "}
+              <Link href="/dashboard/request-money">
                 <Button className="button-border btn-txt-color bg-white  border hover:text-white hover:bg-[#544af1]">
-                  Request Payment
+                  Withdraw Payment
                 </Button>
-              </Link>{" "} */}
-              {/* <Link href="/dashboard/bill-payment">
+              </Link>{" "}
+              <Link href="/dashboard/bill-payment">
                 <Button className="button-border btn-txt-color bg-white border hover:text-white hover:bg-[#544af1]">
                   Bill Payment
                 </Button>{" "}
-              </Link> */}
+              </Link>
             </div>
           </div>
 
@@ -224,7 +224,7 @@ export default function Dashboard() {
                         </TableCell>
                       </TableRow>
                     ) : (
-                      employee?.slice(0, 10)?.map((employee) => (
+                      employee?.slice(0, 7)?.map((employee) => (
                         <TableRow
                           key={employee.id}
                           className="text-muted-foreground border-0"

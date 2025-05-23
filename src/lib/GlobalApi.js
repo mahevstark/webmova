@@ -516,6 +516,203 @@ const deleteAccount = async (token, password, phoneNumber, userId) => {
   }
 };
 
+const SendOtp = async (email, isSignup) => {
+  try {
+    let data = null;
+
+    isSignup
+      ? (data = JSON.stringify({
+          email: email,
+          checkExistence: true,
+        }))
+      : (data = JSON.stringify({
+          email: email,
+        }));
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "user/send-otp",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while sending otp ", error);
+    return error?.response?.data;
+  }
+};
+
+const ResetPassword = async (phoneNumber, password) => {
+  try {
+    let data = JSON.stringify({
+      phoneNumber: phoneNumber,
+      password: password,
+    });
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "user/forget-password-profile",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while reseting password ", error);
+    return error?.response?.data;
+  }
+};
+
+const verifyOtp = async (email, otp) => {
+  try {
+    console.log(otp);
+
+    let data = JSON.stringify({
+      email: email,
+      otp: otp,
+    });
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "user/verify-otp",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while validating otp ", error);
+    return error?.response?.data;
+  }
+};
+
+const CreateProfile = async (submitData, email) => {
+  try {
+    let data = JSON.stringify({
+      email: email,
+      phoneNumber: submitData.get("phoneNumber"),
+      password: submitData.get("password"),
+      firstName: submitData.get("firstName"),
+      isAdmin: true,
+      role: "BUSINESS",
+      companyName: "Mowa",
+      lastName: submitData.get("lastName"),
+      dob: submitData.get("dob"),
+      permanentAddress: submitData.get("permanentAddress"),
+      transactionPIN: submitData.get("transactionPIN"),
+    });
+
+    console.log("data to go", data);
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "user/register-profile",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while creating profile ", error);
+    return error?.response?.data;
+  }
+};
+
+const withdrawmoney = async (formdata, token) => {
+  try {
+    let data = JSON.stringify({
+      token: formdata?.token,
+      link: formdata?.link,
+    });
+
+    console.log("data to go", data);
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "wallet/create-link",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      data: data,
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while creating link ", error);
+    return error?.response?.data;
+  }
+};
+
+const getUsers = async (id, token) => {
+  try {
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: `user/get-all-users/${id}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while getting Users ", error);
+    return error?.response?.data;
+  }
+};
+
+const sendMoney = async (formdata, token) => {
+  try {
+    let data = JSON.stringify({
+      fromWalletId: formdata?.fromWalletId,
+      toWalletId: formdata.toWalletId,
+      amount: formdata?.amount,
+      pin: formdata?.pin,
+      userId: formdata?.userId,
+    });
+    console.log("data to go", data);
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: `wallet/send-money`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      data: data,
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while sending Money ", error);
+    return error?.response?.data;
+  }
+};
+
 export default {
   login,
   getAllUsers,
@@ -538,4 +735,11 @@ export default {
   addBalance,
   deleteEmployee,
   deleteAccount,
+  SendOtp,
+  verifyOtp,
+  CreateProfile,
+  ResetPassword,
+  withdrawmoney,
+  getUsers,
+  sendMoney,
 };

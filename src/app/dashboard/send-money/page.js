@@ -1,17 +1,56 @@
 "use client";
 import Layout from "../../../components/layout/layout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Recieverdetail from "../../../components/receiver-details/page";
+import GlobalApi from "@/lib/GlobalApi";
+import Cookie from "js-cookie";
+import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function SendMoney() {
-  const [receiver, setReceiver] = useState(false);
+  const [step, setStep] = useState("userSelection"); // userSelection, amountEntry, receiverDetails
+  const [selectedUser, setSelectedUser] = useState(null);
   const [formData, setFormData] = useState({
     amount: "",
-    accountNumber: "",
-    bankName: "",
   });
+
+  // Sample users data - replace with your actual users data
+  const [users, setusers] = useState([]);
+  const [loading, setloading] = useState(false);
+
+  const fetchUsers = async () => {
+    try {
+      const token = Cookie.get("token");
+      const user = JSON.parse(localStorage.getItem("userData"));
+
+      setloading(true);
+      const response = await GlobalApi.getUsers(user?.id, token);
+
+      if (response?.success === true) {
+        setusers(response?.data?.users);
+        setloading(false);
+      } else {
+        setusers([]);
+        toast(response?.message || "Error getting users list");
+        setloading(false);
+      }
+    } catch (error) {
+      console.log("error while getting users", error);
+      toast("Network Error while getting users list");
+      setusers([]);
+      setloading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+  const handleUserSelect = (user) => {
+    setSelectedUser(user);
+    setStep("amountEntry");
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,8 +62,21 @@ export default function SendMoney() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    // Note: localStorage is not supported in Claude artifacts
+    // In a real environment, you would use: localStorage.setItem("sendamount", formData.amount);
+    console.log("Amount:", formData.amount);
+    setStep("receiverDetails");
   };
+
+  const handleBackToUsers = () => {
+    setStep("userSelection");
+    setSelectedUser(null);
+  };
+
+  const handleBackToAmount = () => {
+    setStep("amountEntry");
+  };
+
   var page = "Dashboard";
 
   return (
@@ -37,16 +89,75 @@ export default function SendMoney() {
         </p>
 
         <div>
-          {receiver ? (
-            <Recieverdetail />
-          ) : (
+          {step === "userSelection" && (
+            <div className="w-full  mx-auto border shadow-md px-6 py-5 rounded-md">
+              <h2 className="text-lg font-semibold mb-5 text-center">
+                Select Recipient
+              </h2>
+              <div className="space-y-3 max-h-96 overflow-y-auto">
+                {loading ? (
+                  <div className="mx-auto flex justify-center items-center">
+                    <Spinner />
+                  </div>
+                ) : users.length < 1 ? (
+                  <div className="mx-auto flex justify-center items-center">
+                    No Users Available
+                  </div>
+                ) : (
+                  users.map((user) => (
+                    <div
+                      key={user.id}
+                      onClick={() => handleUserSelect(user)}
+                      className="p-4 border rounded-lg cursor-pointer hover:bg-gray-50 hover:border-blue-300 transition-colors"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
+                          {user.firstName.charAt(0)}
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-medium text-gray-900">
+                            {user.firstName} {user.lastName}
+                          </h3>
+                          <p className="text-sm text-gray-500">{user.email}</p>
+                          <p className="text-sm text-gray-400">{user.phone}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+
+          {step === "amountEntry" && (
             <form
               onSubmit={handleSubmit}
               className="space-y-6 w-full max-w-80 mx-auto border shadow-md px-12 py-5 rounded-md"
             >
+              {selectedUser && (
+                <div className="text-center mb-4">
+                  <p className="text-sm text-gray-600">Sending money to:</p>
+                  <div className="flex items-center justify-center space-x-2 mt-2">
+                    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+                      {selectedUser.firstName.charAt(0)}
+                    </div>
+                    <span className="font-medium">
+                      {selectedUser.firstName}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleBackToUsers}
+                    className="text-blue-500 text-sm hover:underline mt-1"
+                  >
+                    Change recipient
+                  </button>
+                </div>
+              )}
+
               <div>
                 <h2 className="text-lg font-semibold mb-5 text-center">
-                  Enter Receiver Details
+                  Enter Amount
                 </h2>
                 <textarea
                   cols="50"
@@ -56,49 +167,37 @@ export default function SendMoney() {
                   value={formData.amount}
                   onChange={handleChange}
                   className="w-full border rounded resize-none focus:outline-none focus:ring-0 text-center mx-auto pt-14"
+                  required
                 ></textarea>
               </div>
-              <div>
-                <label
-                  htmlFor="accountNumber"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Account Number
-                </label>
-                <Input
-                  type="text"
-                  placeholder="Enter Account Number"
-                  name="accountNumber"
-                  value={formData.accountNumber}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded-md focus:outline-none focus:ring-0 mt-2"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="bankName"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Bank Name
-                </label>
-                <Input
-                  type="text"
-                  placeholder="Enter Bank Name"
-                  name="bankName"
-                  value={formData.bankName}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded-md mt-2"
-                />
-              </div>
 
-              <Button
-                type="submit"
-                className="button-background text-white font-semibold border rounded-lg w-full no-hover"
-                onClick={() => setReceiver(!receiver)}
-              >
-                NEXT
-              </Button>
+              <div className="space-y-3">
+                <Button
+                  type="submit"
+                  className="button-background text-white font-semibold border rounded-lg w-full no-hover"
+                >
+                  NEXT
+                </Button>
+                <Button
+                  type="button"
+                  onClick={handleBackToUsers}
+                  className="w-full border border-gray-300 text-gray-700 font-semibold rounded-lg bg-white hover:bg-gray-50"
+                >
+                  BACK
+                </Button>
+              </div>
             </form>
+          )}
+
+          {step === "receiverDetails" && (
+            <div>
+              <div className="mb-4 text-center"></div>
+              <Recieverdetail
+                selectedUser={selectedUser}
+                amount={formData.amount}
+                handleBackToAmount={handleBackToAmount}
+              />
+            </div>
           )}
         </div>
       </div>

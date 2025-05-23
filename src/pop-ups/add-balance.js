@@ -6,17 +6,6 @@ import GlobalApi from "@/lib/GlobalApi";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
 
-const details = {
-  senderName: "John Doe",
-  receiverName: "Jane Smith",
-  receiverAccountType: "Savings",
-  billid: 12,
-  date: "13 March 2024",
-  time: "05:28 PM",
-  amountSent: 500,
-  serviceFee: 15,
-};
-
 const AddBalance = ({
   isOpen,
   onRequestClose,
@@ -30,6 +19,10 @@ const AddBalance = ({
   const [pin, setPin] = useState(["", "", "", "", "", ""]);
   const [pinError, setPinError] = useState("");
   const [loading, setloading] = useState(false);
+  const [paymentData, setPaymentdata] = useState({
+    employee: "",
+    payment: "",
+  });
 
   useEffect(() => {
     if (appElement) {
@@ -93,10 +86,16 @@ const AddBalance = ({
 
       const response = await GlobalApi.addBalance(formData, token);
 
+      console.log("rrr", response);
+
       if (response?.success === true) {
         // Close PIN modal
+        setPaymentdata({
+          employee: employee,
+          payment: response?.data,
+        });
         setIsPinModalOpen(false);
-
+        toggleExpertise();
         // Reset states
         setAmount("");
         setPin(["", "", "", "", "", ""]);
@@ -249,7 +248,7 @@ const AddBalance = ({
       <Paymentsent
         isOpen={showExpertise}
         closeModal={toggleExpertise}
-        details={details}
+        paymentData={paymentData}
         request={"balance"}
       />
     </>

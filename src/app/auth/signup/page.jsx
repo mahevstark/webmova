@@ -10,63 +10,46 @@ import GlobalApi from "../../../lib/GlobalApi";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useUser } from "@/app/provider/UserProvider";
 
 export default function signup() {
-    const [showPassword, setShowPassword] = useState(false);
     const [loading, setloading] = useState(false);
     const [email, setemail] = useState(null);
 
     const router = useRouter();
 
-    const { setlogin } = useUser();
-    const login = async (e) => {
+    const singup = async (e) => {
         e.preventDefault();
         try {
             setloading(true);
-            const response = await GlobalApi.login(email, pass);
-            console.log(response?.data?.token);
+
+            if (!email) {
+                toast("Email is required");
+                return;
+            }
+
+            const response = await GlobalApi.SendOtp(email, true);
+
 
             if (response?.success === true) {
                 setloading(false);
-                toast("Login Success");
-                console.log("user data", response?.data?.user);
+                toast("Otp sent");
+                localStorage.setItem('emailtoSignup', email);
 
-                const userData = response?.data?.user;
+                router.push("/auth/verification");
 
-                console.log("user data", userData);
-
-                // Cookies.set("userData", JSON.stringify(userData), { expires: 7 });
-
-                // const raw = Cookies.get("userData");
-
-                // try {
-                //   const parsed = JSON.parse(raw);
-                //   console.log(parsed);
-                // } catch (error) {
-                //   console.error("Failed to parse userData:", error);
-                // }
-
-                // return;
-
-                setlogin(response?.data?.user, response?.data?.token);
-
-                setTimeout(() => {
-                    router.push("/dashboard");
-                }, 1000);
             } else {
                 setloading(false);
 
-                toast("Login Error", {
-                    description: response?.message,
+                toast("Singup Error", {
+                    description: response?.message || "Error while Singup",
                 });
             }
         } catch (error) {
-            console.log("error in login", error);
+            console.log("error in singup", error);
 
             setloading(false);
             toast({
-                title: "Sigin Error",
+                title: "SigUn Error",
                 description: "Network Error",
             });
         }
@@ -102,9 +85,9 @@ export default function signup() {
             <div className="w-full md:w-1/2 bg-white p-6 md:p-8 flex items-center justify-center">
                 <div className="w-full max-w-md">
                     <h2 className="text-2xl md:text-3xl font-semibold mb-6 md:mb-10 text-center">
-                        SignUp Now
+                        Create New Account
                     </h2>
-                    <form className="space-y-4" onSubmit={login}>
+                    <form className="space-y-4" onSubmit={singup}>
                         <div>
                             <label htmlFor="email" className="sr-only">
                                 Email
@@ -116,7 +99,7 @@ export default function signup() {
                                     name="email"
                                     type="email"
                                     required
-                                    className="w-full focus:outline-none focus:ring-0 border-0 text-gray-400"
+                                    className="w-full focus:outline-none focus:ring-0 border-0 placeholder:text-gray-400 text-black "
                                     placeholder="Enter Your Email"
                                     value={email || ""}
                                     onChange={(e) => setemail(e.target.value)}
@@ -126,8 +109,8 @@ export default function signup() {
                         <div className="  text-right text-base  text-black">
                             Have an Account?{" "}
                             <Link
-                                href="/auth/signup"
-                                className="text-base text-gray-400 font-semibold "
+                                href="/auth/signin"
+                                className=" text-right text-base  text-black "
                             >
                                 Signin now
                             </Link>

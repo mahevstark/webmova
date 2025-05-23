@@ -37,19 +37,6 @@ export default function signin() {
 
         console.log("user data", userData);
 
-        // Cookies.set("userData", JSON.stringify(userData), { expires: 7 });
-
-        // const raw = Cookies.get("userData");
-
-        // try {
-        //   const parsed = JSON.parse(raw);
-        //   console.log(parsed);
-        // } catch (error) {
-        //   console.error("Failed to parse userData:", error);
-        // }
-
-        // return;
-
         setlogin(response?.data?.user, response?.data?.token);
 
         setTimeout(() => {
@@ -117,7 +104,7 @@ export default function signin() {
                   name="phone"
                   type="tel"
                   required
-                  className="w-full focus:outline-none focus:ring-0 border-0 text-gray-400"
+                  className="w-full focus:outline-none text-black focus:ring-0 border-0 placeholder:text-gray-400"
                   placeholder="Enter Your Number"
                   value={phone || ""}
                   onChange={(e) => setphone(e.target.value)}
@@ -135,7 +122,7 @@ export default function signin() {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   required
-                  className="w-full focus:outline-none focus:ring-0 border-0 placeholder-gray-400 text-gray-400"
+                  className="w-full focus:outline-none  focus:ring-0 border-0 placeholder-gray-400 text-black"
                   placeholder="Enter your Password"
                   value={pass || ""}
                   onChange={(e) => setpass(e.target.value)}
@@ -153,14 +140,25 @@ export default function signin() {
                 )}
               </button>
             </div>
-            <div className="  text-right text-base  text-black">
-              Have an Account?{" "}
-              <Link
-                href="/auth/signup"
-                className="text-base text-gray-400 font-semibold "
-              >
-                Signup now
-              </Link>
+            <div className="">
+              <div className="  text-right text-base  text-black">
+                Don't Have an Account?{" "}
+                <Link
+                  href="/auth/signup"
+                  className="text-right text-base  text-black "
+                >
+                  SignUp now
+                </Link>
+              </div>
+              <div className="  text-right text-base  text-black">
+                Forgot Password?{" "}
+                <Link
+                  href="/auth/forgot-password"
+                  className=" text-right text-base  text-black "
+                >
+                  Reset Now
+                </Link>
+              </div>
             </div>
             <Button
               value={loading ? "Signing in..." : "Sign in"}
