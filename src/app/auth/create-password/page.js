@@ -24,6 +24,12 @@ export default function createpassword() {
         toast("Password must be at least 6 characters");
         return;
       }
+
+      if (password !== confirmpassword) {
+        toast("Password and Confirm Password must be same");
+        return;
+      }
+
       setloading(true);
       const email = localStorage.getItem("emailtoSignup");
       console.log(email);

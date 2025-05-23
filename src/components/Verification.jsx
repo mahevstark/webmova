@@ -82,7 +82,7 @@ export default function Verification() {
 
             if (response?.success === true) {
                 setIsVerifying(false);
-                toast("OTP verifired");
+                toast("OTP verified");
                 reset
                     ? Router.push("/auth/create-password")
                     : Router.push("/auth/create-profile");
