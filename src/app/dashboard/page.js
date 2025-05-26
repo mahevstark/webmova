@@ -124,8 +124,12 @@ export default function Dashboard() {
           >
             <div className="w-full ">
               <CardMowa
-                balance={user?.wallet?.balance}
-                date={user?.wallet?.createdAt}
+                balance={user?.wallet?.balance ? user?.wallet?.balance : 0}
+                date={
+                  user?.wallet?.createdAt
+                    ? user?.wallet?.createdAt
+                    : user?.business?.createdAt
+                }
               />
             </div>
 
@@ -224,35 +228,41 @@ export default function Dashboard() {
                         </TableCell>
                       </TableRow>
                     ) : (
-                      employee?.slice(0, 7)?.map((employee) => (
-                        <TableRow
-                          key={employee.id}
-                          className="text-muted-foreground border-0"
-                        >
-                          <TableCell className="sm:table-cell">
-                            {employee.id}
-                          </TableCell>
-                          <TableCell>{employee.name}</TableCell>
-                          <TableCell className="sm:table-cell">
-                            {employee.accountNumber}
-                          </TableCell>
-                          <TableCell className="sm:table-cell">
-                            {employee.day}
-                          </TableCell>
-                          <TableCell className="sm:table-cell">
-                            {employee.time}
-                          </TableCell>
-                          <TableCell className="sm:table-cell">
-                            {employee.type}
-                          </TableCell>
-                          <TableCell className="sm:table-cell">
-                            {employee.amount}
-                          </TableCell>
-                          <TableCell className="sm:table-cell">
-                            {employee.currency}
-                          </TableCell>
-                        </TableRow>
-                      ))
+                      employee
+                        ?.sort(
+                          (a, b) =>
+                            new Date(b.createdAt) - new Date(a.createdAt)
+                        )
+                        ?.slice(0, 7)
+                        ?.map((employee) => (
+                          <TableRow
+                            key={employee.id}
+                            className="text-muted-foreground border-0"
+                          >
+                            <TableCell className="sm:table-cell">
+                              {employee.id}
+                            </TableCell>
+                            <TableCell>{employee.name}</TableCell>
+                            <TableCell className="sm:table-cell">
+                              {employee.accountNumber}
+                            </TableCell>
+                            <TableCell className="sm:table-cell">
+                              {employee.day}
+                            </TableCell>
+                            <TableCell className="sm:table-cell">
+                              {employee.time}
+                            </TableCell>
+                            <TableCell className="sm:table-cell">
+                              {employee.type}
+                            </TableCell>
+                            <TableCell className="sm:table-cell">
+                              {employee.amount}
+                            </TableCell>
+                            <TableCell className="sm:table-cell">
+                              {employee.currency}
+                            </TableCell>
+                          </TableRow>
+                        ))
                     )}
                   </TableBody>
                 </Table>
