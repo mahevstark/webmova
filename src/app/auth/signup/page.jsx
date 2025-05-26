@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Mail } from "lucide-react";
 import signinbg from "../../../assets/signin-bg.png";
 import Callicon from "../../../assets/call-icon.svg";
 import Keyicon from "../../../assets/key.svg";
@@ -93,7 +93,7 @@ export default function signup() {
                                 Email
                             </label>
                             <span className="flex items-center gap-2 border border-color-input rounded-md px-3 py-2 md:px-4 md:py-3 w-full">
-                                <Callicon />
+                                <Mail />
                                 <input
                                     id="email"
                                     name="email"
@@ -106,19 +106,19 @@ export default function signup() {
                                 />
                             </span>
                         </div>
-                        <div className="  text-right text-base  text-black">
+                        <Button
+                            value={loading ? "Almost there..." : "Signup"}
+                            classname="py-3 px-3 w-full"
+                        />
+                        <div className="  text-right text-sm   text-black">
                             Have an Account?{" "}
                             <Link
                                 href="/auth/signin"
-                                className=" text-right text-base  text-black "
+                                className=" text-right text-sm  font-semibold text-black "
                             >
                                 Signin now
                             </Link>
                         </div>
-                        <Button
-                            value={loading ? "Signing in..." : "Sign in"}
-                            classname="py-3 px-3 w-full"
-                        />
                     </form>
                 </div>
             </div>

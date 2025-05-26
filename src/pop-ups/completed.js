@@ -18,6 +18,8 @@ export default function Component({ paymentData, isOpen, onClose, request }) {
   const router = useRouter();
   const pathname = usePathname();
   const [senderName, setSenderName] = useState("");
+  const [copied, setCopied] = useState(false);
+
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("userData"));
 
@@ -34,7 +36,7 @@ export default function Component({ paymentData, isOpen, onClose, request }) {
     pathname === "/dashboard/send-money" && router.push("/dashboard");
   };
 
-  console.log("v", pathname);
+  console.log("v", paymentData);
 
   if (!isVisible) return null;
 
@@ -58,6 +60,8 @@ export default function Component({ paymentData, isOpen, onClose, request }) {
                 ? "Balance Added"
                 : request === "transaction"
                 ? `Transaction ${details?.name}`
+                : request === "withdraw"
+                ? "Withdraw Success"
                 : "Request Send for $5k"}
             </CardTitle>
           )) || (
@@ -70,7 +74,9 @@ export default function Component({ paymentData, isOpen, onClose, request }) {
             mi id purus
           </p>
           <button className="btn-bg hover:bg-inherit rounded-xl text-black">
-            Details of Transaction
+            {request === "withdraw"
+              ? " Withdraw Details"
+              : " Details of Transaction"}
           </button>
         </CardHeader>
 
@@ -128,6 +134,71 @@ export default function Component({ paymentData, isOpen, onClose, request }) {
               <div className="flex justify-between">
                 <span className="txt-detail">Service Fee</span>
                 <span className="txt-detail">$0</span>
+              </div>
+            </div>
+          </CardContent>
+        ) : request === "withdraw" ? (
+          <CardContent>
+            <div className="space-y-2">
+              <div className="flex flex-col gap-1">
+                <span className="txt-detail text-center font-semibold">
+                  Payment Url
+                </span>
+                <div className="flex items-center gap-2 flex-col">
+                  <div className="txt-detail text-sm flex-1">
+                    <div
+                      className="break-all  overflow-wrap-anywhere word-break-break-all"
+                      style={{ wordBreak: "break-all" }}
+                    >
+                      {paymentData?.url}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(paymentData?.url);
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2000);
+                    }}
+                    className="px-2 py-1 button-background text-white text-xs rounded transition-colors flex-shrink-0"
+                  >
+                    {copied ? "Copied!" : "Copy URL"}
+                  </button>
+                </div>
+              </div>
+              <div className="flex justify-between">
+                <span className="txt-detail">Withdraw Amount</span>
+                <span className="txt-detail">${paymentData?.amount}</span>
+              </div>
+
+              {request === "transaction" && (
+                <div>
+                  <p className="line-color">
+                    ---------------------------------------------------
+                  </p>
+                </div>
+              )}
+
+              {request !== "transaction" && (
+                <div>
+                  <p className="line-color">
+                    ---------------------------------------------------
+                  </p>
+                </div>
+              )}
+              <div className="flex justify-between">
+                <span className="txt-detail">Time</span>
+                <span className="txt-detail">
+                  {new Date(paymentData?.data?.createdAt).toLocaleString(
+                    "en-US",
+                    {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }
+                  )}
+                </span>
               </div>
             </div>
           </CardContent>

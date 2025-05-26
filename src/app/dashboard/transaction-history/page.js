@@ -217,35 +217,40 @@ export default function TransactionHistory() {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    currentEmployees.map((employee) => (
-                      <TableRow
-                        key={employee.id}
-                        className="text-muted-foreground border-0"
-                      >
-                        <TableCell className="sm:table-cell">
-                          {employee.id}
-                        </TableCell>
-                        <TableCell>{employee.name}</TableCell>
-                        <TableCell className="sm:table-cell">
-                          {employee.accountNumber}
-                        </TableCell>
-                        <TableCell className="sm:table-cell">
-                          {employee.day}
-                        </TableCell>
-                        <TableCell className="sm:table-cell">
-                          {employee.time}
-                        </TableCell>
-                        <TableCell className="sm:table-cell">
-                          {employee.type}
-                        </TableCell>
-                        <TableCell className="sm:table-cell">
-                          {employee.amount}
-                        </TableCell>
-                        <TableCell className="sm:table-cell">
-                          {employee.currency}
-                        </TableCell>
-                      </TableRow>
-                    ))
+                    currentEmployees
+                      ?.sort(
+                        (a, b) =>
+                          new Date(b?.createdAt) - new Date(a?.createdAt)
+                      )
+                      .map((employee) => (
+                        <TableRow
+                          key={employee.id}
+                          className="text-muted-foreground border-0"
+                        >
+                          <TableCell className="sm:table-cell">
+                            {employee.id}
+                          </TableCell>
+                          <TableCell>{employee.name}</TableCell>
+                          <TableCell className="sm:table-cell">
+                            {employee.accountNumber}
+                          </TableCell>
+                          <TableCell className="sm:table-cell">
+                            {employee.day}
+                          </TableCell>
+                          <TableCell className="sm:table-cell">
+                            {employee.time}
+                          </TableCell>
+                          <TableCell className="sm:table-cell">
+                            {employee.type}
+                          </TableCell>
+                          <TableCell className="sm:table-cell">
+                            {employee.amount}
+                          </TableCell>
+                          <TableCell className="sm:table-cell">
+                            {employee.currency}
+                          </TableCell>
+                        </TableRow>
+                      ))
                   )}
                 </TableBody>
               </Table>
@@ -259,7 +264,7 @@ export default function TransactionHistory() {
             <Spinner />
           </div>
         ) : (
-          currentEmployees.length > 9 && (
+          currentEmployees.length > 10 && (
             <div className="flex justify-between items-center mt-4">
               <button
                 className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"

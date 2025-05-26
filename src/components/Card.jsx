@@ -1,4 +1,6 @@
 export default function Card({ balance, date }) {
+
+
     function formatToShortDate(isoDate) {
         const date = new Date(isoDate);
 

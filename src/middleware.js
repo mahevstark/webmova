@@ -4,8 +4,6 @@ export function middleware(req) {
   const token = req.cookies.get("token");
   let pathname = req.nextUrl.pathname.replace(/\/$/, "") || "/";
 
-  console.log("heyyy", req.nextUrl.pathname);
-
   // Define public routes
   const publicPaths = [
     "/auth/signin",
@@ -13,6 +11,7 @@ export function middleware(req) {
     "/auth/forgot-password",
     "/auth/verification",
     "/auth/create-profile",
+    "/auth/create-password",
   ];
 
   const isPublic = publicPaths.includes(pathname);
@@ -21,6 +20,11 @@ export function middleware(req) {
   if (!isPublic && !token) {
     console.log("Redirecting unauthenticated user to /auth/signin");
     return NextResponse.redirect(new URL("/auth/signin", req.url));
+  }
+
+  if (token && isPublic) {
+    console.log("Redirecting authenticated user dashboard");
+    return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
   // if (token) {

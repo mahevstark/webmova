@@ -140,30 +140,31 @@ export default function signin() {
                 )}
               </button>
             </div>
-            <div className="">
-              <div className="  text-right text-base  text-black">
+
+            <Button
+              value={loading ? "Signing in..." : "Sign in"}
+              classname="py-3 px-3  w-full"
+            />
+            <div className="flex flex-col gap-1">
+              <div className="  text-right text-sm  text-black">
                 Don't Have an Account?{" "}
                 <Link
                   href="/auth/signup"
-                  className="text-right text-base  text-black "
+                  className="text-right text-sm  font-semibold  text-black "
                 >
                   SignUp now
                 </Link>
               </div>
-              <div className="  text-right text-base  text-black">
+              <div className="  text-right text-sm  text-black">
                 Forgot Password?{" "}
                 <Link
                   href="/auth/forgot-password"
-                  className=" text-right text-base  text-black "
+                  className=" text-right text-sm font-semibold  text-black "
                 >
                   Reset Now
                 </Link>
               </div>
             </div>
-            <Button
-              value={loading ? "Signing in..." : "Sign in"}
-              classname="py-3 px-3  w-full"
-            />
           </form>
         </div>
       </div>

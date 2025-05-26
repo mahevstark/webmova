@@ -7,10 +7,23 @@ import Pin from "../../../pop-ups/pin";
 import GlobalApi from "@/lib/GlobalApi";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
-export default function requestmoney() {
+import Paymentsent from "../../../pop-ups/completed";
+
+export default function RequestMoney() {
   const [formData, setFormData] = useState({
     amount: "",
   });
+  const [paymentData, setPaymentdata] = useState({
+    amount: 0,
+    data: "",
+    url: "",
+  });
+  const [showExpertise, setShowExpertise] = useState(false);
+  const toggleExpertise = () => {
+    setShowExpertise(!showExpertise);
+  };
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,51 +36,122 @@ export default function requestmoney() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!formData.amount || formData.amount <= 0) {
+      toast("Please enter a valid amount");
+      return;
+    }
+
+    setIsLoading(true);
+
     const baseUrl =
       "https://usmansharif910.github.io/redirect-link/sendmoney.html";
-
     const token = Cookies.get("token");
 
-    const formData = {
+    const requestData = {
       token: token,
       link: baseUrl,
     };
 
     try {
-      const response = await GlobalApi.withdrawmoney(formData, token);
-      console.log("rrr", response);
+      const response = await GlobalApi.withdrawmoney(requestData, token);
+      console.log("API response: ", response);
 
       if (response?.success === true) {
-        toast("Payment withdraw sucess");
+        toast("Payment withdraw success");
+
+        const login_data = JSON.parse(localStorage.getItem("userData"));
+        console.log("login_data", login_data?.firstName, login_data?.lastName);
+
+        // Build query parameters in the exact order you specified
+        const queryParams = new URLSearchParams();
+        queryParams.append("amount", formData.amount);
+        queryParams.append("user_id", login_data?.id);
+        queryParams.append("wallet_id", login_data.wallet.id);
+        queryParams.append("transaction_id", Date.now().toString());
+        queryParams.append("action", "requested");
+        queryParams.append("firstName", login_data?.firstName);
+        queryParams.append("lastName", login_data?.lastName);
+        queryParams.append("bank", login_data?.bank || "undefined");
+
+        // Get the payment URL from response (contains the code parameter)
+        const paymentUrl = response?.data?.paymentUrl;
+
+        if (paymentUrl) {
+          console.log("Received payment URL:", paymentUrl);
+
+          let code = null;
+
+          // Handle different URL protocols
+          if (
+            paymentUrl.startsWith("mowa://") ||
+            paymentUrl.startsWith("app://")
+          ) {
+            // Handle custom protocol URLs (deep links)
+            try {
+              // Extract code from custom protocol URL
+              const urlParts = paymentUrl.split("?");
+              if (urlParts.length > 1) {
+                const params = new URLSearchParams(urlParts[1]);
+                code = params.get("code");
+              }
+            } catch (error) {
+              console.log("Error parsing custom protocol URL:", error);
+            }
+          } else if (paymentUrl.startsWith("http")) {
+            // Handle standard HTTP/HTTPS URLs
+            try {
+              const url = new URL(paymentUrl);
+              code = url.searchParams.get("code");
+            } catch (error) {
+              console.log("Error parsing HTTP URL:", error);
+            }
+          }
+
+          // Add the code to our query parameters if found (at the end)
+          if (code) {
+            queryParams.append("code", code);
+            console.log("Extracted code:", code);
+          } else {
+            console.warn("No code parameter found in payment URL");
+          }
+
+          // Construct the final web URL with all parameters
+          const finalUrl = `${baseUrl}?${queryParams.toString()}`;
+          setPaymentdata({
+            url: finalUrl,
+            amount: formData?.amount,
+            data: response?.data,
+          });
+
+          console.log("Final redirect URL:", finalUrl);
+          toggleExpertise();
+        } else {
+          console.log("Payment URL not found in response");
+          toast("Payment URL not received from server");
+        }
+
+        // Reset form
         setFormData({
-          email: "",
+          amount: "",
         });
-        // const queryParams = new URLSearchParams({
-        //   amount: amount.toString(),
-        //   user_id: loggedUser?.id?.toString(),
-        //   wallet_id: loggedUser?.wallet?.id?.toString(),
-        //   transaction_id: Date.now().toString(),
-        //   action: "requested",
-        //   firstName: loggedUser?.firstName,
-        //   lastName: loggedUser?.lastName,
-        //   bank: loggedUser?.bank,
-        // });
-        // return queryParams;
       } else {
-        toast(response?.message || "Error while withdraw money");
+        toast(response?.message || "Error while withdrawing money");
         setFormData({
-          email: "",
+          amount: "",
         });
       }
     } catch (error) {
-      console.log("error while withdraw money", error);
+      console.log("Error while withdrawing money", error);
       toast("Network Error");
       setFormData({
-        email: "",
+        amount: "",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
-  var page = "Dashboard";
+
+  const page = "Dashboard";
 
   return (
     <Layout page={page}>
@@ -89,62 +173,34 @@ export default function requestmoney() {
               <textarea
                 cols="50"
                 rows="4"
-                placeholder="Enter Withdraw Amount "
+                placeholder="Enter Withdraw Amount"
                 className="w-full border rounded resize-none focus:outline-none focus:ring-0 focus:border-1 text-center mx-auto pt-14"
                 value={formData.amount}
                 onChange={(e) => {
-                  setFormData(e.target.value);
+                  setFormData((prev) => ({
+                    ...prev,
+                    amount: e.target.value,
+                  }));
                 }}
-              ></textarea>
+              />
             </div>
-            {/* <div>
-              <label
-                htmlFor="accountNumber"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Account Number
-              </label>
-              <Input
-                type="text"
-                placeholder="Enter Account Number"
-                name="accountNumber"
-                value={formData.accountNumber}
-                onChange={handleChange}
-                className="w-full p-2 border rounded-md focus:outline-none focus:ring-0 focus:border-0 mt-2"
-              />
-            </div> */}
-            {/* <div>
-              <label
-                htmlFor="bankName"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Bank Name
-              </label>
-              <Input
-                type="text"
-                placeholder="Enter Bank Name"
-                name="bankName"
-                value={formData.bankName}
-                onChange={handleChange}
-                className="w-full p-2 border rounded-md mt-2"
-              />
-            </div> */}
-
-            {/* <Pin
-              value="Next"
-              style="button-background text-white font-semibold border rounded-lg w-full mt-12  no-hover "
-              request="payment"
-            /> */}
 
             <Button
               type="submit"
-              className="button-background text-white font-semibold border rounded-lg w-full no-hover"
+              disabled={isLoading}
+              className="button-background text-white font-semibold border rounded-lg w-full no-hover disabled:opacity-50"
             >
-              Withdraw
+              {isLoading ? "Processing..." : "Withdraw"}
             </Button>
           </form>
         </div>
       </div>
+      <Paymentsent
+        isOpen={showExpertise}
+        closeModal={toggleExpertise}
+        paymentData={paymentData}
+        request={"withdraw"}
+      />
     </Layout>
   );
 }

@@ -228,90 +228,94 @@ export default function Employee() {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  currentEmployees?.map((employee, index) => (
-                    <TableRow
-                      key={employee.id || `employee-${index}`}
-                      className="text-muted-foreground border-0"
-                    >
-                      <TableCell>{`${employee?.user?.firstName} ${employee?.user?.lastName}`}</TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        {employee?.user?.email}
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        {employee?.user?.phoneNumber}
-                      </TableCell>
-                      <TableCell>
-                        <button
-                          className={`px-2 py-1 text-xs flex items-center gap-2 font-semibold ${
-                            employee?.user?.isActive
-                              ? "active-status"
-                              : "text-red-700 gap-2"
-                          }`}
-                        >
-                          {employee?.user?.isActive ? (
-                            <Active />
-                          ) : (
-                            <Nonactive />
-                          )}{" "}
-                          {employee?.user?.isActive ? "Active" : "Inactive"}
-                        </button>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        {employee?.wallet?.balance}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3">
-                          {!employee?.user?.isActive ? (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="text-blue-500 font-semibold text-left border"
-                              onClick={() => {
-                                Actuser(employee.id);
-                              }}
-                            >
-                              {activatingEmployees[employee.id]
-                                ? "Activating..."
-                                : "Activate"}
-                            </Button>
-                          ) : (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="text-blue-500 font-semibold text-left border"
-                              onClick={() => {
-                                deActuser(employee.id);
-                              }}
-                            >
-                              {deactivatingEmployees[employee.id]
-                                ? "DeActivating..."
-                                : "DeActive"}
-                            </Button>
-                          )}
-                          <Link href={`/dashboard/users/${employee.id}`}>
+                  currentEmployees
+                    ?.sort(
+                      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                    )
+                    ?.map((employee, index) => (
+                      <TableRow
+                        key={employee.id || `employee-${index}`}
+                        className="text-muted-foreground border-0"
+                      >
+                        <TableCell>{`${employee?.user?.firstName} ${employee?.user?.lastName}`}</TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          {employee?.user?.email}
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          {employee?.user?.phoneNumber}
+                        </TableCell>
+                        <TableCell>
+                          <button
+                            className={`px-2 py-1 text-xs flex items-center gap-2 font-semibold ${
+                              employee?.user?.isActive
+                                ? "active-status"
+                                : "text-red-700 gap-2"
+                            }`}
+                          >
+                            {employee?.user?.isActive ? (
+                              <Active />
+                            ) : (
+                              <Nonactive />
+                            )}{" "}
+                            {employee?.user?.isActive ? "Active" : "Inactive"}
+                          </button>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          {employee?.wallet?.balance}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3">
+                            {!employee?.user?.isActive ? (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="text-blue-500 font-semibold text-left border"
+                                onClick={() => {
+                                  Actuser(employee.id);
+                                }}
+                              >
+                                {activatingEmployees[employee.id]
+                                  ? "Activating..."
+                                  : "Activate"}
+                              </Button>
+                            ) : (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="text-blue-500 font-semibold text-left border"
+                                onClick={() => {
+                                  deActuser(employee.id);
+                                }}
+                              >
+                                {deactivatingEmployees[employee.id]
+                                  ? "DeActivating..."
+                                  : "DeActive"}
+                              </Button>
+                            )}
+                            <Link href={`/dashboard/users/${employee.id}`}>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="text-blue-500 font-semibold border text-left"
+                                onClick={() => {
+                                  handleViewClick(employee);
+                                }}
+                              >
+                                View
+                              </Button>
+                            </Link>
                             <Button
                               variant="outline"
                               size="sm"
                               className="text-blue-500 font-semibold border text-left"
-                              onClick={() => {
-                                handleViewClick(employee);
-                              }}
+                              onClick={() => openDeleteDialog(employee)}
                             >
-                              View
+                              Delete
                             </Button>
-                          </Link>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-blue-500 font-semibold border text-left"
-                            onClick={() => openDeleteDialog(employee)}
-                          >
-                            Delete
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
                 )}
               </TableBody>
             </Table>

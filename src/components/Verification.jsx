@@ -19,6 +19,7 @@ export default function Verification() {
     const [loading, setloading] = useState(false);
     const searchParams = useSearchParams();
     const reset = searchParams.get("reset");
+    console.log('rrr', reset);
 
 
     // Timer effect
@@ -51,6 +52,75 @@ export default function Verification() {
         }
     };
 
+    // New paste functionality
+    const handlePaste = (e, index) => {
+        e.preventDefault();
+        const pastedData = e.clipboardData.getData('text/plain').trim();
+
+        // Check if pasted data is numeric and 6 digits
+        if (/^\d{6}$/.test(pastedData)) {
+            const digits = pastedData.split('');
+            setOtp(digits);
+
+            // Focus on the last input after pasting
+            if (inputRefs.current[5]) {
+                inputRefs.current[5].focus();
+            }
+
+
+        } else if (/^\d+$/.test(pastedData) && pastedData.length > 0) {
+            // Handle partial numeric paste
+            const digits = pastedData.split('').slice(0, 6);
+            const newOtp = [...otp];
+
+            for (let i = 0; i < digits.length && (index + i) < 6; i++) {
+                newOtp[index + i] = digits[i];
+            }
+
+            setOtp(newOtp);
+
+            // Focus on next empty field or last filled field
+            const nextIndex = Math.min(index + digits.length, 5);
+            if (inputRefs.current[nextIndex]) {
+                inputRefs.current[nextIndex].focus();
+            }
+        } else {
+            toast("Please paste a valid 6-digit OTP");
+        }
+    };
+
+    // Handle keyboard shortcuts
+    const handleKeyDown = (e, index) => {
+        // Handle Ctrl+V for paste
+        if (e.ctrlKey && e.key === 'v') {
+            // Let the paste event handle it
+            return;
+        }
+
+        // Handle Ctrl+A for select all
+        if (e.ctrlKey && e.key === 'a') {
+            e.preventDefault();
+            // Select all OTP inputs by focusing on first and selecting content
+            if (inputRefs.current[0]) {
+                inputRefs.current[0].focus();
+                inputRefs.current[0].select();
+            }
+            return;
+        }
+
+        // Handle arrow keys for navigation
+        if (e.key === 'ArrowLeft' && index > 0) {
+            e.preventDefault();
+            inputRefs.current[index - 1].focus();
+        } else if (e.key === 'ArrowRight' && index < 5) {
+            e.preventDefault();
+            inputRefs.current[index + 1].focus();
+        }
+
+        // Handle backspace
+        handleBackspace(e, index);
+    };
+
     const handleResendOTP = async () => {
         try {
             // Call your resend OTP API here
@@ -67,6 +137,7 @@ export default function Verification() {
 
     const handleVerifyOTP = async () => {
         const otpString = otp.join("");
+
         if (otpString.length !== 6) {
             toast("Please enter complete OTP");
             return;
@@ -77,6 +148,7 @@ export default function Verification() {
         try {
             const email = localStorage.getItem("emailtoSignup");
             console.log(email);
+
 
             const response = await GlobalApi.verifyOtp(email, otpString);
 
@@ -157,12 +229,13 @@ export default function Verification() {
             <div className="w-full md:w-1/2 bg-white p-6 md:p-8 flex items-center justify-center">
                 <div className="w-full max-w-md text-center flex items-center justify-center flex-col">
                     <div className="text-center pb-6">
-                        <h2 className="text-2xl md:text-3xl font-semibold mb-6 md:mb-6 text-center">
+                        <h2 className="text-2xl md:text-3xl font-semibold mb-4 md:mb-4 text-center">
                             Enter Verification Code{" "}
                         </h2>
                         <p className="text-center text-sm font-medium p-color leading-6 w-3/2 mx-auto">
                             Secure your account with a one-time code
                         </p>
+
                     </div>
                     <div className="space-y-4">
                         <div className="flex gap-5 mx-auto pb-6">
@@ -175,9 +248,11 @@ export default function Verification() {
                                         type="tel"
                                         value={digit}
                                         onChange={(e) => handleChange(e.target.value, index)}
-                                        onKeyDown={(e) => handleBackspace(e, index)}
+                                        onKeyDown={(e) => handleKeyDown(e, index)}
+                                        onPaste={(e) => handlePaste(e, index)}
                                         ref={(el) => (inputRefs.current[index] = el)}
                                         className="w-full h-full border-0 outline-none focus:ring-0 text-center"
+                                        maxLength={1}
                                     />
                                 </span>
                             ))}
