@@ -49,8 +49,9 @@ export default function billpayment() {
         />
         <h1 className="text-2xl font-semibold mb-4">Bill Payment</h1>
         <p className="text-gray-600 mb-6 text-sm">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
-          bibendum laoreet massa quis viverra.
+          Bill Payment lets you easily pay your bills anytime, anywhere. Whether
+          it’s electricity, water, internet, or credit cards, just select your
+          bill, enter the amount, and pay securely with a few taps.
         </p>
         <div>
           <form
@@ -77,8 +78,8 @@ export default function billpayment() {
               />
             </div>
             <p className="text-sm w-72 text-gray-600 pb-8">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Vestibulum pellentesque elit sit{" "}
+              Please enter your bill details carefully to ensure a smooth and
+              accurate payment process.
             </p>
             <Button
               type="submit"

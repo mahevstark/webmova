@@ -15,6 +15,7 @@ export default function SendMoney() {
   const [formData, setFormData] = useState({
     amount: "",
   });
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Sample users data - replace with your actual users data
   const [users, setusers] = useState([]);
@@ -47,6 +48,16 @@ export default function SendMoney() {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  // Filter users based on search query
+  const filteredUsers = users.filter((user) => {
+    const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+    const email = user.email.toLowerCase();
+    const query = searchQuery.toLowerCase();
+
+    return fullName.includes(query) || email.includes(query);
+  });
+
   const handleUserSelect = (user) => {
     setSelectedUser(user);
     setStep("amountEntry");
@@ -58,6 +69,10 @@ export default function SendMoney() {
       ...prevState,
       [name]: value,
     }));
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
   };
 
   const handleSubmit = (e) => {
@@ -84,34 +99,48 @@ export default function SendMoney() {
       <div className="px-11">
         <h1 className="text-2xl font-semibold mb-4">Send Money</h1>
         <p className="text-gray-600 mb-6 text-sm">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
-          bibendum laoreet massa quis viverra.
+          Easily send money to friends, family, or anyone, anytime and anywhere.
+          Just enter the recipient’s details, the amount, and hit send.
         </p>
 
         <div>
           {step === "userSelection" && (
-            <div className="w-full  mx-auto border shadow-md px-6 py-5 rounded-md">
-              <h2 className="text-lg font-semibold mb-5 text-center">
+            <div className="w-full mx-auto border shadow-md px-6 py-5 rounded-md mb-4 ">
+              <h2 className="text-lg font-semibold mb-5 text-center ">
                 Select Recipient
               </h2>
-              <div className="space-y-3 max-h-96 overflow-y-auto">
+
+              {/* Search Bar */}
+              <div className="mb-4">
+                <Input
+                  type="text"
+                  placeholder="Search by name or email..."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  className="w-full"
+                />
+              </div>
+
+              <div className="space-y-3 max-h-96 overflow-y-auto scroll-container ">
                 {loading ? (
                   <div className="mx-auto flex justify-center items-center">
                     <Spinner />
                   </div>
-                ) : users.length < 1 ? (
-                  <div className="mx-auto flex justify-center items-center">
-                    No Users Available
+                ) : filteredUsers.length < 1 ? (
+                  <div className="mx-auto flex justify-center items-center text-gray-500">
+                    {searchQuery
+                      ? "No users found matching your search"
+                      : "No Users Available"}
                   </div>
                 ) : (
-                  users.map((user) => (
+                  filteredUsers.map((user) => (
                     <div
                       key={user.id}
                       onClick={() => handleUserSelect(user)}
-                      className="p-4 border rounded-lg cursor-pointer hover:bg-gray-50 hover:border-blue-300 transition-colors"
+                      className="p-4 border rounded-lg cursor-pointer hover:bg-gray-50 hover:border-blue-300 transition-colors "
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
+                        <div className="w-10 h-10 bg-[#544af1] rounded-full flex items-center justify-center text-white font-semibold">
                           {user.firstName.charAt(0)}
                         </div>
                         <div className="flex-1">
@@ -132,13 +161,13 @@ export default function SendMoney() {
           {step === "amountEntry" && (
             <form
               onSubmit={handleSubmit}
-              className="space-y-6 w-full max-w-80 mx-auto border shadow-md px-12 py-5 rounded-md"
+              className="space-y-6 w-full max-w-96 mx-auto border shadow-md px-12 py-5 rounded-md"
             >
               {selectedUser && (
                 <div className="text-center mb-4">
                   <p className="text-sm text-gray-600">Sending money to:</p>
                   <div className="flex items-center justify-center space-x-2 mt-2">
-                    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+                    <div className="w-8 h-8 bg-[#6c5dd3] rounded-full flex items-center justify-center text-white text-sm font-semibold">
                       {selectedUser.firstName.charAt(0)}
                     </div>
                     <span className="font-medium">
@@ -148,7 +177,7 @@ export default function SendMoney() {
                   <button
                     type="button"
                     onClick={handleBackToUsers}
-                    className="text-blue-500 text-sm hover:underline mt-1"
+                    className="text-[#544af1] text-sm hover:underline mt-1"
                   >
                     Change recipient
                   </button>

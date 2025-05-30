@@ -11,7 +11,7 @@ export default function Card({ balance, date }) {
         return `${month}/${day}/${year}`;
     }
     return (
-        <div className="relative w-full max-w-md mt-5">
+        <div className="relative w-full max-w-md xl:w-[94%] lg:w-[74%]   mt-5">
             {/* Left peach/orange accent */}
             <div className="absolute left-0 top-1/2 -translate-y-1/2 h-[85%] w-8 bg-[#FFCBA4] rounded-l-3xl" />
 
@@ -33,9 +33,9 @@ export default function Card({ balance, date }) {
                             <p className="text-white text-3xl font-bold">${balance}</p>
                         </div>
 
-                        <div className="mt-8">
+                        <div className="mt-8 flex flex-col">
                             <p className="text-white/80 text-xs">VALID FROM</p>
-                            <div className="flex justify-between items-center">
+                            <div className="flex justify-between items-center flex-wrap">
                                 <p className="text-white">{formatToShortDate(date)}</p>
                                 <p className="text-white">•••• •••• •••• 1234</p>
                             </div>

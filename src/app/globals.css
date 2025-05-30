@@ -135,7 +135,13 @@
 
 .settings {
   width: 280px;
-  margin-left: 28px !important;
+  margin-left: 38px !important;
+}
+
+@media (max-width: 639px) {
+  .settings {
+    margin-left: 18px !important;
+  }
 }
 .settings-p {
   color: #6c6c70;
@@ -155,6 +161,16 @@
 
 .z {
   z-index: 100000000000000 !important;
+}
+.scroll-container {
+  overflow: auto; /* Enables scrolling */
+  -ms-overflow-style: none; /* Hides scrollbar in IE and Edge */
+  scrollbar-width: none; /* Hides scrollbar in Firefox */
+}
+
+/* Hides scrollbar in Chrome, Safari, Edge (WebKit browsers) */
+.scroll-container::-webkit-scrollbar {
+  display: none;
 }
 
 @layer base {

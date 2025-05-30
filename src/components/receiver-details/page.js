@@ -38,8 +38,8 @@ export default function receiverdetails({
           Receiver Details
         </CardTitle>
         <p className="text-sm text-center text-muted-foreground">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed gravida
-          mi id purus
+          The receiver's information is provided below. Please review the
+          details for accuracy before proceeding.
         </p>
       </CardHeader>
       <CardContent>

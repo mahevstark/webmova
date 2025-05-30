@@ -30,7 +30,13 @@ export default function ChangePassword() {
 
   const updateP = async () => {
     try {
+      if (!oldpass === "" || newpass === "") {
+        toast("All feilds are required");
+        return;
+      }
+
       setloading(true);
+
       const response = await GlobalApi.changePass(user?.id, oldpass, newpass);
 
       if (response?.success === true) {
@@ -64,9 +70,9 @@ export default function ChangePassword() {
 
   return (
     <Layout page={"settings"}>
-      <div className="flex sm:flex-row flex-col">
+      <div className="flex sm:flex-row flex-col 2xl:h-[84vh] xl:h-[77vh] lg:h-[76vh] md:h-[79vh]">
         <Layoutsettings />{" "}
-        <div className="mx-6 border rounded-md w-auto pt-4 sm:w-full space-y-8 mt-16 sm:mt-0 mb-12 sm:mb-8 pb-4 sm:pb-0 shadow-lg xl:pb-8">
+        <div className="mx-2 mr-6 md:mx-6  max-sm:ml-4 w-auto border rounded-md pt-4 sm:w-full space-y-8 mt-6 sm:mt-0 mb-12 sm:mb-0 sm:pb-0 xl:pb-12 shadow-lg max-sm:pb-6">
           <div className="flex px-6 items-center justify-between flex-col sm:flex-row">
             <h1 className="text-xl font-semibold text-black">
               Change Password
@@ -127,7 +133,7 @@ export default function ChangePassword() {
                     required
                     value={newpass}
                     className="w-full focus:outline-none focus:ring-0 border-0 placeholder-gray-400 text-gray-400"
-                    placeholder="Create New Password"
+                    placeholder="Enter New Password"
                     onChange={(e) => {
                       setnewpass(e.target.value);
                     }}

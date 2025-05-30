@@ -70,8 +70,13 @@ export default function Component({ paymentData, isOpen, onClose, request }) {
             </CardTitle>
           )}
           <p className="text-sm text-p font-medium mt-7">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed gravida
-            mi id purus
+            {request === "withdraw"
+              ? "Your funds have been transferred successfully to your account. You should see the amount reflected shortly."
+              : request === "balance"
+              ? "Your balance has been sent successfully. The funds are now on their way to the recipient’s account. "
+              : request === "transaction"
+              ? "Your transaction has been completed successfully. The amount has been securely transferred, and you will receive a confirmation receipt shortly"
+              : null}
           </p>
           <button className="btn-bg hover:bg-inherit rounded-xl text-black">
             {request === "withdraw"
