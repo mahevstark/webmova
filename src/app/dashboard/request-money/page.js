@@ -158,8 +158,7 @@ export default function RequestMoney() {
       <div className="px-11">
         <h1 className="text-2xl font-semibold mb-4">Withdraw Payment</h1>
         <p className="text-gray-600 mb-6 text-sm">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
-          bibendum laoreet massa quis viverra.
+          Transfer your funds quickly and securely to your account.
         </p>
         <div>
           <form

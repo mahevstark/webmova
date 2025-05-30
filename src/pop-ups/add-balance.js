@@ -161,7 +161,7 @@ const AddBalance = ({
             Add Balance
           </h2>
           <p className="custom-p-color mb-6" style={{ width: "340px" }}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Add balance to Mowapay wallet quickly instantly.
           </p>
           <span
             className="block mx-auto"

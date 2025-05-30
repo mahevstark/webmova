@@ -73,14 +73,13 @@ export default function signin() {
         />
         <div className="absolute inset-0 bg-opacity-50 px-6 pb-6 pt-4 md:px-11 md:pb-10 md:pt-7 flex flex-col justify-between">
           <div className="text-white text-xl md:text-3xl font-bold">MOWA</div>
-          <div className="text-white w-full md:w-[502px]">
-            <h1 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4">
-              Lorem ipsum dolor sit amet, consectetur.
+          <div className="text-white w-full 2xl:w-[502px] lg:w-[440px]">
+            <h1 className="2xl:text-4xl  lg:text-2xl xl:text-4xl font-bold mb-2 md:mb-4">
+              Mowapay — Simplify Your Payments, Amplify Your Life.
             </h1>
-            <p className="text-base md:text-lg">
-              Praesent gravida tincidunt blandit. Ut porta aliquet nulla. Nullam
-              vel metus semper, ullamcorper ipsum sed, lacinia mauris.
-              Suspendisse potenti.
+            <p className="2xl:text-lg xl:text-lg md:text-lg">
+              Mowapay is your all-in-one payment solution designed to make
+              transactions hassle-free.
             </p>
           </div>
         </div>
@@ -140,17 +139,12 @@ export default function signin() {
                 )}
               </button>
             </div>
-
-            <Button
-              value={loading ? "Signing in..." : "Sign in"}
-              classname="py-3 px-3  w-full"
-            />
             <div className="flex flex-col gap-1">
               <div className="  text-right text-sm  text-black">
                 Don't Have an Account?{" "}
                 <Link
                   href="/auth/signup"
-                  className="text-right text-sm  font-semibold  text-black "
+                  className="text-right text-sm  font-semibold  text-[#544af1] "
                 >
                   SignUp now
                 </Link>
@@ -159,12 +153,16 @@ export default function signin() {
                 Forgot Password?{" "}
                 <Link
                   href="/auth/forgot-password"
-                  className=" text-right text-sm font-semibold  text-black "
+                  className=" text-right text-sm font-semibold  text-[#544af1] "
                 >
                   Reset Now
                 </Link>
               </div>
             </div>
+            <Button
+              value={loading ? "Signing in..." : "Sign in"}
+              classname="py-3 px-3  w-full font-semibold text-base"
+            />
           </form>
         </div>
       </div>

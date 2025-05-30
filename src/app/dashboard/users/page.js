@@ -192,7 +192,7 @@ export default function Employee() {
           </Button>
         </div>
 
-        <Card className="border-none shadow-none p-0 mt-5 mb-5">
+        <Card className="border-none shadow-none p-0 mt-5 mb-5 2xl:w-auto xl:w-auto lg:w-auto md:w-[650px]">
           <CardContent className="p-0 overflow-x-auto">
             <Table className="p-0">
               <TableHeader className="tb-col">
@@ -264,7 +264,7 @@ export default function Employee() {
                           {employee?.wallet?.balance}
                         </TableCell>
                         <TableCell>
-                          <div className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3">
+                          <div className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3 items-center">
                             {!employee?.user?.isActive ? (
                               <Button
                                 variant="outline"

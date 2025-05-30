@@ -64,14 +64,13 @@ export default function createpassword() {
         />
         <div className="absolute inset-0 bg-opacity-50 px-6 pb-6 pt-4 md:px-11 md:pb-10 md:pt-7 flex flex-col justify-between">
           <div className="text-white text-xl md:text-3xl font-bold">MOWA</div>
-          <div className="text-white w-full md:w-[502px]">
-            <h1 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4">
-              Lorem ipsum dolor sit amet, consectetur.
+          <div className="text-white w-full 2xl:w-[502px] lg:w-[440px]">
+            <h1 className="2xl:text-4xl  lg:text-2xl xl:text-4xl font-bold mb-2 md:mb-4">
+              Mowapay — Simplify Your Payments, Amplify Your Life.
             </h1>
-            <p className="text-base md:text-lg">
-              Praesent gravida tincidunt blandit. Ut porta aliquet nulla. Nullam
-              vel metus semper, ullamcorper ipsum sed, lacinia mauris.
-              Suspendisse potenti.
+            <p className="2xl:text-lg xl:text-lg md:text-lg">
+              Mowapay is your all-in-one payment solution designed to make
+              transactions hassle-free.
             </p>
           </div>
         </div>

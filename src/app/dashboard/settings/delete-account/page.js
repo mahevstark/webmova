@@ -44,9 +44,9 @@ export default function deleteaccount() {
 
   return (
     <Layout page={"settings"}>
-      <div className="flex sm:flex-row flex-col ">
+      <div className="flex sm:flex-row flex-col  2xl:h-[84vh] xl:h-[77vh] lg:h-[87vh] md:h-[84vh] ">
         <Layoutsettings />{" "}
-        <div className="mx-6 w-auto pt-4 border rounded-md sm:w-full space-y-8 mt-16 sm:mt-0 mb-12 sm:mb-8 pb-4 sm:pb-0 shadow-lg ">
+        <div className="mx-2 mr-6 md:mx-6  max-sm:ml-4 w-auto border rounded-md pt-4 sm:w-full space-y-8 mt-6 sm:mt-0 mb-12 sm:mb-0 sm:pb-0 xl:pb-12 shadow-lg max-sm:pb-6">
           <div className="flex px-6 items-center justify-between flex-col sm:flex-row">
             <h1 className="text-xl font-semibold text-black">Delete Account</h1>
           </div>
@@ -67,7 +67,7 @@ export default function deleteaccount() {
             {/* Current Password Field */}
             <div className="flex flex-col gap-3 sm:mt-2 mt-5">
               <p className="settings-p   mt-4 ">Current Password</p>
-              <div className="relative sm:w-2/5 w-auto">
+              <div className="relative 2xl:w-1/4 xl:w-2/6 md:w-2/4 lg:w-3/4 w-auto">
                 <label htmlFor="current-password" className="sr-only">
                   Current Password
                 </label>
@@ -77,8 +77,8 @@ export default function deleteaccount() {
                     name="current-password"
                     type={showPassword ? "text" : "password"}
                     required
-                    className="w-full focus:outline-none focus:ring-0 border-0 placeholder-gray-400 text-gray-400"
-                    placeholder="Enter your Current Password"
+                    className="w-full focus:outline-none focus:ring-0 border-0 placeholder-gray-400 text-black "
+                    placeholder="Current Password"
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
                   />
@@ -105,13 +105,13 @@ export default function deleteaccount() {
                 />
                 <p className="text-sm" style={{ color: "#717171" }}>
                   I accept{" "}
-                  <span className="btn-txt">
+                  <span className="text-[#544af1]">
                     <Link href="/dashboard/settings/privacy-policy">
                       Privacy policy
                     </Link>
                   </span>{" "}
                   &
-                  <span className="btn-txt">
+                  <span className="text-[#544af1]">
                     <Link href="/dashboard/settings/terms">Terms of use</Link>
                   </span>
                 </p>
@@ -121,7 +121,7 @@ export default function deleteaccount() {
               {" "}
               <button
                 onClick={deleteAc}
-                className="py-2 px-4 w-40 mt-9 mx-auto mb-4 button-background rounded-lg  text-white font-medium uppercase"
+                className="py-2 px-4 w-40 mt-9 mx-auto mb-4 button-background rounded-lg  text-white font-medium "
               >
                 {loading ? "Almost there..." : "Delete Account"}
               </button>

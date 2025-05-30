@@ -94,11 +94,8 @@ export default function Pin({ value, style, request, selectedUser, amount }) {
           <AlertDialogTitle className="text-center font-semibold">
             Pin Required
           </AlertDialogTitle>
-          <AlertDialogDescription
-            style={{ width: "257px" }}
-            className="text-muted-foreground"
-          >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          <AlertDialogDescription className="text-muted-foreground text-center">
+            Enter your PIN to continue.
           </AlertDialogDescription>
 
           <div className="flex gap-3" style={{ marginTop: "25px" }}>

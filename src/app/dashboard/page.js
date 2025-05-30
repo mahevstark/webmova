@@ -89,7 +89,7 @@ export default function Dashboard() {
   }, []);
   return (
     <Layout page={page}>
-      <div className="  sm:px-6 md:px-10">
+      <div className="2xl:mx-10 xl:mx-10 lg:px-10 md:px-10 max-sm:px-8">
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between  sm:w-[38%] gap-2 sm:gap-0">
@@ -119,10 +119,10 @@ export default function Dashboard() {
           </div>
 
           <div
-            className="flex flex-col lg:flex-row justify-between gap-4 lg:gap-0"
+            className="flex lg:flex-col md:flex-col max-sm:flex-col xl:flex-row 2xl:flex-row justify-between gap-4  lg:gap-0"
             style={{ margin: 0 }}
           >
-            <div className="w-full ">
+            <div className="w-full">
               <CardMowa
                 balance={user?.wallet?.balance ? user?.wallet?.balance : 0}
                 date={
@@ -133,7 +133,7 @@ export default function Dashboard() {
               />
             </div>
 
-            <Card className="mt-4 w-72 sm:w-full lg:w-1/2 shadow-md border">
+            <Card className="mt-4 shadow-md border ">
               <CardHeader>
                 <CardTitle className="flex justify-between items-center">
                   <p className="btn-txt-color font-semibold text-lg">Stats</p>
@@ -149,20 +149,25 @@ export default function Dashboard() {
                 </p>
               </CardHeader>
               <CardContent>
-                <div className="flex justify-around  items-center flex-col sm:flex-row gap-5 sm:gap-auto">
+                <div
+                  className="flex justify-normal 2xl:justify-around  md:justify-around  items-center 
+             2xl:flex-nowrap xl:flex-nowrap max-sm:flex-wrap   gap-5 sm:gap-auto"
+                >
                   <div className="flex  gap-3 items-center border shadow-md px-4 sm:px-5 pt-4 pb-4 rounded-lg ">
                     <p className="text-2xl font-bold text-gray-700">
-                      ${user?.wallet?.balance}
+                      ${user?.wallet?.balance ? user?.wallet?.balance : 0}
                     </p>
                     <p className="text-sm text-gray-700">Balance</p>
                   </div>
-                  <div className="flex border justify-between items-center px-4 gap-3 shadow-md sm:px-5 pt-4 pb-4 rounded-lg">
-                    <p className="text-2xl font-bold">{user?.wallet?.type}</p>
+                  <div className="flex border justify-between items-center px-4 gap-3 shadow-md sm:px-5 pt-4 pb-4 rounded-lg ">
+                    <p className="text-2xl font-bold">
+                      {user?.wallet?.type ? user?.wallet?.type : "None"}
+                    </p>
                     <p className="text-sm text-muted-foreground">Wallet Type</p>
                   </div>
                   <div className="flex border justify-between items-center px-4 gap-3 shadow-md sm:px-5 pt-4 pb-4 rounded-lg ">
                     <p className="text-2xl font-bold">
-                      {user?.wallet?.provider}
+                      {user?.wallet?.provider ? user?.wallet?.provider : "None"}
                     </p>
                     <p className="text-sm text-muted-foreground">Provider</p>
                   </div>
@@ -172,9 +177,9 @@ export default function Dashboard() {
           </div>
 
           <div className="flex flex-col lg:flex-row gap-7  sm:w-auto">
-            <Card className="border-none shadow-none p-0 mt-5 mb-5 w-full">
-              <CardHeader>
-                <CardTitle className="text-xl text-[#544AF1]">
+            <Card className="border-none shadow-none p-0 mt-5 mb-5 w-full ">
+              <CardHeader className="p-0 py-2">
+                <CardTitle className="text-xl text-[#544AF1] ">
                   Recent Employee Transactions
                 </CardTitle>
               </CardHeader>
@@ -183,7 +188,7 @@ export default function Dashboard() {
                   <TableHeader className="tb-col">
                     <TableRow>
                       <TableHead className="sm:table-cel font-semibold text-blackl">
-                        User ID
+                        ID
                       </TableHead>
                       <TableHead className="font-semibold text-black">
                         Name
