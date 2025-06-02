@@ -8,6 +8,8 @@ import GlobalApi from "@/lib/GlobalApi";
 import Cookie from "js-cookie";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 export default function SendMoney() {
   const [step, setStep] = useState("userSelection"); // userSelection, amountEntry, receiverDetails
@@ -97,7 +99,14 @@ export default function SendMoney() {
   return (
     <Layout page={page}>
       <div className="px-11">
-        <h1 className="text-2xl font-semibold mb-4">Send Money</h1>
+        <div className="flex gap-2 items-center mb-4 ">
+          {" "}
+          <Link href="/">
+            {" "}
+            <ArrowLeft />
+          </Link>
+          <h1 className="text-lg md:text-2xl font-semibold">Send Money</h1>
+        </div>
         <p className="text-gray-600 mb-6 text-sm">
           Easily send money to friends, family, or anyone, anytime and anywhere.
           Just enter the recipient’s details, the amount, and hit send.

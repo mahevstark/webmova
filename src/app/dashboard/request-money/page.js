@@ -8,6 +8,8 @@ import GlobalApi from "@/lib/GlobalApi";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 import Paymentsent from "../../../pop-ups/completed";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 export default function RequestMoney() {
   const [formData, setFormData] = useState({
@@ -156,14 +158,23 @@ export default function RequestMoney() {
   return (
     <Layout page={page}>
       <div className="px-11">
-        <h1 className="text-2xl font-semibold mb-4">Withdraw Payment</h1>
+        <div className="flex gap-2 items-center mb-4 ">
+          {" "}
+          <Link href="/">
+            {" "}
+            <ArrowLeft />
+          </Link>
+          <h1 className="text-lg md:text-2xl font-semibold">
+            Withdraw Payment
+          </h1>
+        </div>
         <p className="text-gray-600 mb-6 text-sm">
           Transfer your funds quickly and securely to your account.
         </p>
         <div>
           <form
             onSubmit={handleSubmit}
-            className="space-y-6 w-full max-w-80 mx-auto border shadow-md px-12 py-5 rounded-md"
+            className="space-y-6 w-full max-w-xl mx-auto border shadow-md px-12 py-5 rounded-md"
           >
             <div>
               <h2 className="text-lg font-semibold mb-5 text-center">

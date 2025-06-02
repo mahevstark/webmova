@@ -91,6 +91,8 @@ export default function Settings({ page }) {
         {links.map((link) => {
           const Icon = link.icon;
           const isActive = pathname === link.href;
+          console.log("pathname", link.href);
+
           return (
             <Link
               key={link.href}
@@ -98,14 +100,16 @@ export default function Settings({ page }) {
               className={cn(
                 "flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors",
                 isActive
-                  ? "layout-active-color bg-[#efd34d] "
+                  ? "button-background text-white bg-[#efd34d] "
                   : "custom-p-color hover:bg-gray-200  ",
-                link.isDanger && "text-destructive hover:bg-destructive/10"
+                link.isDanger && "text-white hover:bg-destructive/10"
               )}
             >
-              <Icon className="w-5 h-5 mr-3" />
+              <Icon className="w-5 h-5 mr-3 " />
               {link.label}
-              {link.isDanger && <ChevronRight className="w-4 h-4 ml-auto" />}
+              {link.isDanger && (
+                <ChevronRight className="w-4 h-4 ml-auto text-white" />
+              )}
             </Link>
           );
         })}

@@ -129,7 +129,7 @@ export default function Sidebar({ page }) {
         <div className="p-4">
           <Link href="/auth/signin">
             <button
-              className="flex hover:bg-red-600 hover:text-white items-center text-sm custom-p-color px-4 py-3 rounded-xl w-full font-semibold"
+              className="flex bg-red-400 text-white items-center text-sm  px-4 py-3 rounded-xl w-full font-semibold"
               onClick={() => {
                 handlelogout();
               }}

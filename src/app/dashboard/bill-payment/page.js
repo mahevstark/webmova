@@ -4,6 +4,9 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import BillPaymentPopup from "../../../pop-ups/bill-payment-details";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+
 const paymentDetails = {
   senderName: "Miran Butt",
   receiverName: "Hanif Ali",
@@ -47,7 +50,15 @@ export default function billpayment() {
           onPay={handlePay}
           details={paymentDetails}
         />
-        <h1 className="text-2xl font-semibold mb-4">Bill Payment</h1>
+
+        <div className="flex gap-2 items-center mb-4 ">
+          {" "}
+          <Link href="/">
+            {" "}
+            <ArrowLeft />
+          </Link>
+          <h1 className="text-lg md:text-2xl font-semibold">Bill Payment</h1>
+        </div>
         <p className="text-gray-600 mb-6 text-sm">
           Bill Payment lets you easily pay your bills anytime, anywhere. Whether
           it’s electricity, water, internet, or credit cards, just select your
@@ -56,7 +67,7 @@ export default function billpayment() {
         <div>
           <form
             onSubmit={handleSubmit}
-            className="space-y-6 w-full max-w-96 mx-auto border shadow-md px-12 py-5 rounded-md"
+            className="space-y-6 w-full max-w-xl mx-auto border shadow-md px-12 py-5 rounded-md"
           >
             <div>
               <h2 className="text-lg font-semibold mb-5">Enter Bill Details</h2>
@@ -94,11 +105,3 @@ export default function billpayment() {
     </Layout>
   );
 }
-
-// import React from "react";
-
-// const billpayment = () => {
-//   return <div></div>;
-// };
-
-// export default billpayment;

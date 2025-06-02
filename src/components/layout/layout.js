@@ -3,7 +3,7 @@ import Sidebarlayout from "../side-bar-layout/page";
 
 const Layout = ({ children, page }) => {
   return (
-    <div className="flex  2xl:container 2xl:mx-auto">
+    <div className="flex ">
       <Sidebarlayout page={page} />
 
       <div className="w-full ">

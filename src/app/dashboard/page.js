@@ -18,6 +18,7 @@ import GlobalApi from "@/lib/GlobalApi";
 import Cookies from "js-cookie";
 import { Spinner } from "@/components/ui/spinner";
 import CardMowa from "../../components/Card";
+import { toast } from "sonner";
 export default function Dashboard() {
   var page = "Dashboard";
 
@@ -52,8 +53,6 @@ export default function Dashboard() {
         "weekly"
       );
 
-      console.log("my data", response?.data?.recentTransactions);
-
       if (response?.success === true) {
         const formatted = response?.data?.recentTransactions?.map((txn) => {
           const date = new Date(txn.timestamp);
@@ -78,7 +77,7 @@ export default function Dashboard() {
       }
       setLoading(false);
     } catch (error) {
-      console.error("Error getting transaction history:", error);
+      console.log("Error getting transaction history:", error);
       setEmployee([]);
       setLoading(false);
     }
@@ -87,18 +86,25 @@ export default function Dashboard() {
   useEffect(() => {
     getTransactions();
   }, []);
+
+  const handleCard = () => {
+    toast("Your Card is already added");
+  };
   return (
     <Layout page={page}>
-      <div className="2xl:mx-10 xl:mx-10 lg:px-10 md:px-10 max-sm:px-8">
+      <div className=" 2xl:mx-0 xl:mx-0 lg:px-10 md:px-10 max-sm:px-8">
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between  sm:w-[38%] gap-2 sm:gap-0">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between  sm:w-[38%] gap-2 sm:gap-0 2xl:justify-normal 2xl:gap-60 ">
               <h1 className="text-2xl font-semibold">Card</h1>
-              <button className="rounded-md font-semibold bg-[#544af1] text-white px-3 py-1">
+              <button
+                className="rounded-md font-semibold bg-[#544af1] text-white px-3 py-1"
+                onClick={handleCard}
+              >
                 Add New Card
               </button>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex 2xl:block xl:block lg:hidden md:hidden max-sm:hidden flex-wrap gap-2">
               <Link href="/dashboard/send-money">
                 {" "}
                 <Button className="button-border  btn-txt-color bg-white hover:text-white hover:bg-[#544af1] border">
@@ -132,8 +138,25 @@ export default function Dashboard() {
                 }
               />
             </div>
-
-            <Card className="mt-4 shadow-md border ">
+            <div className="flex lg:block lg:mt-4 2xl:hidden xl:hidden md:block flex-wrap gap-2">
+              <Link href="/dashboard/send-money">
+                {" "}
+                <Button className="button-border  btn-txt-color bg-white hover:text-white hover:bg-[#544af1] border">
+                  Send Payment
+                </Button>
+              </Link>{" "}
+              <Link href="/dashboard/request-money">
+                <Button className="button-border btn-txt-color bg-white  border hover:text-white hover:bg-[#544af1]">
+                  Withdraw Payment
+                </Button>
+              </Link>{" "}
+              <Link href="/dashboard/bill-payment">
+                <Button className="button-border btn-txt-color bg-white border hover:text-white hover:bg-[#544af1]">
+                  Bill Payment
+                </Button>{" "}
+              </Link>
+            </div>
+            <Card className="mt-4 shadow-md border xl:w-[139%] 2xl:w-[135%]">
               <CardHeader>
                 <CardTitle className="flex justify-between items-center">
                   <p className="btn-txt-color font-semibold text-lg">Stats</p>
