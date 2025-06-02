@@ -449,6 +449,7 @@ const addBalance = async (formData, token) => {
       pin: formData?.pin,
       userId: formData?.userId,
     });
+    console.log("data for add balance", data);
 
     let config = {
       method: "post",
@@ -688,11 +689,11 @@ const sendMoney = async (formdata, token) => {
     let data = JSON.stringify({
       fromWalletId: formdata?.fromWalletId,
       toWalletId: formdata.toWalletId,
-      amount: formdata?.amount,
+      amount: Number(formdata?.amount),
       pin: formdata?.pin,
       userId: formdata?.userId,
     });
-    console.log("data to go", data);
+    console.log("data to go send moeny", data);
 
     let config = {
       method: "post",

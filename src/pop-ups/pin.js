@@ -37,6 +37,8 @@ export default function Pin({ value, style, request, selectedUser, amount }) {
         pin: pin.join(""),
         userId: data?.id,
       };
+      console.log("formData", formData);
+
       const response = await GlobalApi.sendMoney(formData, token);
       console.log("rr", response);
 

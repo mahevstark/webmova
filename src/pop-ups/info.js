@@ -8,9 +8,6 @@ import paid from "../assets/paid/paid.png";
 import Image from "next/image";
 
 export default function InfoModal({ title, open }) {
-  
-
- 
   return (
     <Dialog open={open}>
       <DialogContent className="sm:max-w-[425px]">
@@ -24,8 +21,7 @@ export default function InfoModal({ title, open }) {
         >
           <h2 className=" text-xl font-semibold text-center">{title}</h2>
           <p className="mt-2 text-sm text-center text-muted-foreground">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed gravida
-            mi id purus
+            Password Updated Successfully
           </p>
         </div>
       </DialogContent>
