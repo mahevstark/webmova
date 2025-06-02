@@ -114,7 +114,7 @@ export default function RequestMoney() {
             queryParams.append("code", code);
             console.log("Extracted code:", code);
           } else {
-            console.warn("No code parameter found in payment URL");
+            console.log("No code parameter found in payment URL");
           }
 
           // Construct the final web URL with all parameters
