@@ -105,10 +105,6 @@ export default function signup() {
                                 />
                             </span>
                         </div>
-                        <Button
-                            value={loading ? "Almost there..." : "Signup"}
-                            classname="py-3 px-3 w-full"
-                        />
                         <div className="  text-right text-sm   text-black">
                             Have an Account?{" "}
                             <Link
@@ -118,6 +114,11 @@ export default function signup() {
                                 Signin now
                             </Link>
                         </div>
+                        <Button
+                            value={loading ? "Almost there..." : "Signup"}
+                            classname="py-3 px-3 w-full"
+                        />
+
                     </form>
                 </div>
             </div>

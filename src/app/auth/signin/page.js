@@ -31,11 +31,8 @@ export default function signin() {
       if (response?.success === true) {
         setloading(false);
         toast("Login Success");
-        console.log("user data", response?.data?.user);
 
         const userData = response?.data?.user;
-
-        console.log("user data", userData);
 
         setlogin(response?.data?.user, response?.data?.token);
 
@@ -141,15 +138,6 @@ export default function signin() {
             </div>
             <div className="flex flex-col gap-1">
               <div className="  text-right text-sm  text-black">
-                Don't Have an Account?{" "}
-                <Link
-                  href="/auth/signup"
-                  className="text-right text-sm  font-semibold  text-[#544af1] "
-                >
-                  SignUp now
-                </Link>
-              </div>
-              <div className="  text-right text-sm  text-black">
                 Forgot Password?{" "}
                 <Link
                   href="/auth/forgot-password"
@@ -163,6 +151,15 @@ export default function signin() {
               value={loading ? "Signing in..." : "Sign in"}
               classname="py-3 px-3  w-full font-semibold text-base"
             />
+            <div className="  text-center text-sm   text-black">
+              Don't Have an Account?{" "}
+              <Link
+                href="/auth/signup"
+                className="text-right text-sm  font-semibold  text-[#544af1] "
+              >
+                SignUp now
+              </Link>
+            </div>
           </form>
         </div>
       </div>

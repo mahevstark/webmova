@@ -139,7 +139,7 @@ export default function TransactionHistory() {
         />
       )}
 
-      <div className="container mx-auto px-4 sm:px-6 md:px-4 pb-12 2xl:w-full  sm:w-full">
+      <div className=" px-4 sm:px-6 md:px-10 pb-12 2xl:w-full  sm:w-full">
         <h1 className="text-2xl font-semibold mb-4">Transaction History</h1>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
           <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">

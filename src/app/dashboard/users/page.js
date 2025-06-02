@@ -166,7 +166,7 @@ export default function Employee() {
         onDelete={handleDelete}
         selectedEmployee={selectedEmployee}
       />
-      <div className="container mx-auto px-4 sm:px-6 md:px-10 pb-12">
+      <div className=" px-4 sm:px-6 md:px-10 pb-12">
         <h1 className="text-2xl font-semibold mb-4">Employees</h1>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
           <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
@@ -178,7 +178,7 @@ export default function Employee() {
               <Input
                 type="text"
                 placeholder="Search keyword"
-                className="pl-10 pr-4 py-2 w-full border-class-employee select-f-color font-medium"
+                className="pl-10 pr-4 py-2 w-full border-class-employee placeholder:text-[#c2c2c2] font-medium"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
