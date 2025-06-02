@@ -25,7 +25,7 @@ export default function receiverdetails({
         },
         { label: "Receiver Account Type", value: "Stripe" },
         { label: "Amount sent", value: amount },
-        { label: "Service Fee", value: "$0" },
+        { label: "Service Fee", value: "$15" },
       ]);
     }
   }, [selectedUser, amount]);

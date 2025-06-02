@@ -36,8 +36,24 @@ export default function Component({ paymentData, isOpen, onClose, request }) {
     pathname === "/dashboard/send-money" && router.push("/dashboard");
   };
 
-  console.log("v", paymentData);
+  console.log("v", paymentData?.payment?.createdAt);
+  console.log("my payyment data", paymentData);
 
+  function getTodayFormatted() {
+    const now = new Date();
+
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    const year = String(now.getFullYear()).slice(-2);
+
+    let hours = now.getHours();
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const ampm = hours >= 12 ? "PM" : "AM";
+
+    hours = hours % 12 || 12; // Convert 0 to 12 for 12-hour format
+
+    return `${month}/${day}/${year} ${hours}:${minutes} ${ampm}`;
+  }
   if (!isVisible) return null;
 
   return (
@@ -108,19 +124,7 @@ export default function Component({ paymentData, isOpen, onClose, request }) {
               </div>
               <div className="flex justify-between">
                 <span className="txt-detail">Date</span>
-                <span className="txt-detail">
-                  {" "}
-                  {new Date(paymentData?.payment?.createdAt).toLocaleString(
-                    "en-US",
-                    {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    }
-                  )}
-                </span>
+                <span className="txt-detail"> {getTodayFormatted()}</span>
               </div>
 
               <div>
@@ -192,18 +196,7 @@ export default function Component({ paymentData, isOpen, onClose, request }) {
               )}
               <div className="flex justify-between">
                 <span className="txt-detail">Time</span>
-                <span className="txt-detail">
-                  {new Date(paymentData?.data?.createdAt).toLocaleString(
-                    "en-US",
-                    {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    }
-                  )}
-                </span>
+                <span className="txt-detail">{getTodayFormatted()}</span>
               </div>
             </div>
           </CardContent>
@@ -246,15 +239,7 @@ export default function Component({ paymentData, isOpen, onClose, request }) {
               )}
               <div className="flex justify-between">
                 <span className="txt-detail">Time</span>
-                <span className="txt-detail">
-                  {new Date(paymentData?.createdAt).toLocaleString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </span>
+                <span className="txt-detail">{getTodayFormatted()}</span>
               </div>
             </div>
           </CardContent>
