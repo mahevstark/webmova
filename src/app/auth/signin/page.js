@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import signinbg from "../../../assets/signin-bg.png";
 import Callicon from "../../../assets/call-icon.svg";
@@ -56,6 +56,13 @@ export default function signin() {
       });
     }
   };
+
+  const token = Cookies.get("token");
+  useEffect(() => {
+    if (token) {
+      router.replace("/dashboard");
+    }
+  }, [token]);
 
   return (
     <div className="flex flex-col md:flex-row h-screen">

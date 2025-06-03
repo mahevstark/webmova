@@ -5,6 +5,7 @@ import Activity from "../../assets/Activity.svg";
 import Active from "../../assets/active.svg";
 import Cookies from "js-cookie";
 import { LogOut } from "lucide-react";
+import { useRouter } from "next/navigation";
 const menuItems = [
   {
     name: "Dashboard",
@@ -48,6 +49,7 @@ export default function Sidebar({ page }) {
   const [activeItem, setActiveItem] = useState(page);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setloading] = useState(false);
+  const router = useRouter();
   const handlelogout = () => {
     setloading(true);
 
@@ -56,6 +58,7 @@ export default function Sidebar({ page }) {
       Cookies.remove("token");
       localStorage.removeItem("emailtoSignup");
       localStorage.removeItem("userData");
+      router.push("/auth/signin");
     }, 1000);
     setTimeout(() => {
       setloading(false);
