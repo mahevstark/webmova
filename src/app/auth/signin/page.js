@@ -57,14 +57,12 @@ export default function signin() {
     }
   };
 
+  const token = Cookies.get("token");
   useEffect(() => {
-    const token = Cookies.get("token");
     if (token) {
       router.replace("/dashboard");
-    } else {
-      router.replace("/auth/signin");
     }
-  }, []);
+  }, [token]);
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
