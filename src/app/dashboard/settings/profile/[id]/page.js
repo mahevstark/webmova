@@ -92,7 +92,9 @@ export default function editprofile() {
 
             <div className="mt-4 flex flex-col gap-3">
               <div>
-                <p className="text-sm mb-3 settings-p">First Name</p>
+                <p className="text-sm mb-3 settings-txt font-semibold">
+                  First Name
+                </p>
                 <span className="flex items-center gap-2 border border-color-input rounded-lg px-3 py-1 md:px-4 md:py-2 sm:w-96 w-auto">
                   {/* <Image src={msg} alt="" /> */}
                   <input
@@ -110,7 +112,9 @@ export default function editprofile() {
                 </span>
               </div>
               <div>
-                <p className="text-sm mb-3 settings-p">Last Name</p>
+                <p className="text-sm mb-3 settings-txt font-semibold">
+                  Last Name
+                </p>
                 <span className="flex items-center gap-2 border border-color-input rounded-lg px-3 py-1 md:px-4 md:py-2 sm:w-96 w-auto">
                   {/* <Image src={msg} alt="" /> */}
                   <input
@@ -129,7 +133,7 @@ export default function editprofile() {
               </div>
 
               <div>
-                <p className="text-sm mb-3 settings-p">Email</p>
+                <p className="text-sm mb-3 settings-txt font-semibold">Email</p>
                 <span className="flex items-center gap-2 border border-color-input rounded-lg px-3 py-1 md:px-4 md:py-2 sm:w-96 w-auto">
                   {/* <Image src={msg} alt="" /> */}
                   <input
@@ -148,7 +152,9 @@ export default function editprofile() {
               </div>
 
               <div>
-                <p className="text-sm mb-3 settings-p">Date of Birth</p>
+                <p className="text-sm mb-3 settings-txt font-semibold">
+                  Date of Birth
+                </p>
                 <span className="flex items-center gap-2 border border-color-input rounded-lg px-3 py-1 md:px-4 md:py-2 sm:w-96 ">
                   {/* <Image src={msg} alt="" /> */}
                   <input
@@ -165,7 +171,9 @@ export default function editprofile() {
               </div>
 
               <div>
-                <p className="text-sm mb-3 settings-p">Permanent Address</p>
+                <p className="text-sm mb-3 settings-txt font-semibold">
+                  Permanent Address
+                </p>
                 <span className="flex items-center gap-2 border border-color-input rounded-lg px-3 py-1 md:px-4 md:py-2 sm:w-96 w-auto">
                   {/* <Image src={msg} alt="" /> */}
                   <input

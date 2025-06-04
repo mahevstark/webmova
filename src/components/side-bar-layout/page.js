@@ -59,8 +59,6 @@ export default function Sidebar({ page }) {
       localStorage.removeItem("emailtoSignup");
       localStorage.removeItem("userData");
       router.push("/auth/signin");
-    }, 1000);
-    setTimeout(() => {
       setloading(false);
     }, 1000);
   };

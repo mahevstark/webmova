@@ -1,5 +1,44 @@
-export default function Card({ balance, date }) {
+import GlobalApi from "@/lib/GlobalApi";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
+export default function Card({ userid, date }) {
+    const [CardData, setCardData] = useState("");
+
+
+
+    const getCarddetails = async () => {
+        try {
+
+            const token = Cookies.get('token')
+            const response = await GlobalApi.getCardDetails(token, userid?.id);
+
+            if (response?.success === true) {
+                setCardData(response?.data?.wallets[0]);
+
+
+            }
+            else {
+                toast(response?.error || "Error fetching card details")
+                setCardData([]);
+
+            }
+        } catch (error) {
+
+            console.log('error while fetching card', error);
+            toast("Network error while fetching card details")
+            setCardData([]);
+
+
+
+
+        }
+    }
+
+    useEffect(() => {
+        if (userid) { getCarddetails() }
+    }, [userid])
 
     function formatToShortDate(isoDate) {
         const date = new Date(isoDate);
@@ -10,6 +49,9 @@ export default function Card({ balance, date }) {
 
         return `${month}/${day}/${year}`;
     }
+
+
+
     return (
         <>
 
@@ -33,14 +75,14 @@ export default function Card({ balance, date }) {
                         <div className="space-y-4">
                             <div>
                                 <p className="text-white/80 text-sm">Balance</p>
-                                <p className="text-white text-3xl font-bold">${balance}</p>
+                                <p className="text-white text-3xl font-bold">${CardData?.amount || 0}</p>
                             </div>
 
                             <div className="mt-8 flex flex-col">
                                 <p className="text-white/80 text-xs">VALID FROM</p>
                                 <div className="flex justify-between items-center flex-wrap">
-                                    <p className="text-white">{formatToShortDate(date)}</p>
-                                    <p className="text-white">•••• •••• •••• 1234</p>
+                                    <p className="text-white">{date ? formatToShortDate(date) : "Date"}</p>
+                                    <p className="text-white">•••• •••• •••• {CardData?.Account_Number?.slice(0, 5)} </p>
                                 </div>
                             </div>
                         </div>
