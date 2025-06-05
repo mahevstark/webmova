@@ -19,7 +19,10 @@ import { use, useEffect, useState } from "react";
 import Addbalance from "../../../../pop-ups/add-balance";
 import GlobalApi from "@/lib/GlobalApi";
 import Cookies from "js-cookie";
+import { useUser } from "@/app/provider/UserProvider";
+
 export default function profile() {
+  const { user } = useUser();
   const employees = [
     {
       id: 1,
@@ -178,16 +181,20 @@ export default function profile() {
               <h1 className="text-2xl font-semibold">Employee Profile </h1>
             </div>
             <div className="flex flex-wrap gap-4">
-              {/* <span className="flex text-sm items-center gap-2">
-                <p className="btn-txt-color font-medium">Payment Request</p>
-                <p className="custom-p-color">NO</p>
-                <Switch className="" />
-              </span> */}
-              {/* <span className="flex text-sm items-center gap-2">
-                <p className="btn-txt-color font-medium">Status:</p>
-                <p className="custom-p-color">Active:</p>
-                <Switch className="" />
-              </span> */}
+              {user?.role === "STANDARD" && (
+                <>
+                  <span className="flex text-sm items-center gap-2">
+                    <p className="btn-txt-color font-medium">Payment Request</p>
+                    <p className="custom-p-color">NO</p>
+                    <Switch className="" />
+                  </span>
+                  <span className="flex text-sm items-center gap-2">
+                    <p className="btn-txt-color font-medium">Status:</p>
+                    <p className="custom-p-color">Active:</p>
+                    <Switch className="" />
+                  </span>
+                </>
+              )}
               <Link href="#">
                 {" "}
                 <Button
@@ -197,12 +204,14 @@ export default function profile() {
                   Add Balance
                 </Button>
               </Link>{" "}
-              {/* <Button
-                className="button-border btn-txt-color bg-white hover:bg-white border "
-                onClick={openDeleteDialog}
-              >
-                Delete Employee
-              </Button> */}
+              {user?.role === "STANDARD" && (
+                <Button
+                  className="button-border btn-txt-color bg-white hover:bg-white border"
+                  onClick={openDeleteDialog}
+                >
+                  Delete Employee
+                </Button>
+              )}
             </div>
           </div>
 
@@ -237,16 +246,20 @@ export default function profile() {
                     {employee?.user?.isActive ? "Active" : "InActive"}
                   </p>
                 </span>
-                {/* <span className="flex gap-2">
-                  <p className=" text-muted-foreground">DoB: </p>
-                  <p className="text-gray-600">{employee?.user?.dob}</p>
-                </span>
-                <span className="flex gap-2">
-                  <p className=" text-muted-foreground">Address: </p>
-                  <p className="text-gray-600">
-                    {employee?.user?.permanentAddress}
-                  </p>
-                </span> */}
+                {user?.role === "STANDARD" && (
+                  <>
+                    <span className="flex gap-2">
+                      <p className=" text-muted-foreground">DoB: </p>
+                      <p className="text-gray-600">{employee?.user?.dob}</p>
+                    </span>
+                    <span className="flex gap-2">
+                      <p className=" text-muted-foreground">Address: </p>
+                      <p className="text-gray-600">
+                        {employee?.user?.permanentAddress}
+                      </p>
+                    </span>
+                  </>
+                )}
               </span>
             </div>
 
@@ -254,12 +267,14 @@ export default function profile() {
               <CardHeader className="p-0">
                 <CardTitle className="flex justify-between items-center">
                   <p className="btn-txt-color font-semibold text-lg">Stats</p>
-                  {/* <select
-                    className="border p-2 rounded-full font-medium btn-txt-color"
-                    style={{ background: "#cfccff69" }}
-                  >
-                    <option value="weekly">Weekly</option>
-                  </select> */}
+                  {user?.role === "STANDARD" && (
+                    <select
+                      className="border p-2 rounded-full font-medium btn-txt-color"
+                      style={{ background: "#cfccff69" }}
+                    >
+                      <option value="weekly">Weekly</option>
+                    </select>
+                  )}
                 </CardTitle>
                 <p className="text-sm text-muted-foreground">
                   Showing Recent Results
@@ -281,12 +296,14 @@ export default function profile() {
                       Wallet Type
                     </p>
                   </div>
-                  {/* <div className="flex gap-1 justify-between items-center  flex-col border px-12 pt-2 shadow pb-2 rounded-lg">
-                    <p className="text-2xl font-bold text-gray-600">$50k</p>
-                    <p className="text-sm text-muted-foreground text-gray-500">
-                      Receiving
-                    </p>
-                  </div> */}
+                  {user?.role === "STANDARD" && (
+                    <div className="flex gap-1 justify-between items-center  flex-col border px-12 pt-2 shadow pb-2 rounded-lg">
+                      <p className="text-2xl font-bold text-gray-600">$50k</p>
+                      <p className="text-sm text-muted-foreground text-gray-500">
+                        Receiving
+                      </p>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>

@@ -4,10 +4,13 @@ const axiosClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASEURL,
 });
 
-const login = async (phn, pass) => {
+const login = async (input, pass) => {
   try {
+    // Check if input is email or phone number
+    const isEmail = input.includes("@");
+
     let data = JSON.stringify({
-      phoneNumber: phn,
+      [isEmail ? "email" : "phoneNumber"]: input,
       password: pass,
     });
 

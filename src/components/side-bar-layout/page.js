@@ -6,43 +6,7 @@ import Active from "../../assets/active.svg";
 import Cookies from "js-cookie";
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
-const menuItems = [
-  {
-    name: "Dashboard",
-    icon: Activity,
-    href: "/",
-    activeicon: Active,
-    check: "Dashboard",
-  },
-  {
-    name: "Employees",
-    icon: Activity,
-    href: "/dashboard/users",
-    activeicon: Active,
-    check: "Employees",
-  },
-  {
-    name: "Transaction History",
-    icon: Activity,
-    href: "/dashboard/transaction-history",
-    activeicon: Active,
-    check: "transactionhistory",
-  },
-  // {
-  //   name: "Payment Request",
-  //   icon: Activity,
-  //   href: "/dashboard/payment-request",
-  //   activeicon: Active,
-  //   check: "paymentrequest",
-  // },
-  {
-    name: "Setting",
-    icon: Activity,
-    href: "/dashboard/settings/profile",
-    activeicon: Active,
-    check: "settings",
-  },
-];
+import { useUser } from "@/app/provider/UserProvider";
 
 export default function Sidebar({ page }) {
   const place = page;
@@ -50,6 +14,52 @@ export default function Sidebar({ page }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setloading] = useState(false);
   const router = useRouter();
+  const { user } = useUser();
+
+  console.log(user, "---------------user-----------");
+
+  const menuItems = [
+    {
+      name: "Dashboard",
+      icon: Activity,
+      href: "/",
+      activeicon: Active,
+      check: "Dashboard",
+    },
+    {
+      name: "Employees",
+      icon: Activity,
+      href: "/dashboard/users",
+      activeicon: Active,
+      check: "Employees",
+    },
+    {
+      name: "Transaction History",
+      icon: Activity,
+      href: "/dashboard/transaction-history",
+      activeicon: Active,
+      check: "transactionhistory",
+    },
+    ...(user?.role === "STANDARD"
+      ? [
+          {
+            name: "Payment Request",
+            icon: Activity,
+            href: "/dashboard/payment-request",
+            activeicon: Active,
+            check: "paymentrequest",
+          },
+        ]
+      : []),
+    {
+      name: "Setting",
+      icon: Activity,
+      href: "/dashboard/settings/profile",
+      activeicon: Active,
+      check: "settings",
+    },
+  ];
+
   const handlelogout = () => {
     setloading(true);
 
@@ -137,9 +147,7 @@ export default function Sidebar({ page }) {
                 handlelogout();
               }}
             >
-              {/* <Active className="mr-3" /> */}
               <LogOut className="mr-3 w-5" />
-
               {loading ? "Signing out..." : "Logout"}
             </button>
           </Link>

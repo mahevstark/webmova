@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-
+import { useUser } from "@/app/provider/UserProvider";
 import {
   Bell,
   ChevronRight,
@@ -20,6 +20,9 @@ import {
 
 export default function Settings({ page }) {
   const pathname = usePathname();
+  const { user } = useUser();
+
+  console.log(user, "---------------user-----------");
 
   const links = [
     {
@@ -27,16 +30,35 @@ export default function Settings({ page }) {
       icon: User,
       label: "Profile",
     },
-    // {
-    //   href: "/dashboard/settings/notification-settings",
-    //   icon: Bell,
-    //   label: "Notification Settings",
-    // },
-    // {
-    //   href: "/dashboard/settings/wallet",
-    //   icon: Shield,
-    //   label: "Secure your Wallet",
-    // },
+    ...(user?.role === "STANDARD"
+      ? [
+          {
+            href: "/dashboard/settings/notification-settings",
+            icon: Bell,
+            label: "Notification Settings",
+          },
+          {
+            href: "/dashboard/settings/wallet",
+            icon: Shield,
+            label: "Secure your Wallet",
+          },
+          {
+            href: "/dashboard/settings/devices",
+            icon: LayoutGrid,
+            label: "Manage Devices",
+          },
+          {
+            href: "/dashboard/settings/languages",
+            icon: Globe,
+            label: "Language",
+          },
+          {
+            href: "/dashboard/settings/webApp-settings",
+            icon: LayoutGrid,
+            label: "WebApp Settings",
+          },
+        ]
+      : []),
     {
       href: "/dashboard/settings/change-password",
       icon: Key,
@@ -52,11 +74,6 @@ export default function Settings({ page }) {
       icon: ScrollText,
       label: "Terms & Conditions",
     },
-    // {
-    //   href: "/dashboard/settings/devices",
-    //   icon: LayoutGrid,
-    //   label: "Manage Devices",
-    // },
     {
       href: "/dashboard/settings/about",
       icon: Info,
@@ -67,16 +84,6 @@ export default function Settings({ page }) {
       icon: HelpCircle,
       label: "Help Center",
     },
-    // {
-    //   href: "/dashboard/settings/languages",
-    //   icon: Globe,
-    //   label: "Language",
-    // },
-    // {
-    //   href: "/dashboard/settings/webApp-settings",
-    //   icon: LayoutGrid,
-    //   label: "WebApp Settings",
-    // },
     {
       href: "/dashboard/settings/delete-account",
       icon: LogOut,
