@@ -91,7 +91,6 @@ export default function Settings({ page }) {
         {links.map((link) => {
           const Icon = link.icon;
           const isActive = pathname === link.href;
-          console.log("pathname", link.href);
 
           return (
             <Link

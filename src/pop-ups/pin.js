@@ -15,11 +15,24 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import GlobalApi from "@/lib/GlobalApi";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
-export default function Pin({ value, style, request, selectedUser, amount }) {
+export default function Pin({
+  value,
+  style,
+  request,
+  selectedUser,
+  amount,
+  page,
+  otp,
+  dialogOpen,
+  setDialogOpen,
+}) {
   const [showExpertise, setShowExpertise] = useState(false);
   const [pin, setPin] = useState(Array(6).fill(""));
   const [paymentData, setPaymentdata] = useState({});
+  const [loading, setloading] = useState(false);
+  const router = useRouter();
 
   const toggleExpertise = () => {
     setShowExpertise(!showExpertise);
@@ -40,7 +53,6 @@ export default function Pin({ value, style, request, selectedUser, amount }) {
       console.log("formData", formData);
 
       const response = await GlobalApi.sendMoney(formData, token);
-      console.log("rr", response);
 
       if (response?.success === true) {
         setShowExpertise(!showExpertise);
@@ -76,8 +88,60 @@ export default function Pin({ value, style, request, selectedUser, amount }) {
     }
   };
 
+  const manageApi = () => {
+    if (page === "delete-account") {
+      if (!pin) {
+        toast("Enter OTP to continue");
+      }
+      ConfirmDelete();
+    } else {
+      sendPayment();
+    }
+  };
+  const handleDialogOpenChange = (isOpen) => {
+    setDialogOpen(isOpen);
+    if (isOpen) {
+      manageApi();
+    }
+  };
+
+  const ConfirmDelete = async () => {
+    try {
+      setloading(true);
+      const token = Cookies.get("token");
+
+      const userData = JSON.parse(localStorage.getItem("userData"));
+      console.log("userData", userData);
+      const response = await GlobalApi.ConfirmOTP(
+        userData?.phoneNumber,
+        userData?.email,
+        otp,
+        token
+      );
+
+      if (response?.success === true) {
+        setloading(false);
+        toast("Account deleted successfully");
+        Cookies.remove("userData");
+        Cookies.remove("token");
+        localStorage.removeItem("emailtoSignup");
+        localStorage.removeItem("userData");
+
+        setTimeout(() => {
+          router.push("/auth/signin");
+        }, 1000);
+      } else {
+        toast(response?.message || "Account deletion failed");
+        setloading(false);
+      }
+    } catch (error) {
+      toast(response?.message || "Network error.try again later");
+      setloading(false);
+    }
+  };
+
   return (
-    <AlertDialog>
+    <AlertDialog open={dialogOpen} onOpenChange={handleDialogOpenChange}>
       <Paymentsent
         isOpen={showExpertise}
         closeModal={toggleExpertise}
@@ -85,19 +149,23 @@ export default function Pin({ value, style, request, selectedUser, amount }) {
         paymentData={paymentData}
       />
 
-      <AlertDialogTrigger asChild>
-        <Button variant="outline" className={style}>
-          {value}
-        </Button>
-      </AlertDialogTrigger>
+      {page !== "delete-account" && (
+        <AlertDialogTrigger asChild>
+          <Button variant="outline" className={style}>
+            {value}
+          </Button>
+        </AlertDialogTrigger>
+      )}
 
       <AlertDialogContent className="w-auto">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-center font-semibold">
-            Pin Required
+            {page === "delete-account" ? "Enter OTP" : "  Pin Required"}
           </AlertDialogTitle>
           <AlertDialogDescription className="text-muted-foreground text-center">
-            Enter your PIN to continue.
+            {page === "delete-account"
+              ? "Enter your OTP to continue."
+              : "Enter your PIN to continue."}
           </AlertDialogDescription>
 
           <div className="flex gap-3" style={{ marginTop: "25px" }}>
@@ -117,11 +185,11 @@ export default function Pin({ value, style, request, selectedUser, amount }) {
 
         <AlertDialogFooter>
           <AlertDialogAction
-            onClick={sendPayment}
+            onClick={manageApi}
             className="button-background text-white font-semibold border rounded-lg w-40 mt-4 mx-auto no-hover"
             style={{ width: "130px" }}
           >
-            Confirm
+            {loading ? "Almost there..." : "Confirm"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -1,32 +1,38 @@
 "use client";
 import Layout from "../../../../components/layout/layout";
 import Layoutsettings from "../../../../pop-ups/layout-settings";
-import Keyicon from "../../../../assets/key.svg";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import Button from "../../../../components/button/page";
 import Link from "next/link";
 import GlobalApi from "@/lib/GlobalApi";
 import { toast } from "sonner";
+import Pin from "../../../../pop-ups/pin";
 import Cookies from "js-cookie";
 
 export default function deleteaccount() {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
-  const [loading, setloading] = useState(false);
   const [checked, setchecked] = useState(false);
-  const deleteAc = async () => {
+  const [dialogOpen, setDialogOpen] = useState(false); // <== new
+  const [loading, setloading] = useState(false);
+  const [otp, setOtp] = useState("");
+
+  const openDialog = () => {
+    setDialogOpen(true);
+  };
+
+  const SendDelOTP = async () => {
     try {
       if (!password) {
         toast("Password is required.");
         return;
       }
       if (!checked) {
-        toast("Accept Terms and Conditions before Deleting your Account.");
+        toast("Check Privacy Policy & terms .");
         return;
       }
+
       setloading(true);
-      console.log("i am here");
       const token = Cookies.get("token");
       console.log("token", token);
 
@@ -37,21 +43,24 @@ export default function deleteaccount() {
         token,
         password,
         userData?.phoneNumber,
-        userData?.id
+        userData?.id,
+        userData?.email
       );
-      console.log("rrr", response);
+      console.log("rrr  nn", response);
 
       if (response?.success === true) {
-        toast("Account deleted successfully");
+        setOtp(response?.data?.otp);
         setloading(false);
+        openDialog();
       } else {
         toast(response?.message || "Account deletion failed");
-
+        setOtp("");
         setloading(false);
       }
     } catch (error) {
       setloading(false);
       toast(response?.message || "Network error.try again later");
+      setOtp("");
     }
   };
 
@@ -130,14 +139,22 @@ export default function deleteaccount() {
                 </p>
               </div>
             </div>
-            <div className="mx-auto w-full flex justify-center items-center mt-3">
+            <div className="mx-auto w-44 flex justify-center items-center mt-3">
               {" "}
               <button
-                onClick={deleteAc}
+                onClick={SendDelOTP}
                 className="py-2 px-4 w-40 mt-9 mx-auto mb-4 button-background rounded-lg  text-white font-medium "
               >
                 {loading ? "Almost there..." : "Delete Account"}
               </button>
+              <Pin
+                value="Delete Account"
+                style="button-background text-white font-semibold border rounded-lg w-full   no-hover "
+                page={"delete-account"}
+                otp={otp}
+                dialogOpen={dialogOpen} // pass dialog state
+                setDialogOpen={setDialogOpen}
+              />
             </div>
           </div>
         </div>

@@ -28,6 +28,8 @@ export default function Dashboard() {
     setuser(JSON.parse(localStorage.getItem("userData")));
   }, []);
 
+  console.log("user", user);
+
   const token = Cookies.get("token");
   console.log("token", token);
 
@@ -90,6 +92,33 @@ export default function Dashboard() {
   const handleCard = () => {
     toast("Your Card is already added");
   };
+
+  const [Balance, setBalance] = useState(0);
+
+  const getCarddetails = async () => {
+    try {
+      const token = Cookies.get("token");
+      const response = await GlobalApi.getCardDetails(token, user?.id);
+
+      if (response?.success === true) {
+        setBalance(response?.data?.wallets[0]?.amount);
+      } else {
+        toast(response?.error || "Error fetching card details");
+        setBalance([]);
+      }
+    } catch (error) {
+      console.log("error while fetching card", error);
+      toast("Network error while fetching card details");
+      setBalance([]);
+    }
+  };
+
+  useEffect(() => {
+    if (user?.id) {
+      getCarddetails();
+    }
+  }, [user?.id]);
+
   return (
     <Layout page={page}>
       <div className=" 2xl:mx-0 xl:mx-0 lg:px-10 md:px-10 max-sm:px-8">
@@ -136,6 +165,7 @@ export default function Dashboard() {
                     ? user?.wallet?.createdAt
                     : user?.business?.createdAt
                 }
+                userid={user}
               />
             </div>
             <div className="flex lg:block lg:mt-4 2xl:hidden xl:hidden md:block flex-wrap gap-2">
@@ -178,7 +208,7 @@ export default function Dashboard() {
                 >
                   <div className="flex  gap-3 items-center border shadow-md px-4 sm:px-5 pt-4 pb-4 rounded-lg ">
                     <p className="text-2xl font-bold text-gray-700">
-                      ${user?.wallet?.balance ? user?.wallet?.balance : 0}
+                      ${Balance ? Balance : 0}
                     </p>
                     <p className="text-sm text-gray-700">Balance</p>
                   </div>

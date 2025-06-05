@@ -491,28 +491,30 @@ const deleteEmployee = async (token, id) => {
   }
 };
 
-const deleteAccount = async (token, password, phoneNumber, userId) => {
+const deleteAccount = async (token, password, phoneNumber, userId, email) => {
   try {
     const data = {
       password,
       phoneNumber,
       userId,
+      email,
     };
     let config = {
       method: "delete",
       maxBodyLength: Infinity,
       url: "user/delete-user-request",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
       data: data,
     };
 
+    console.log("data while deleting ", data);
+
     const response = await axiosClient.request(config);
     return response?.data;
   } catch (error) {
-    console.log("error while deleting account ", error);
+    console.log("error while sending delete account  otp", error);
     return error?.response?.data;
   }
 };
@@ -714,6 +716,52 @@ const sendMoney = async (formdata, token) => {
   }
 };
 
+const getCardDetails = async (token, id) => {
+  try {
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: `wallet/get-wallet/${id}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while fetching card details", error);
+    return error?.response?.data;
+  }
+};
+
+const ConfirmOTP = async (phoneNumber, email, otp, token) => {
+  try {
+    const data = {
+      email,
+      otp,
+    };
+    console.log("data to go", data);
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "user/verify-otp-and-delete-user",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      data: data,
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while deleting account ", error);
+    return error?.response?.data;
+  }
+};
 export default {
   login,
   getAllUsers,
@@ -743,4 +791,6 @@ export default {
   withdrawmoney,
   getUsers,
   sendMoney,
+  getCardDetails,
+  ConfirmOTP,
 };

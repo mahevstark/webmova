@@ -95,25 +95,33 @@ export default function profile() {
               <div className="">
                 <div className="flex flex-col gap-3">
                   <div className="flex gap-3 sm:items-center sm:flex-row flex-col items-start">
-                    <label className="text-sm settings-txt">First Name:</label>
+                    <label className="text-sm settings-txt font-semibold">
+                      First Name:
+                    </label>
                     <p className="det">{user?.fname || "Not set"}</p>
                   </div>
                   <div className="flex gap-3 sm:items-center sm:flex-row flex-col items-start">
-                    <label className="text-sm text-muted-foreground">
+                    <label className="text-sm settings-txt font-semibold">
                       Last Name:
                     </label>
                     <p className="det">{user?.lname || "Not set"}</p>
                   </div>
                   <div className="flex gap-3 sm:items-center sm:flex-row flex-col items-start">
-                    <label className="text-sm settings-txt">Email:</label>
+                    <label className="text-sm settings-txt font-semibold">
+                      Email:
+                    </label>
                     <p className="det">{user?.email || "Not set"}</p>
                   </div>
                   <div className="flex gap-3 sm:items-center sm:flex-row flex-col items-start">
-                    <label className="text-sm settings-txt">DOB:</label>
+                    <label className="text-sm settings-txt font-semibold">
+                      DOB:
+                    </label>
                     <p className="det">{user?.dob || "Not set"}</p>
                   </div>
                   <div className="flex gap-3 sm:items-center sm:flex-row flex-col items-start">
-                    <label className="text-sm settings-txt">Address:</label>
+                    <label className="text-sm settings-txt font-semibold">
+                      Address:
+                    </label>
                     <p className="det">{user?.address || "Not set"}</p>
                   </div>
                 </div>
