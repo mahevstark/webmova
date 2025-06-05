@@ -27,7 +27,7 @@ export default function Sidebar({ page }) {
       check: "Dashboard",
     },
     {
-      name: "Employees",
+       name: user?.role === "STANDARD" ? "User" : "Employees", // 👈 Conditional name
       icon: Activity,
       href: "/dashboard/users",
       activeicon: Active,

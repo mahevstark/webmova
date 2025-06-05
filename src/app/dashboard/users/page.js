@@ -23,10 +23,12 @@ import Cookies from "js-cookie";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/app/provider/UserProvider";
 
 const page = "Employees";
 
 export default function Employee() {
+  const { user } = useUser();
   const [searchTerm, setSearchTerm] = useState("");
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isAddEmployeeDialogOpen, setIsAddEmployeeDialogOpen] = useState(false);
@@ -184,12 +186,15 @@ export default function Employee() {
               />
             </div>
           </div>
-          <Button
-            className="button-border btn-txt-color bg-white hover:bg-white border"
-            onClick={() => setIsAddEmployeeDialogOpen(true)}
-          >
-            Add Employee
-          </Button>
+
+          {user?.role !== "STANDARD" && (
+            <Button
+              className="button-border btn-txt-color bg-white hover:bg-white border"
+              onClick={() => setIsAddEmployeeDialogOpen(true)}
+            >
+              Add Employee
+            </Button>
+          )}
         </div>
 
         <Card className="border-none shadow-none p-0 mt-5 mb-5 2xl:w-auto xl:w-auto lg:w-auto md:w-[650px]">
