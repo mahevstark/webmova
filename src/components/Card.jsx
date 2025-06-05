@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function Card({ userid, date }) {
-    const [CardData, setCardData] = useState("");
+    const [CardData, setCardData] = useState([]);
 
 
 
