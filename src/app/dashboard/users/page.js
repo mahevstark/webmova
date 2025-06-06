@@ -50,7 +50,7 @@ export default function Employee() {
       const response = await GlobalApi.getAllUsers(user?.business?.id, token);
 
       if (response?.success === true) {
-        setEmployees(response?.data);
+        setEmployees(response?.data?.employees);
       } else {
         console.log("Failed to fetch users");
       }

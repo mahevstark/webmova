@@ -762,6 +762,435 @@ const ConfirmOTP = async (phoneNumber, email, otp, token) => {
     return error?.response?.data;
   }
 };
+
+const UpdateHeroSection = async (formdata, token) => {
+  try {
+    let data = JSON.stringify({
+      title: formdata?.title,
+      subtitle: formdata?.content,
+      ctaButtonText: formdata?.ctaText,
+      ctaButtonLink: formdata?.ctaLink,
+      backgroundImage: "https://example.com/hero-bg.jpg",
+    });
+
+    let config = {
+      method: "put",
+      maxBodyLength: Infinity,
+      url: "superadmin/content/hero",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while saving hero content ", error);
+    return error?.response?.data;
+  }
+};
+
+const getHeroSection = async () => {
+  try {
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: "superadmin/content/hero",
+      headers: {},
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while getting hero content ", error);
+    return error?.response?.data;
+  }
+};
+
+const getFaqs = async () => {
+  try {
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: "superadmin/content/faq",
+      headers: {},
+    };
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while getting faqs ", error);
+    return error?.response?.data;
+  }
+};
+
+const createFaq = async (formdata, token) => {
+  try {
+    let data = JSON.stringify({
+      question: formdata?.question,
+      answer: formdata?.answer,
+      order: 1,
+    });
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "superadmin/content/faq",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while creating faqs ", error);
+    return error?.response?.data;
+  }
+};
+
+const deleteFaq = async (id, token) => {
+  try {
+    let config = {
+      method: "delete",
+      maxBodyLength: Infinity,
+      url: `superadmin/content/faq/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while deleting faqs ", error);
+    return error?.response?.data;
+  }
+};
+
+const editfaqs = async (formdata, token, id) => {
+  try {
+    let data = JSON.stringify({
+      question: formdata?.question,
+      answer: formdata?.answer,
+      order: 1,
+      isActive: true,
+    });
+
+    let config = {
+      method: "put",
+      maxBodyLength: Infinity,
+      url: `superadmin/content/faq/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while editing faqs ", error);
+    return error?.response?.data;
+  }
+};
+
+const getAbout = async () => {
+  try {
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: "superadmin/content/about",
+      headers: {},
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while getting about ", error);
+    return error?.response?.data;
+  }
+};
+
+const createAbout = async (formdata, token) => {
+  try {
+    let data = JSON.stringify({
+      mainContent: formdata?.mainContent,
+      mission: formdata?.mission,
+      vision: formdata?.vision,
+      values: ["Innovation", "Security", "Accessibility", "Customer Focus"],
+      privacyPolicy: formdata?.privacyPolicy,
+    });
+
+    let config = {
+      method: "put",
+      maxBodyLength: Infinity,
+      url: "superadmin/content/about",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while editing about ", error);
+    return error?.response?.data;
+  }
+};
+
+const getContact = async () => {
+  try {
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: "superadmin/content/contact",
+      headers: {},
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while getting contact ", error);
+    return error?.response?.data;
+  }
+};
+
+const UpdateContact = async (formdata, token) => {
+  try {
+    let data = JSON.stringify({
+      address: formdata?.address,
+      phoneNumbers: formdata?.phoneNumbers,
+      emails: formdata?.emails,
+      socialMedia: formdata?.socialMedia,
+    });
+
+    let config = {
+      method: "put",
+      maxBodyLength: Infinity,
+      url: "superadmin/content/contact",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while editing contact ", error);
+    return error?.response?.data;
+  }
+};
+
+const getTestimonials = async () => {
+  try {
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: "superadmin/content/testimonials",
+      headers: {},
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while getting testimonials ", error);
+    return error?.response?.data;
+  }
+};
+
+const CreateTestimonials = async (formdata, token) => {
+  try {
+    let data = JSON.stringify({
+      action: "CREATE",
+      data: {
+        clientName: formdata?.clientName,
+        position: formdata?.position,
+        company: formdata?.company,
+        content: formdata?.content,
+        rating: formdata?.rating,
+        imageUrl: "https://example.com/michael.jpg",
+        order: 1,
+      },
+    });
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "superadmin/content/testimonials",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while getting testimonials ", error);
+    return error?.response?.data;
+  }
+};
+
+const deleteTestimonial = async (token, id) => {
+  try {
+    let data = JSON.stringify({
+      action: "DELETE",
+    });
+    let config = {
+      method: "delete",
+      maxBodyLength: Infinity,
+      url: `superadmin/content/testimonials/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while deleting testimonial ", error);
+    return error?.response?.data;
+  }
+};
+
+const UpdateTestimonials = async (formdata, token, id) => {
+  try {
+    let data = JSON.stringify({
+      action: "UPDATE",
+      data: {
+        clientName: formdata?.clientName,
+        position: formdata?.position,
+        company: formdata?.company,
+        content: formdata?.content,
+        rating: formdata?.rating,
+        imageUrl: "https://example.com/michael.jpg",
+        order: 1,
+      },
+    });
+
+    console.log("data to go", data);
+
+    let config = {
+      method: "put",
+      maxBodyLength: Infinity,
+      url: `superadmin/content/testimonials/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while getting testimonials ", error);
+    return error?.response?.data;
+  }
+};
+
+const getPartners = async () => {
+  try {
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: "superadmin/content/partners",
+      headers: {},
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while getting partners ", error);
+    return error?.response?.data;
+  }
+};
+
+const AddPartner = async (formdata, token, URL) => {
+  try {
+    let data = JSON.stringify({
+      name: formdata?.name,
+      logoUrl: URL,
+      websiteUrl: formdata?.websiteUrl,
+      order: 1,
+    });
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "superadmin/content/partners",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while adding partners ", error);
+    return error?.response?.data;
+  }
+};
+
+const deleteParnter = async (token, id) => {
+  try {
+    let config = {
+      method: "delete",
+      maxBodyLength: Infinity,
+      url: `superadmin/content/partners/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while deleting partners ", error);
+    return error?.response?.data;
+  }
+};
+
+const UpdatePartner = async (formdata, token, URL, id) => {
+  try {
+    let data = JSON.stringify({
+      name: formdata?.name,
+      logoUrl: URL,
+      websiteUrl: formdata?.websiteUrl,
+      order: 1,
+    });
+
+    let config = {
+      method: "put",
+      maxBodyLength: Infinity,
+      url: `superadmin/content/partners/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while editing partner", error);
+    return error?.response?.data;
+  }
+};
+
 export default {
   login,
   getAllUsers,
@@ -793,4 +1222,22 @@ export default {
   sendMoney,
   getCardDetails,
   ConfirmOTP,
+  getHeroSection,
+  UpdateHeroSection,
+  getFaqs,
+  createFaq,
+  deleteFaq,
+  editfaqs,
+  getAbout,
+  createAbout,
+  getContact,
+  UpdateContact,
+  getTestimonials,
+  CreateTestimonials,
+  deleteTestimonial,
+  UpdateTestimonials,
+  getPartners,
+  AddPartner,
+  deleteParnter,
+  UpdatePartner,
 };
