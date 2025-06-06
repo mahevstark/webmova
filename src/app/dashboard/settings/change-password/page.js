@@ -71,7 +71,7 @@ export default function ChangePassword() {
   return (
     <Layout page={"settings"}>
       <div className="flex sm:flex-row flex-col 2xl:h-[87vh] xl:h-[77vh] lg:h-[78vh] md:h-[79vh]">
-        <Layoutsettings />{" "}
+        <Layoutsettings />
         <div className="mx-2 mr-6 md:mx-6  max-sm:ml-4 w-auto border rounded-md pt-4 sm:w-full space-y-8 mt-6 sm:mt-0 mb-12 sm:mb-0 sm:pb-0 xl:pb-12 shadow-lg max-sm:pb-6">
           <div className="flex px-6 items-center justify-between flex-col sm:flex-row">
             <h1 className="text-xl font-semibold text-black">

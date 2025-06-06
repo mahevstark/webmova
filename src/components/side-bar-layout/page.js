@@ -42,6 +42,13 @@ const menuItems = [
     activeicon: Active,
     check: "settings",
   },
+  {
+    name: "Content Management",
+    icon: Activity,
+    href: "/dashboard/hero-section",
+    activeicon: Active,
+    check: "Content",
+  },
 ];
 
 export default function Sidebar({ page }) {
