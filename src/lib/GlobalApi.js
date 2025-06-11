@@ -736,13 +736,14 @@ const getCardDetails = async (token, id) => {
   }
 };
 
-const ConfirmOTP = async (phoneNumber, email, otp, token) => {
+const ConfirmOTP = async (email, otp, token) => {
   try {
     const data = {
       email,
       otp,
     };
-    console.log("data to go", data);
+
+    console.log("data", data);
 
     let config = {
       method: "post",

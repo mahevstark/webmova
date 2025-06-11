@@ -12,7 +12,7 @@ import GlobalApi from "@/lib/GlobalApi"
 import { toast } from "sonner"
 import Cookies from "js-cookie"
 import { Spinner } from "@/components/ui/spinner"
-export default function FaqsPage() {
+export default function HeroSection() {
     const [isEditing, setIsEditing] = useState(false)
     const [heroData, setHeroData] = useState({
         title: "",

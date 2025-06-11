@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-import { Handshake, HelpCircle, Info, LayoutGrid, MessageSquareText, Phone } from "lucide-react";
+import { ChevronRight, Handshake, HelpCircle, Info, LayoutGrid, MessageSquareText, Phone } from "lucide-react";
 
 export default function LayoutContentManager({ page }) {
     const pathname = usePathname();

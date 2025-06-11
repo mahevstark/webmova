@@ -55,7 +55,7 @@ const ImageUpload = ({ setURL }) => {
         setUploadedUrl(data.url);
         setSelectedFile(null);
         // Reset file input
-        document.getElementById("fileInput").value = "";
+        setSelectedFile(null);
       } else {
         setError(data.error || "Upload failed");
       }

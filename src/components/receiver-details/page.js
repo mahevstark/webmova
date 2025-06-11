@@ -14,7 +14,7 @@ export default function receiverdetails({
   handleBackToAmount,
 }) {
   const [details, setdetails] = useState([]);
-
+  const [dialogOpen, setDialogOpen] = useState(false);
   useEffect(() => {
     if (selectedUser) {
       setdetails([
@@ -64,6 +64,8 @@ export default function receiverdetails({
           style="button-background text-white font-semibold border rounded-lg w-full   no-hover "
           selectedUser={selectedUser}
           amount={amount}
+          dialogOpen={dialogOpen}
+          setDialogOpen={setDialogOpen}
         />
       </CardFooter>
     </Card>

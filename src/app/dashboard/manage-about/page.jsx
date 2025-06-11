@@ -120,7 +120,7 @@ export default function AboutPage() {
                 mainContent: "",
                 mission: "",
                 vision: "",
-                values: "",
+                values: [],
                 privacyPolicy: "",
                 published: true,
             }

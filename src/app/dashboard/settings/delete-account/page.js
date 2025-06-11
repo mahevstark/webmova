@@ -34,7 +34,6 @@ export default function deleteaccount() {
 
       setloading(true);
       const token = Cookies.get("token");
-      console.log("token", token);
 
       const userData = JSON.parse(localStorage.getItem("userData"));
       console.log("userData", userData);
@@ -122,7 +121,7 @@ export default function deleteaccount() {
                 <input
                   type="checkbox"
                   onChange={(e) => {
-                    setchecked(e);
+                    setchecked(e.target.value);
                   }}
                 />
                 <p className="text-sm" style={{ color: "#717171" }}>
