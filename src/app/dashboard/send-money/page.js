@@ -79,9 +79,7 @@ export default function SendMoney() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Note: localStorage is not supported in Claude artifacts
-    // In a real environment, you would use: localStorage.setItem("sendamount", formData.amount);
-    console.log("Amount:", formData.amount);
+
     setStep("receiverDetails");
   };
 

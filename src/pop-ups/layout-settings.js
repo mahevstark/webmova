@@ -101,7 +101,7 @@ export default function Settings({ page }) {
                 isActive
                   ? "button-background text-white bg-[#efd34d] "
                   : "custom-p-color hover:bg-gray-200  ",
-                link.isDanger && "text-white hover:bg-destructive/10"
+                link.isDanger && "text-white "
               )}
             >
               <Icon className="w-5 h-5 mr-3 " />

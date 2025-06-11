@@ -4,8 +4,9 @@ import Link from "next/link";
 import Activity from "../../assets/Activity.svg";
 import Active from "../../assets/active.svg";
 import Cookies from "js-cookie";
-import { LogOut } from "lucide-react";
+import { LogOut, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+
 const menuItems = [
   {
     name: "Dashboard",
@@ -42,6 +43,13 @@ const menuItems = [
     activeicon: Active,
     check: "settings",
   },
+  {
+    name: "Content Management",
+    icon: Activity,
+    href: "/dashboard/hero-section",
+    activeicon: Active,
+    check: "Content",
+  },
 ];
 
 export default function Sidebar({ page }) {
@@ -49,7 +57,9 @@ export default function Sidebar({ page }) {
   const [activeItem, setActiveItem] = useState(page);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setloading] = useState(false);
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const router = useRouter();
+
   const handlelogout = () => {
     setloading(true);
 
@@ -60,11 +70,20 @@ export default function Sidebar({ page }) {
       localStorage.removeItem("userData");
       router.push("/auth/signin");
       setloading(false);
+      setShowLogoutDialog(false);
     }, 1000);
   };
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
+  };
+
+  const handleLogoutClick = () => {
+    setShowLogoutDialog(true);
+  };
+
+  const handleCancelLogout = () => {
+    setShowLogoutDialog(false);
   };
 
   return (
@@ -83,6 +102,38 @@ export default function Sidebar({ page }) {
           className="fixed inset-0 z-50 bg-black bg-opacity-50 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         ></div>
+      )}
+
+      {/* Logout Confirmation Dialog */}
+      {showLogoutDialog && (
+        <div className="fixed inset-0 z-[60] bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg p-6 max-w-sm mx-4 w-full shadow-xl">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-800">
+                Confirm Logout
+              </h3>
+            </div>
+            <p className="text-gray-500 mb-6">
+              Are you sure you want to logout? You will need to sign in again to
+              access your account.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={handleCancelLogout}
+                className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handlelogout}
+                disabled={loading}
+                className="px-4 py-2 bg-red-400 text-white rounded-lg hover:bg-red-500 font-medium disabled:opacity-50"
+              >
+                {loading ? "Signing out..." : "Logout"}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Sidebar */}
@@ -128,19 +179,13 @@ export default function Sidebar({ page }) {
           </ul>
         </nav>
         <div className="p-4">
-          <Link href="/auth/signin">
-            <button
-              className="flex bg-red-400 text-white items-center text-sm  px-4 py-3 rounded-xl w-full font-semibold"
-              onClick={() => {
-                handlelogout();
-              }}
-            >
-              {/* <Active className="mr-3" /> */}
-              <LogOut className="mr-3 w-5" />
-
-              {loading ? "Signing out..." : "Logout"}
-            </button>
-          </Link>
+          <button
+            className="flex bg-red-400 text-white items-center text-sm  px-4 py-3 rounded-xl w-full font-semibold hover:bg-red-500"
+            onClick={handleLogoutClick}
+          >
+            <LogOut className="mr-3 w-5" />
+            Logout
+          </button>
         </div>
       </aside>
     </div>

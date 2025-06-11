@@ -113,9 +113,8 @@ export default function Pin({
       const userData = JSON.parse(localStorage.getItem("userData"));
       console.log("userData", userData);
       const response = await GlobalApi.ConfirmOTP(
-        userData?.phoneNumber,
         userData?.email,
-        otp,
+        pin.join(""),
         token
       );
 
@@ -160,7 +159,7 @@ export default function Pin({
       <AlertDialogContent className="w-auto">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-center font-semibold">
-            {page === "delete-account" ? "Enter OTP" : "  Pin Required"}
+            {page === "delete-account" ? "Enter OTPs" : "  Pin Required"}
           </AlertDialogTitle>
           <AlertDialogDescription className="text-muted-foreground text-center">
             {page === "delete-account"
