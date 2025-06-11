@@ -82,7 +82,7 @@ export default function Card({ userid, date }) {
                                 <p className="text-white/80 text-xs">VALID FROM</p>
                                 <div className="flex justify-between items-center flex-wrap">
                                     <p className="text-white">{date ? formatToShortDate(date) : "Date"}</p>
-                                    <p className="text-white">•••• •••• •••• {CardData?.Account_Number?.slice(0, 5)} </p>
+                                    <p className="text-white">{CardData?.Account_Number} </p>
                                 </div>
                             </div>
                         </div>
