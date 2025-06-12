@@ -65,6 +65,9 @@ const AddBalance = ({
   // Process the actual balance addition after PIN verification
   const handleAddBalance = async () => {
     // Check if PIN is complete
+
+    console.log("employee meee", employee?.user);
+
     if (pin.join("").length !== 6) {
       setPinError("Please enter a complete 4-digit PIN");
       return;
@@ -77,8 +80,8 @@ const AddBalance = ({
 
       const formData = {
         fromWalletId: login_data.wallet.id,
-        walletId: employee.wallet.id,
-        toWalletId: employee.wallet.id,
+        walletId: employee?.user.wallet.id,
+        toWalletId: employee?.user.wallet.id,
         amount: parseInt(amount),
         pin: pin.join(""),
         userId: login_data?.id,
@@ -156,7 +159,7 @@ const AddBalance = ({
         className="fixed inset-0 flex items-center justify-center"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-[100]"
       >
-        <div className="bg-white p-6 rounded-lg shadow-lg w-12 sm:w-64">
+        <div className="bg-white p-6 rounded-lg shadow-lg box">
           <h2 className="text-xl font-semibold text-center mb-4">
             Add Balance
           </h2>
@@ -206,7 +209,7 @@ const AddBalance = ({
             Security Verification
           </h2>
           <p className="text-center mb-6">
-            Please enter your 4-digit PIN to complete this transaction
+            Please enter your 6-digit PIN to complete this transaction
           </p>
 
           <div className="flex justify-center gap-3 mb-4">

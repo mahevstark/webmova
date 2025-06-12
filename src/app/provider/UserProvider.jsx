@@ -8,13 +8,14 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
+    const [BusinessUser, setBusinessUser] = useState(null);
 
     useEffect(() => {
         try {
             const storedUser = localStorage.getItem('userData');
             const storedToken = Cookies.get('token');
 
-            console.log('token', token);
+
 
 
             if (storedUser) {
@@ -32,11 +33,12 @@ export const UserProvider = ({ children }) => {
         }
     }, []);
 
-    const setlogin = (userData, tokenValue) => {
+    const setlogin = (userData, tokenValue, role) => {
         try {
 
             localStorage.setItem('userData', JSON.stringify(userData));
             Cookies.set('token', tokenValue, { expires: 7 });
+            Cookies.set('role', role, { expires: 7 });
 
 
             setUser(userData);
@@ -45,6 +47,8 @@ export const UserProvider = ({ children }) => {
             console.error('Error setting login data:', error);
         }
     };
+
+
 
     const logout = () => {
         localStorage.removeItem('emailtoSignup')

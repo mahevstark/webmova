@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, MailIcon } from "lucide-react";
 import signinbg from "../../../assets/signin-bg.png";
 import Callicon from "../../../assets/call-icon.svg";
 import Keyicon from "../../../assets/key.svg";
@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 import { useUser } from "@/app/provider/UserProvider";
+import { useSearchParams } from "next/navigation";
 
 export default function signin() {
   const [showPassword, setShowPassword] = useState(false);
@@ -20,25 +21,44 @@ export default function signin() {
   const [pass, setpass] = useState(null);
   const router = useRouter();
 
+  const searchParams = useSearchParams();
+  const role = searchParams.get("role");
+
+  const isAdmin = role === "admin";
+  console.log("is admin", isAdmin);
+
   const { setlogin } = useUser();
+  const checkType = (str) => {
+    return /\S+@\S+\.\S+/.test(str)
+      ? "Email"
+      : /^\+?\d{7,}$/.test(str)
+      ? "Phone"
+      : "Unknown";
+  };
   const login = async (e) => {
     e.preventDefault();
     try {
       setloading(true);
-      const response = await GlobalApi.login(phone, pass);
-      console.log(response?.data?.token);
-
-      if (response?.success === true) {
+      if (!phone || !pass) {
         setloading(false);
-        toast("Login Success");
+        toast("Please fill all fields");
+        return;
+      }
+      console.log(checkType(phone));
 
-        const userData = response?.data?.user;
-
-        setlogin(response?.data?.user, response?.data?.token);
-
-        setTimeout(() => {
-          router.push("/dashboard");
-        }, 1000);
+      const role = checkType(phone) === "Email" ? "email" : "phone";
+      const response = await GlobalApi.login(phone, pass, role);
+      console.log("rrr", response?.data?.data);
+      if (response?.status === 200) {
+        if (role === "email") {
+          setlogin(response?.data?.user, response?.data?.token);
+          setloading(false);
+          toast("Login Success");
+        } else {
+          setlogin(response?.data?.data?.user, response?.data?.data?.token);
+          setloading(false);
+          toast("Login Success");
+        }
       } else {
         setloading(false);
 
@@ -101,14 +121,20 @@ export default function signin() {
                 Phone Number
               </label>
               <span className="flex items-center gap-2 border border-color-input rounded-md px-3 py-2 md:px-4 md:py-3 w-full">
-                <Callicon />
+                {isAdmin ? (
+                  <MailIcon className="text-gray-400" />
+                ) : (
+                  <Callicon />
+                )}
                 <input
                   id="phone"
                   name="phone"
                   type="tel"
                   required
                   className="w-full focus:outline-none text-black focus:ring-0 border-0 placeholder:text-gray-400"
-                  placeholder="Enter Your Number"
+                  placeholder={
+                    isAdmin ? "Enter your Email" : "Enter Your Phone Number"
+                  }
                   value={phone || ""}
                   onChange={(e) => setphone(e.target.value)}
                 />
@@ -144,29 +170,33 @@ export default function signin() {
               </button>
             </div>
             <div className="flex flex-col gap-1">
-              <div className="  text-right text-sm  text-black">
-                Forgot Password?{" "}
-                <Link
-                  href="/auth/forgot-password"
-                  className=" text-right text-sm font-semibold  text-[#544af1] "
-                >
-                  Reset Now
-                </Link>
-              </div>
+              {!isAdmin && (
+                <div className="  text-right text-sm  text-black">
+                  Forgot Password?{" "}
+                  <Link
+                    href="/auth/forgot-password"
+                    className=" text-right text-sm font-semibold  text-[#544af1] "
+                  >
+                    Reset Now
+                  </Link>
+                </div>
+              )}
             </div>
             <Button
               value={loading ? "Signing in..." : "Sign in"}
               classname="py-3 px-3  w-full font-semibold text-base"
             />
-            <div className="  text-center text-sm   text-black">
-              Don't Have an Account?{" "}
-              <Link
-                href="/auth/signup"
-                className="text-right text-sm  font-semibold  text-[#544af1] "
-              >
-                SignUp now
-              </Link>
-            </div>
+            {!isAdmin && (
+              <div className="text-center text-sm text-gray-500 mt-4">
+                Don't have an account?{" "}
+                <Link
+                  href="/auth/signup"
+                  className="text-[#544af1] font-semibold"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
           </form>
         </div>
       </div>

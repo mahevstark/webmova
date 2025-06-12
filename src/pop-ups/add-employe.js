@@ -108,6 +108,7 @@ export default function AddEmployee({
         token,
         data?.business?.id
       );
+      console.log("rrr for employeees", response);
 
       if (response?.success === true) {
         employee();

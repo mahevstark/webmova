@@ -49,6 +49,7 @@ export default function Employee() {
 
       const response = await GlobalApi.getAllUsers(user?.business?.id, token);
 
+      console.log("response from users", response);
       if (response?.success === true) {
         setEmployees(response?.data?.employees);
       } else {
@@ -261,7 +262,7 @@ export default function Employee() {
                           </button>
                         </TableCell>
                         <TableCell className="hidden sm:table-cell">
-                          {employee?.wallet?.balance}
+                          {employee?.user?.wallet?.balance}
                         </TableCell>
                         <TableCell>
                           <div className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3 items-center">
@@ -292,18 +293,18 @@ export default function Employee() {
                                   : "DeActive"}
                               </Button>
                             )}
-                            <Link href={`/dashboard/users/${employee.id}`}>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="text-blue-500 font-semibold border text-left"
-                                onClick={() => {
-                                  handleViewClick(employee);
-                                }}
-                              >
-                                View
-                              </Button>
-                            </Link>
+
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-blue-500 font-semibold border text-left"
+                              onClick={() => {
+                                handleViewClick(employee);
+                              }}
+                            >
+                              View
+                            </Button>
+
                             <Button
                               variant="outline"
                               size="sm"

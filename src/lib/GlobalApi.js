@@ -4,17 +4,23 @@ const axiosClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASEURL,
 });
 
-const login = async (phn, pass) => {
+const login = async (phn, pass, role) => {
   try {
-    let data = JSON.stringify({
-      phoneNumber: phn,
-      password: pass,
-    });
+    let data =
+      role === "email"
+        ? JSON.stringify({
+            email: phn,
+            password: pass,
+          })
+        : JSON.stringify({
+            phoneNumber: phn,
+            password: pass,
+          });
 
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "user/login-profile",
+      url: role === "email" ? "auth/login" : "user/login-profile",
       headers: {
         "Content-Type": "application/json",
       },
@@ -22,7 +28,12 @@ const login = async (phn, pass) => {
     };
 
     const response = await axiosClient.request(config);
-    return response?.data;
+
+    if (role === "email") {
+      return response;
+    } else {
+      return response;
+    }
   } catch (error) {
     console.log("error while login ", error?.response?.data?.message);
     return error?.response?.data;
@@ -43,7 +54,7 @@ const getAllUsers = async (id, token) => {
     console.log("config", config);
 
     const response = await axiosClient.request(config);
-    console.log("rr by client", response);
+    console.log("rr abc", response);
 
     return response?.data;
   } catch (error) {
@@ -340,7 +351,7 @@ const createStaticpage = async (obj) => {
   }
 };
 
-const changePass = async (id, oldp, newp) => {
+const changePass = async (id, oldp, newp, token) => {
   try {
     let data = JSON.stringify({
       userId: id,
@@ -354,6 +365,7 @@ const changePass = async (id, oldp, newp) => {
       url: "user/change-password",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       data: data,
     };
@@ -742,8 +754,6 @@ const ConfirmOTP = async (email, otp, token) => {
       email,
       otp,
     };
-
-    console.log("data", data);
 
     let config = {
       method: "post",
@@ -1172,6 +1182,8 @@ const UpdatePartner = async (formdata, token, URL, id) => {
       websiteUrl: formdata?.websiteUrl,
       order: 1,
     });
+
+    console.log("data to go", data);
 
     let config = {
       method: "put",

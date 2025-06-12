@@ -99,7 +99,10 @@ export default function PartnersPage() {
                     toast("Partner Image is required");
                     return;
                 }
-                if (formData?.name === '' || formData?.logo === '' || formData?.websiteUrl === '') {
+
+
+
+                if (formData?.name === '' || formData?.websiteUrl === '') {
                     toast("All feilds are required")
                     return
                 }
