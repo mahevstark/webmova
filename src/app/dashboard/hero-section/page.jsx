@@ -12,6 +12,7 @@ import GlobalApi from "@/lib/GlobalApi"
 import { toast } from "sonner"
 import Cookies from "js-cookie"
 import { Spinner } from "@/components/ui/spinner"
+import Link from "next/link"
 export default function HeroSection() {
     const [isEditing, setIsEditing] = useState(false)
     const [heroData, setHeroData] = useState({
@@ -24,16 +25,17 @@ export default function HeroSection() {
 
     const [editData, setEditData] = useState(heroData)
     const [loading, setloading] = useState(false);
+
+
     const isValidLink = (ctaLink) => {
-        if (typeof link !== "string" || !link.trim()) return false;
 
-        const externalPattern = /^https?:\/\/[^\s]+$/;
-        const internalPattern = /^[\/]?[a-zA-Z0-9#?&=._-]+$/; // allows with or without leading /
+        if (!ctaLink.startsWith('http://') && !ctaLink.startsWith('https://')) {
+            return false
+        } else if (ctaLink.startsWith('http://') || ctaLink.startsWith('https://')) {
+            return true
+        }
 
-        return externalPattern.test(link) || internalPattern.test(link);
     }
-
-
     const handleSave = async () => {
         setHeroData(editData)
 
@@ -46,11 +48,14 @@ export default function HeroSection() {
                 return;
             }
 
-            if (!isValidLink(heroData?.ctaLink)) {
+            console.log(isValidLink(heroData?.ctaLink));
+
+            if (isValidLink(heroData?.ctaLink) === false) {
                 toast("Invalid link ")
                 setloading(false);
                 return;
             }
+
 
             setloading(true);
             const token = Cookies.get('token')
@@ -59,7 +64,7 @@ export default function HeroSection() {
 
             if (response?.success === false) {
                 setIsEditing(false)
-                toast("Error while saving Hero Section.")
+                toast(response?.message || "Error while saving Hero Section.")
                 setloading(false);
 
             } else {
@@ -88,7 +93,7 @@ export default function HeroSection() {
         try {
             setloading(true);
             const response = await GlobalApi.getHeroSection();
-            console.log('rrr', response);
+
 
             if (response?.success === false) {
                 toast("Error getting hero section content")
@@ -244,7 +249,9 @@ export default function HeroSection() {
                                         2xl:px-6 2xl:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors cursor-pointer">
                                                 {heroData.ctaText}
                                             </span>
-                                            <span className="text-sm opacity-75">→ {heroData.ctaLink}</span>
+                                            <span className="text-sm opacity-75">→
+                                                <Link href={heroData.ctaLink || 'no'} target="_blank" rel="noopener noreferrer">{heroData.ctaLink}</Link>
+                                            </span>
                                         </div>
                                     </div>
                                 </CardContent>

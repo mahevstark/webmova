@@ -37,7 +37,13 @@ export default function ChangePassword() {
 
       setloading(true);
 
-      const response = await GlobalApi.changePass(user?.id, oldpass, newpass);
+      const token = Cookies.get("token");
+      const response = await GlobalApi.changePass(
+        user?.id,
+        oldpass,
+        newpass,
+        token
+      );
 
       if (response?.success === true) {
         toast("Password changed successfully.");

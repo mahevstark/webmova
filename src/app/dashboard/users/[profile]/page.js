@@ -90,8 +90,6 @@ export default function profile() {
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleAddBalance = (amount) => {
-    console.log("aaaaa", amount);
-
     setBalance((prevBalance) => prevBalance + amount);
 
     console.log(`New balance: ${balance + amount}`);
@@ -269,7 +267,7 @@ export default function profile() {
                 <div className="flex gap-5 justify-center  items-center mt-8 flex-col sm:flex-row ">
                   <div className="flex gap-1 items-center flex-col border px-12 pt-2 shadow pb-2 rounded-lg">
                     <p className="text-2xl font-bold text-gray-600">
-                      ${employee?.wallet?.balance + balance || 0}.00
+                      ${employee?.user?.wallet?.balance + balance || 0}.00
                     </p>
                     <p className="text-sm text-gray-500">Balance</p>
                   </div>
