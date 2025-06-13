@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 import { useUser } from "@/app/provider/UserProvider";
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 
 export default function signin() {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,11 +21,11 @@ export default function signin() {
   const [pass, setpass] = useState(null);
   const router = useRouter();
 
-  const searchParams = useSearchParams();
-  const role = searchParams.get("role");
+  // const searchParams = useSearchParams();
+  // const role = searchParams.get("role");
 
-  const isAdmin = role === "admin";
-  console.log("is admin", isAdmin);
+  // const isAdmin = role === "admin";
+  // console.log("is admin", isAdmin);
 
   const { setlogin } = useUser();
   const checkType = (str) => {
@@ -48,7 +48,7 @@ export default function signin() {
 
       const role = checkType(phone) === "Email" ? "email" : "phone";
       const response = await GlobalApi.login(phone, pass, role);
-      console.log("rrr", response?.data?.data);
+
       if (response?.status === 200) {
         if (role === "email") {
           setlogin(response?.data?.user, response?.data?.token);
@@ -121,11 +121,11 @@ export default function signin() {
                 Phone Number
               </label>
               <span className="flex items-center gap-2 border border-color-input rounded-md px-3 py-2 md:px-4 md:py-3 w-full">
-                {isAdmin ? (
-                  <MailIcon className="text-gray-400" />
-                ) : (
-                  <Callicon />
-                )}
+                {/* {isAdmin ? (
+                  // <MailIcon className="text-gray-400" />
+                ) : ( */}
+                <Callicon />
+                {/* )} */}
                 <input
                   id="phone"
                   name="phone"
@@ -133,7 +133,8 @@ export default function signin() {
                   required
                   className="w-full focus:outline-none text-black focus:ring-0 border-0 placeholder:text-gray-400"
                   placeholder={
-                    isAdmin ? "Enter your Email" : "Enter Your Phone Number"
+                    // isAdmin ? "Enter your Email" : "Enter Your Phone Number"
+                    "Enter Your Phone Number"
                   }
                   value={phone || ""}
                   onChange={(e) => setphone(e.target.value)}
@@ -170,33 +171,33 @@ export default function signin() {
               </button>
             </div>
             <div className="flex flex-col gap-1">
-              {!isAdmin && (
-                <div className="  text-right text-sm  text-black">
-                  Forgot Password?{" "}
-                  <Link
-                    href="/auth/forgot-password"
-                    className=" text-right text-sm font-semibold  text-[#544af1] "
-                  >
-                    Reset Now
-                  </Link>
-                </div>
-              )}
+              {/* {!isAdmin && ( */}
+              <div className="  text-right text-sm  text-black">
+                Forgot Password?{" "}
+                <Link
+                  href="/auth/forgot-password"
+                  className=" text-right text-sm font-semibold  text-[#544af1] "
+                >
+                  Reset Now
+                </Link>
+              </div>
+              {/* )} */}
             </div>
             <Button
               value={loading ? "Signing in..." : "Sign in"}
               classname="py-3 px-3  w-full font-semibold text-base"
             />
-            {!isAdmin && (
-              <div className="text-center text-sm text-gray-500 mt-4">
-                Don't have an account?{" "}
-                <Link
-                  href="/auth/signup"
-                  className="text-[#544af1] font-semibold"
-                >
-                  Sign Up
-                </Link>
-              </div>
-            )}
+            {/* {!isAdmin && ( */}
+            <div className="text-center text-sm text-gray-500 mt-4">
+              Don't have an account?{" "}
+              <Link
+                href="/auth/signup"
+                className="text-[#544af1] font-semibold"
+              >
+                Sign Up
+              </Link>
+            </div>
+            {/* )} */}
           </form>
         </div>
       </div>
