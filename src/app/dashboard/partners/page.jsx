@@ -27,14 +27,6 @@ export default function PartnersPage() {
     const [Saveloading, setSaveloading] = useState(false);
     const [URL, setURL] = useState(null);
 
-    function isValidUrl(string) {
-        try {
-            new URL(string);
-            return true;
-        } catch (_) {
-            return false;
-        }
-    }
 
     const filteredPartners = partners.filter(
         (partner) =>
@@ -51,7 +43,9 @@ export default function PartnersPage() {
 
             try {
 
-                if (!isValidUrl(formData.websiteUrl)) {
+                let websiteRegex = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/\S*)?$/;
+
+                if (!websiteRegex.test(formData.websiteUrl)) {
                     toast("Please enter a valid URL");
                     return;
                 }
@@ -95,6 +89,13 @@ export default function PartnersPage() {
 
             try {
 
+                let websiteRegexs = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/\S*)?$/;
+
+                if (!websiteRegexs.test(formData.websiteUrl)) {
+                    toast("Please enter a valid URL");
+                    return;
+                }
+
                 if (URL === null) {
                     toast("Partner Image is required");
                     return;
@@ -106,6 +107,13 @@ export default function PartnersPage() {
                     toast("All feilds are required")
                     return
                 }
+
+                const websiteRegex = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/\S*)?$/;
+
+                // if (!websiteRegex.test(formData.websiteUrl)) {
+                //     toast("Please enter a valid URL");
+                //     return;
+                // }
                 setSaveloading(true);
                 const token = Cookies.get('token');
                 const response = await GlobalApi.AddPartner(formData, token, URL);
