@@ -78,55 +78,103 @@ const AddBalance = ({
       const login_data = JSON.parse(localStorage.getItem("userData"));
       const token = Cookies.get("token");
 
-      const formData = {
-        fromWalletId: login_data.wallet.id,
-        walletId: employee?.user.wallet.id,
-        toWalletId: employee?.user.wallet.id,
-        amount: parseInt(amount),
-        pin: pin.join(""),
-        userId: login_data?.id,
-      };
+      const role = Cookies.get("role");
+      let formData = null;
+      role === "admin"
+        ? (formData = {
+            userId: employee?.id,
+            amount: parseInt(amount),
+            description: "amount sent by admin",
+          })
+        : (formData = {
+            fromWalletId: login_data.wallet.id,
+            walletId: employee?.user.wallet.id,
+            toWalletId: employee?.user.wallet.id,
+            amount: parseInt(amount),
+            pin: pin.join(""),
+            userId: login_data?.id,
+          });
 
-      const response = await GlobalApi.addBalance(formData, token);
+      const response = await GlobalApi.addBalance(formData, token, role);
 
-      console.log("rrr", response);
+      console.log("rrr by add balance", response);
 
-      if (response?.success === true) {
-        // Close PIN modal
-        setPaymentdata({
-          employee: employee,
-          payment: response?.data,
-        });
-        setIsPinModalOpen(false);
-        toggleExpertise();
-        // Reset states
-        setAmount("");
-        setPin(["", "", "", "", "", ""]);
-        setPinError("");
-        handleClosePinModal();
-        // Close main modal
-        onRequestClose();
-        toast("Balance added Successfully");
-        setloading(false);
+      if (role === "admin") {
+        if (response?.status === 200) {
+          // Close PIN modal
+          setPaymentdata({
+            employee: employee,
+            payment: response?.data?.data,
+          });
+          setIsPinModalOpen(false);
+          toggleExpertise();
+          // Reset states
+          setAmount("");
+          setPin(["", "", "", "", "", ""]);
+          setPinError("");
+          handleClosePinModal();
+          // Close main modal
+          onRequestClose();
+          toast("Balance added Successfully");
+          setloading(false);
 
-        // Notify parent component
-        onAddBalance(parseInt(amount));
+          // Notify parent component
+          onAddBalance(parseInt(amount));
+        } else {
+          toast(response?.message || "Error while adding balance");
+
+          setloading(false);
+
+          setPinError(
+            response?.message ||
+              "Transaction failed. Please check your PIN and try again."
+          );
+          setAmount("");
+          setPin(["", "", "", "", "", ""]);
+          setPinError("");
+
+          handleClosePinModal();
+
+          onRequestClose();
+        }
       } else {
-        toast(response?.message || "Error while adding balance");
+        if (response?.data?.success === true) {
+          // Close PIN modal
+          setPaymentdata({
+            employee: employee,
+            payment: response?.data,
+          });
+          setIsPinModalOpen(false);
+          toggleExpertise();
+          // Reset states
+          setAmount("");
+          setPin(["", "", "", "", "", ""]);
+          setPinError("");
+          handleClosePinModal();
+          // Close main modal
+          onRequestClose();
+          toast("Balance added Successfully");
+          setloading(false);
 
-        setloading(false);
+          // Notify parent component
+          onAddBalance(parseInt(amount));
+        } else {
+          toast(response?.data?.message || "Error while adding balance");
 
-        setPinError(
-          response?.message ||
-            "Transaction failed. Please check your PIN and try again."
-        );
-        setAmount("");
-        setPin(["", "", "", "", "", ""]);
-        setPinError("");
+          setloading(false);
 
-        handleClosePinModal();
+          setPinError(
+            response?.message ||
+              "Transaction failed. Please check your PIN and try again."
+          );
+          setAmount("");
+          setPin(["", "", "", "", "", ""]);
+          setPinError("");
 
-        onRequestClose();
+          handleClosePinModal();
+
+          onRequestClose();
+        }
       }
     } catch (error) {
       console.log("error while adding balance", error);

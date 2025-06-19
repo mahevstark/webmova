@@ -40,23 +40,26 @@ const login = async (phn, pass, role) => {
   }
 };
 
-const getAllUsers = async (id, token) => {
+const getAllUsers = async (id, token, role) => {
   try {
+    console.log("role", role);
+
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: `business/${id}/employees`,
+      url:
+        role === "admin"
+          ? `/superadmin/users?page=1&limit=20000&status=active`
+          : `business/${id}/employees`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
 
-    console.log("config", config);
-
     const response = await axiosClient.request(config);
-    console.log("rr abc", response);
+    console.log("my response", response);
 
-    return response?.data;
+    return response;
   } catch (error) {
     console.log("error while fetching users ", error?.response?.data?.message);
     return error?.response?.data;
@@ -119,41 +122,71 @@ const deActUser = async (id, token) => {
   }
 };
 
-const getTransactions = async (token, id, filter) => {
+const getTransactions = async (token, id, filter, role, selectedType) => {
   try {
+    console.log("ff", filter);
+    console.log("t", selectedType);
+
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: `wallet/transaction-stats/${id}/${filter}`,
+      url:
+        role === "admin"
+          ? `/superadmin/transactions?page=1&limit=10000&type=${filter}&status=${selectedType}&startDate=2024-01-01&endDate=2099-12-31&minAmount=0&maxAmount=1000000`
+          : `wallet/transaction-stats/${id}/${filter}`,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     };
 
+    console.log("config", config);
+
     const response = await axiosClient.request(config);
 
-    return response?.data;
+    if (role === "admin") {
+      return response;
+    } else {
+      return response?.data;
+    }
   } catch (error) {
     console.log("error while fetching transactions ", error);
-    return error?.response?.data;
+
+    if (role === "admin") {
+      return error?.response;
+    } else {
+      return error?.response?.data;
+    }
   }
 };
 
-const registerEmp = async (formdata, token, id) => {
+const registerEmp = async (formdata, token, id, role) => {
   try {
-    let data = JSON.stringify({
-      businessId: id,
-      firstName: formdata?.firstName,
-      lastName: formdata?.lastName,
-      email: formdata?.email,
-      phoneNumber: formdata?.phoneNumber,
-    });
+    let data = null;
+    role === "admin"
+      ? (data = JSON.stringify({
+          firstName: formdata?.firstName,
+          lastName: formdata?.lastName,
+          email: formdata?.email,
+          phoneNumber: formdata?.phoneNumber,
+          Role: "USER",
+          isAdmin: false,
+          password: formdata?.password,
+        }))
+      : (data = JSON.stringify({
+          businessId: id,
+          firstName: formdata?.firstName,
+          lastName: formdata?.lastName,
+          email: formdata?.email,
+          phoneNumber: formdata?.phoneNumber,
+        }));
+
+    console.log("data to go", data, "  ", token);
 
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "business/employee/create",
+      url: role === "admin" ? "superadmin/users" : "business/employee/create",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -306,6 +339,8 @@ const EditStaticPaga = async (obj, token) => {
       slug: obj?.slug,
     });
 
+    console.log("obj", obj);
+
     let config = {
       method: "put",
       maxBodyLength: Infinity,
@@ -316,6 +351,8 @@ const EditStaticPaga = async (obj, token) => {
       },
       data: data,
     };
+
+    console.log("url", config);
 
     const response = await axiosClient.request(config);
     return response?.data;
@@ -451,22 +488,31 @@ const getPaymentRequests = async (bid, p, lim, eid) => {
   }
 };
 
-const addBalance = async (formData, token) => {
+const addBalance = async (formData, token, role) => {
   try {
-    let data = JSON.stringify({
-      fromWalletId: formData?.fromWalletId,
-      walletId: formData?.walletId,
-      toWalletId: formData?.toWalletId,
-      amount: formData?.amount,
-      pin: formData?.pin,
-      userId: formData?.userId,
-    });
+    let data = null;
+
+    role === "admin"
+      ? (data = JSON.stringify({
+          userId: formData?.userId,
+          amount: formData?.amount,
+          description: formData?.description,
+        }))
+      : (data = JSON.stringify({
+          fromWalletId: formData?.fromWalletId,
+          walletId: formData?.walletId,
+          toWalletId: formData?.toWalletId,
+          amount: formData?.amount,
+          pin: formData?.pin,
+          userId: formData?.userId,
+        }));
     console.log("data for add balance", data);
 
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "wallet/send-money",
+      url:
+        role === "admin" ? "superadmin/users/add-balance" : "wallet/send-money",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -475,19 +521,20 @@ const addBalance = async (formData, token) => {
     };
 
     const response = await axiosClient.request(config);
-    return response?.data;
+    return response;
   } catch (error) {
     console.log("error while getting employee req ", error);
-    return error?.response?.data;
+    return error?.response;
   }
 };
 
-const deleteEmployee = async (token, id) => {
+const deleteEmployee = async (token, id, role) => {
   try {
     let config = {
       method: "delete",
       maxBodyLength: Infinity,
-      url: `business/employee/${id}`,
+      url:
+        role !== "admin" ? `business/employee/${id}` : `superadmin/users/${id}`,
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -496,7 +543,7 @@ const deleteEmployee = async (token, id) => {
 
     const response = await axiosClient.request(config);
 
-    return response?.data;
+    return response;
   } catch (error) {
     console.log("error while deleting employee ", error);
     return error?.response?.data;
@@ -1204,6 +1251,45 @@ const UpdatePartner = async (formdata, token, URL, id) => {
   }
 };
 
+const dashboardStats = async (token) => {
+  try {
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: "superadmin/analytics/dashboard",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    const response = await axiosClient.request(config);
+    return response;
+  } catch (error) {
+    console.log("error while editing partner", error);
+    return error?.response;
+  }
+};
+
+const transactioninsights = async (token) => {
+  try {
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: "superadmin/analytics/transactions?timeRange=30days&interval=day",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axiosClient.request(config);
+    return response;
+  } catch (error) {
+    console.log("error while editing partner", error);
+    return error?.response;
+  }
+};
+
 export default {
   login,
   getAllUsers,
@@ -1253,4 +1339,6 @@ export default {
   AddPartner,
   deleteParnter,
   UpdatePartner,
+  dashboardStats,
+  transactioninsights,
 };

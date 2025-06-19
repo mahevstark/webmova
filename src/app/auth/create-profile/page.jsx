@@ -3,7 +3,6 @@ import Image from "next/image";
 import { React, useState } from "react";
 import signinbg from "../../../assets/signin-bg.png";
 import Button from "../../../components/button/page";
-import Link from "next/link";
 import GlobalApi from "@/lib/GlobalApi";
 import { toast } from "sonner";
 import { useUser } from "@/app/provider/UserProvider";
@@ -117,13 +116,13 @@ export default function CreateProfile() {
         try {
             const email = localStorage.getItem("emailtoSignup");
             const response = await GlobalApi.CreateProfile(formData, email);
-            console.log('eee', response);
+
 
             if (response?.success === true) {
                 toast("Profile Created successfully");
                 setIsSubmitting(false);
 
-                setlogin(response?.data?.user, response?.data?.token);
+                setlogin(response?.data?.user, response?.data?.token, 'businessUser');
 
                 setTimeout(() => {
                     router.push("/dashboard");

@@ -8,18 +8,18 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
-    const [BusinessUser, setBusinessUser] = useState(null);
+    const [Role, setRole] = useState(null);
 
     useEffect(() => {
         try {
             const storedUser = localStorage.getItem('userData');
             const storedToken = Cookies.get('token');
-
-
+            const role = Cookies.get('role')
 
 
             if (storedUser) {
                 setUser(JSON.parse(storedUser));
+                setRole(role)
             }
 
             if (storedToken) {
@@ -27,7 +27,7 @@ export const UserProvider = ({ children }) => {
             }
         } catch (error) {
             console.error('Error loading user data from cookies:', error);
-            // Clear potentially corrupted cookies
+
             Cookies.remove('userData');
             Cookies.remove('token');
         }
@@ -36,10 +36,11 @@ export const UserProvider = ({ children }) => {
     const setlogin = (userData, tokenValue, role) => {
         try {
 
+
+
             localStorage.setItem('userData', JSON.stringify(userData));
             Cookies.set('token', tokenValue, { expires: 7 });
             Cookies.set('role', role, { expires: 7 });
-
 
             setUser(userData);
             setToken(tokenValue);
@@ -61,7 +62,7 @@ export const UserProvider = ({ children }) => {
     };
 
     return (
-        <UserContext.Provider value={{ user, setlogin, logout, token }}>
+        <UserContext.Provider value={{ user, setlogin, logout, token, Role }}>
             {children}
         </UserContext.Provider>
     );

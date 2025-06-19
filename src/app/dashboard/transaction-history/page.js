@@ -29,13 +29,15 @@ import { Spinner } from "@/components/ui/spinner";
 export default function TransactionHistory() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState("TRANSFER");
+  const [selectedType, setSeletedType] = useState("COMPLETED");
   const rowsPerPage = 10; // Number of rows per page
   const [modalDetails, setModalDetails] = useState(null);
   const [employee, setEmployee] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showExpertise, setShowExpertise] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [totalTrans, setTotalTrans] = useState(null);
 
   // Fix for hydration mismatch - ensure component is only fully rendered on client
   useEffect(() => {
@@ -48,8 +50,14 @@ export default function TransactionHistory() {
     setShowExpertise(!showExpertise);
     if (txn) setModalDetails(txn);
   };
+  const [role, setrole] = useState("");
 
-  const getTransactions = async (s) => {
+  useEffect(() => {
+    const role = Cookies.get("role");
+    setrole(role);
+  }, []);
+
+  const getTransactions = async (s, type) => {
     try {
       setLoading(true);
 
@@ -59,34 +67,70 @@ export default function TransactionHistory() {
       }
 
       const data = JSON.parse(localStorage.getItem("userData"));
+      const role = Cookies.get("role");
 
-      const response = await GlobalApi.getTransactions(token, data?.id, s);
+      const response = await GlobalApi.getTransactions(
+        token,
+        data?.id,
+        s,
+        role,
+        type
+      );
 
-      console.log("my data", response?.data?.recentTransactions);
+      console.log("my data for transaction", response);
 
-      if (response?.success === true) {
-        const formatted = response?.data?.recentTransactions?.map((txn) => {
-          const date = new Date(txn.timestamp);
-          return {
-            id: txn.id,
-            name: `User ${txn.id}`, // Replace with actual name if available
-            accountNumber: txn.transactionId || "N/A",
-            day: date.toLocaleDateString(),
-            time: date.toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            }),
-            type: txn.action,
-            amount: `$${txn.amount}`,
-            action: "View",
-            currency: txn?.currency || "USA",
-          };
-        });
-        setEmployee(formatted);
+      if (role === "admin") {
+        if (response?.status === 200) {
+          setTotalTrans(response?.data);
+          const formatted = response?.data?.transactions?.map((txn) => {
+            const date = new Date(txn.timestamp);
+            return {
+              id: txn.id,
+              name: `User ${txn.id}`, // Replace with actual name if available
+              accountNumber: txn.transactionId || "N/A",
+              day: date.toLocaleDateString(),
+              time: date.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+              type: txn.type === "ADMIN_CREDIT" ? "Admit Credit" : txn.type,
+              amount: `$${txn.amount}`,
+              action: txn.actions,
+              currency: txn?.currency || "USA",
+            };
+          });
+          setLoading(false);
+          setEmployee(formatted);
+        } else {
+          setEmployee([]);
+          setLoading(false);
+        }
       } else {
-        setEmployee([]);
+        if (response?.success === true) {
+          const formatted = response?.data?.recentTransactions?.map((txn) => {
+            const date = new Date(txn.timestamp);
+            return {
+              id: txn.id,
+              name: `User ${txn.id}`, // Replace with actual name if available
+              accountNumber: txn.transactionId || "N/A",
+              day: date.toLocaleDateString(),
+              time: date.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+              type: txn.action,
+              amount: `$${txn.amount}`,
+              action: "View",
+              currency: txn?.currency || "USA",
+            };
+          });
+          setLoading(false);
+          setEmployee(formatted);
+        } else {
+          setEmployee([]);
+          setLoading(false);
+        }
       }
-      setLoading(false);
     } catch (error) {
       console.error("Error getting transaction history:", error);
       setEmployee([]);
@@ -96,9 +140,12 @@ export default function TransactionHistory() {
 
   useEffect(() => {
     if (isClient) {
-      getTransactions(selected);
+      getTransactions(selected, selectedType);
     }
-  }, [isClient, selected]);
+    if (selectedType) {
+      getTransactions(selected, selectedType);
+    }
+  }, [isClient, selected, selectedType]);
 
   // Get the current page data
   const filteredEmployees = employee.filter((emp) =>
@@ -150,14 +197,49 @@ export default function TransactionHistory() {
               }}
             >
               <SelectTrigger className="border-class-employee select-color font-medium">
-                <SelectValue placeholder="Filter Transactions" />
+                <SelectValue
+                  placeholder={
+                    role === "admin"
+                      ? "Filter Transactions Type"
+                      : "Filter Transactions"
+                  }
+                />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="weekly">Weekly</SelectItem>
-                <SelectItem value="monthly">Monthly</SelectItem>
-                <SelectItem value="yearly">Yearly</SelectItem>
-              </SelectContent>
+              {role === "admin" ? (
+                <SelectContent>
+                  <SelectItem value="TRANSFER">Transfer</SelectItem>
+                  <SelectItem value="DEPOSIT">Deposit</SelectItem>
+                  <SelectItem value="REQUESTED">Requested</SelectItem>
+                  <SelectItem value="ADMIN_CREDIT">Admin Credit</SelectItem>
+                </SelectContent>
+              ) : (
+                <SelectContent>
+                  <SelectItem value="weekly">Weekly</SelectItem>
+                  <SelectItem value="monthly">Monthly</SelectItem>
+                  <SelectItem value="yearly">Yearly</SelectItem>
+                </SelectContent>
+              )}
             </Select>
+
+            {role === "admin" && (
+              <Select
+                className="border-class-employee w-full sm:w-[180px]"
+                onValueChange={(value) => {
+                  setSeletedType(value);
+                }}
+              >
+                <SelectTrigger className="border-class-employee select-color font-medium">
+                  <SelectValue placeholder="Filter Transactions Status" />
+                </SelectTrigger>
+
+                <SelectContent>
+                  <SelectItem value="COMPLETED">Completed</SelectItem>
+                  <SelectItem value="PENDING">Pending</SelectItem>
+                  <SelectItem value="FAILED">Failed</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
+
             <div className="relative w-full">
               <Search
                 className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-600"
@@ -172,6 +254,16 @@ export default function TransactionHistory() {
               />
             </div>
           </div>
+          {role === "admin" && (
+            <>
+              <div className=" px-4 py-2  rounded-md border-class-employee select-color font-medium  text-sm flex gap-2">
+                <span className="block">Total Amount:</span>
+                <span className="select-color font-semibold">
+                  {totalTrans?.totalAmount || 0}
+                </span>
+              </div>
+            </>
+          )}
         </div>
         <div className="border-t">
           <Card className="border-none shadow-none p-0 mt-5 mb-5">

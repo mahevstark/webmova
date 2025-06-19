@@ -10,70 +10,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Image from "next/image";
-import Dcard from "../../../../assets/card.png";
 import DeleteConfirmation from "../../../../pop-ups/delete-employee";
 import Link from "next/link";
-import { Switch } from "@/components/ui/switch";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Addbalance from "../../../../pop-ups/add-balance";
 import GlobalApi from "@/lib/GlobalApi";
 import Cookies from "js-cookie";
 export default function profile() {
-  const employees = [
-    {
-      id: 1,
-      name: "Dummy name",
-      accountNumber: "0817239419528913",
-      day: "23-07-2024",
-      time: "10:30 AM",
-      type: "Credit",
-      amount: "$500",
-      action: "View",
-    },
-    {
-      id: 2,
-      name: "Dummy name",
-      accountNumber: "0817239419528913",
-      day: "23-07-2024",
-      time: "2:15 PM",
-      type: "Debit",
-      amount: "$200",
-      action: "View",
-    },
-    {
-      id: 3,
-      name: "Dummy name",
-      accountNumber: "0817239419528913",
-      day: "23-07-2024",
-      time: "9:00 AM",
-      type: "Credit",
-      amount: "$750",
-      action: "View",
-    },
-    {
-      id: 4,
-      name: "Dummy name",
-      accountNumber: "0817239419528913",
-      day: "23-07-2024",
-      time: "3:45 PM",
-      type: "Debit",
-      amount: "$100",
-      action: "View",
-    },
-    {
-      id: 5,
-      name: "Dummy name",
-      accountNumber: "0817239419528913",
-      day: "23-07-2024",
-      time: "11:30 AM",
-      type: "Credit",
-      amount: "$300",
-      action: "View",
-    },
-  ];
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
+  const [Role, setRole] = useState(null);
   const openDeleteDialog = () => {
     setIsDeleteDialogOpen(true);
   };
@@ -91,12 +37,15 @@ export default function profile() {
 
   const handleAddBalance = (amount) => {
     setBalance((prevBalance) => prevBalance + amount);
-
+    const b = balance + amount;
+    setBalance(b);
     console.log(`New balance: ${balance + amount}`);
   };
   var page = "Employees";
 
   const [employee, setEmployee] = useState(null);
+
+  console.log("employee", employee);
 
   const [req, setReq] = useState([]);
 
@@ -141,6 +90,10 @@ export default function profile() {
   useEffect(() => {
     const stored = sessionStorage.getItem("selectedEmployee");
     console.log("stored", JSON.parse(stored));
+
+    const role = Cookies.get("role");
+
+    setRole(role);
 
     if (stored) {
       setEmployee(JSON.parse(stored));
@@ -213,26 +166,35 @@ export default function profile() {
                 <span className="flex gap-2">
                   <p className=" text-muted-foreground">Name: </p>
                   <p className="text-gray-800">
-                    {employee?.user?.firstName || "Employee Name"}{" "}
+                    {employee?.user?.firstName
+                      ? employee?.user?.firstName
+                      : employee?.firstName || "Employee Name"}{" "}
                     {employee?.user?.lastName}{" "}
                   </p>
                 </span>
                 <span className="flex gap-2">
                   <p className=" text-muted-foreground">Contact Number: </p>
                   <p className="text-gray-600">
-                    {employee?.user?.phoneNumber || "Contact Number"}
+                    {employee?.user?.phoneNumber
+                      ? employee?.user?.phoneNumber
+                      : employee?.phoneNumber || "Contact Number"}
                   </p>
                 </span>
                 <span className="flex gap-2">
                   <p className=" text-muted-foreground">EMail: </p>
                   <p className="text-gray-600">
-                    {employee?.user?.email || "Email"}
+                    ``
+                    {employee?.user?.email
+                      ? employee?.user?.email
+                      : employee?.email || "Email"}
                   </p>
                 </span>
                 <span className="flex gap-2">
                   <p className=" text-muted-foreground">Status: </p>
                   <p className="text-gray-600">
-                    {employee?.user?.isActive ? "Active" : "InActive"}
+                    {employee?.user?.isActive || employee?.isActive
+                      ? "Active"
+                      : "InActive"}
                   </p>
                 </span>
                 {/* <span className="flex gap-2">
@@ -267,7 +229,11 @@ export default function profile() {
                 <div className="flex gap-5 justify-center  items-center mt-8 flex-col sm:flex-row ">
                   <div className="flex gap-1 items-center flex-col border px-12 pt-2 shadow pb-2 rounded-lg">
                     <p className="text-2xl font-bold text-gray-600">
-                      ${employee?.user?.wallet?.balance + balance || 0}.00
+                      $
+                      {employee?.user?.wallet?.balance
+                        ? employee?.user?.wallet?.balance + balance
+                        : employee?.wallet?.balance + balance || 0}
+                      .00
                     </p>
                     <p className="text-sm text-gray-500">Balance</p>
                   </div>
@@ -293,7 +259,9 @@ export default function profile() {
           <div className="flex flex-col lg:flex-row gap-7 ">
             <Card className="border-none shadow-none p-0 mt-5 mb-5 w-full">
               <h1 className="btn-txt-color font-semibold text-xl mb-6">
-                Payment requests
+                {Role === "admin"
+                  ? " Transaction requests"
+                  : " Payment requests"}
               </h1>
               <CardContent className="p-0 overflow-x-auto w-80 sm:w-full">
                 <Table className="p-0">
