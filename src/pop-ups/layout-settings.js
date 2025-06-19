@@ -17,73 +17,144 @@ import {
   Shield,
   User,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 export default function Settings({ page }) {
   const pathname = usePathname();
+  const [Role, setRole] = useState(false);
+  let links = [];
 
-  const links = [
-    {
-      href: "/dashboard/settings/profile",
-      icon: User,
-      label: "Profile",
-    },
-    // {
-    //   href: "/dashboard/settings/notification-settings",
-    //   icon: Bell,
-    //   label: "Notification Settings",
-    // },
-    // {
-    //   href: "/dashboard/settings/wallet",
-    //   icon: Shield,
-    //   label: "Secure your Wallet",
-    // },
-    {
-      href: "/dashboard/settings/change-password",
-      icon: Key,
-      label: "Change Password",
-    },
-    {
-      href: "/dashboard/settings/privacy-policy",
-      icon: Lock,
-      label: "Privacy Policy",
-    },
-    {
-      href: "/dashboard/settings/terms",
-      icon: ScrollText,
-      label: "Terms & Conditions",
-    },
-    // {
-    //   href: "/dashboard/settings/devices",
-    //   icon: LayoutGrid,
-    //   label: "Manage Devices",
-    // },
-    {
-      href: "/dashboard/settings/about",
-      icon: Info,
-      label: "About App",
-    },
-    {
-      href: "/dashboard/settings/help-center",
-      icon: HelpCircle,
-      label: "Help Center",
-    },
-    // {
-    //   href: "/dashboard/settings/languages",
-    //   icon: Globe,
-    //   label: "Language",
-    // },
-    // {
-    //   href: "/dashboard/settings/webApp-settings",
-    //   icon: LayoutGrid,
-    //   label: "WebApp Settings",
-    // },
-    {
-      href: "/dashboard/settings/delete-account",
-      icon: LogOut,
-      label: "Delete Account",
-      isDanger: true,
-    },
-  ];
+  const user = localStorage.getItem("userData");
+  console.log("user", user);
+
+  useEffect(() => {
+    const role = Cookies.get("role");
+    setRole(role);
+  }, []);
+  if (Role === "admin") {
+    links = [
+      {
+        href: "/dashboard/settings/profile",
+        icon: User,
+        label: "Profile",
+      },
+      // {
+      //   href: "/dashboard/settings/notification-settings",
+      //   icon: Bell,
+      //   label: "Notification Settings",
+      // },
+      // {
+      //   href: "/dashboard/settings/wallet",
+      //   icon: Shield,
+      //   label: "Secure your Wallet",
+      // },
+      {
+        href: "/dashboard/settings/change-password",
+        icon: Key,
+        label: "Change Password",
+      },
+      {
+        href: "/dashboard/settings/privacy-policy",
+        icon: Lock,
+        label: "Privacy Policy",
+      },
+      {
+        href: "/dashboard/settings/terms",
+        icon: ScrollText,
+        label: "Terms & Conditions",
+      },
+      // {
+      //   href: "/dashboard/settings/devices",
+      //   icon: LayoutGrid,
+      //   label: "Manage Devices",
+      // },
+      {
+        href: "/dashboard/settings/about",
+        icon: Info,
+        label: "About App",
+      },
+      {
+        href: "/dashboard/settings/help-center",
+        icon: HelpCircle,
+        label: "Help Center",
+      },
+      // {
+      //   href: "/dashboard/settings/languages",
+      //   icon: Globe,
+      //   label: "Language",
+      // },
+      {
+        href: "/dashboard/settings/webApp-settings",
+        icon: LayoutGrid,
+        label: "WebApp Settings",
+      },
+    ];
+  } else {
+    links = [
+      {
+        href: "/dashboard/settings/profile",
+        icon: User,
+        label: "Profile",
+      },
+      // {
+      //   href: "/dashboard/settings/notification-settings",
+      //   icon: Bell,
+      //   label: "Notification Settings",
+      // },
+      // {
+      //   href: "/dashboard/settings/wallet",
+      //   icon: Shield,
+      //   label: "Secure your Wallet",
+      // },
+      {
+        href: "/dashboard/settings/change-password",
+        icon: Key,
+        label: "Change Password",
+      },
+      {
+        href: "/dashboard/settings/privacy-policy",
+        icon: Lock,
+        label: "Privacy Policy",
+      },
+      {
+        href: "/dashboard/settings/terms",
+        icon: ScrollText,
+        label: "Terms & Conditions",
+      },
+      // {
+      //   href: "/dashboard/settings/devices",
+      //   icon: LayoutGrid,
+      //   label: "Manage Devices",
+      // },
+      {
+        href: "/dashboard/settings/about",
+        icon: Info,
+        label: "About App",
+      },
+      {
+        href: "/dashboard/settings/help-center",
+        icon: HelpCircle,
+        label: "Help Center",
+      },
+      // {
+      //   href: "/dashboard/settings/languages",
+      //   icon: Globe,
+      //   label: "Language",
+      // },
+      // {
+      //   href: "/dashboard/settings/webApp-settings",
+      //   icon: LayoutGrid,
+      //   label: "WebApp Settings",
+      // },
+      {
+        href: "/dashboard/settings/delete-account",
+        icon: LogOut,
+        label: "Delete Account",
+        isDanger: true,
+      },
+    ];
+  }
 
   return (
     <div className="settings">

@@ -17,7 +17,10 @@ export default function DeleteConfirmation({
   onClose,
   onDelete,
   selectedEmployee,
+  Role,
 }) {
+  console.log("rr", Role);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setloading] = useState(false);
   console.log("selectedEmployee", selectedEmployee);
@@ -28,17 +31,34 @@ export default function DeleteConfirmation({
       const token = Cookies.get("token");
       const response = await GlobalApi.deleteEmployee(
         token,
-        selectedEmployee?.id
+        selectedEmployee?.id,
+        Role
       );
 
-      if (response?.success === true) {
-        setloading(false);
-        handleCloseModal();
-        onClose();
-        onDelete();
+      console.log("rr for my adiin", response);
+
+      if (Role === "admin") {
+        console.log("i am here");
+
+        if (response?.status === 200) {
+          setloading(false);
+          handleCloseModal();
+          onClose();
+          onDelete();
+        } else {
+          handleCloseModal();
+          onClose();
+        }
       } else {
-        handleCloseModal();
-        onClose();
+        if (response?.data?.success === true) {
+          setloading(false);
+          handleCloseModal();
+          onClose();
+          onDelete();
+        } else {
+          handleCloseModal();
+          onClose();
+        }
       }
     } catch (error) {
       console.log("error while deleting Employee", error);
@@ -73,14 +93,12 @@ export default function DeleteConfirmation({
             <Card className="shadow-none border-none">
               <CardHeader>
                 <CardTitle className="text-xl font-semibold text-center shadow-none">
-                  Delete Employee
+                  {Role === "admin" ? "Delete User" : "Delete Employee"}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-p font-medium">
-                  Are you sure that you want to delete your member? If you
-                  delete, then Lorem ipsum dolor sit amet, consectetur
-                  adipiscing elit.
+                <p className="text-sm text-p font-medium text-center">
+                  Are you sure that you want to delete your member?
                 </p>
               </CardContent>
               <CardFooter className="flex justify-center gap-4 mt-4">

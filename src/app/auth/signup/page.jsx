@@ -1,10 +1,8 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import { Eye, EyeOff, Mail } from "lucide-react";
+import { Mail } from "lucide-react";
 import signinbg from "../../../assets/signin-bg.png";
-import Callicon from "../../../assets/call-icon.svg";
-import Keyicon from "../../../assets/key.svg";
 import Button from "../../../components/button/page";
 import GlobalApi from "../../../lib/GlobalApi";
 import Link from "next/link";
@@ -14,6 +12,7 @@ import { toast } from "sonner";
 export default function signup() {
     const [loading, setloading] = useState(false);
     const [email, setemail] = useState(null);
+
 
     const router = useRouter();
 

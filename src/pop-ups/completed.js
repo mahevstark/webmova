@@ -111,7 +111,9 @@ export default function Component({ paymentData, isOpen, onClose, request }) {
               <div className="flex justify-between">
                 <span className="txt-detail">Receiver Name</span>
                 <span className="txt-detail">
-                  {paymentData.employee?.user?.firstName}
+                  {paymentData.employee?.user?.firstName
+                    ? paymentData.employee?.user?.firstName
+                    : paymentData.employee?.firstName}
                 </span>
               </div>
               {/* <div className="flex justify-between">
@@ -136,7 +138,10 @@ export default function Component({ paymentData, isOpen, onClose, request }) {
               <div className="flex justify-between">
                 <span className="txt-detail">Amount Sent</span>
                 <span className="txt-detail">
-                  ${paymentData?.payment?.transferAmount}
+                  $
+                  {paymentData?.payment?.transferAmount
+                    ? paymentData?.payment?.transferAmount
+                    : paymentData?.payment?.addedAmounta}
                 </span>
               </div>
 

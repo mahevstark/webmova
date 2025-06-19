@@ -78,7 +78,7 @@ export default function profile() {
             <button
               onClick={handleEditProfile}
               variant="outline"
-              className="button-border btn-txt-color text-white font-semibold border rounded-lg mt-4 px-4 p-2 no-hover"
+              className="bg-[#544af1] hover:bg-[#544af1] text-white font-semibold border rounded-lg mt-4 px-4 p-2 no-hover"
             >
               Edit Profile
             </button>

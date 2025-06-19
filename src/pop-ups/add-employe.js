@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -18,7 +18,6 @@ import { Label } from "@/components/ui/label";
 //   SelectValue,
 // } from "@/components/ui/select";
 import InfoModal from "./info";
-import { CalendarIcon, PhoneIcon } from "lucide-react";
 // import { format } from "date-fns";
 // import { Calendar } from "@/components/ui/calendar";
 // import {
@@ -31,18 +30,14 @@ import GlobalApi from "@/lib/GlobalApi";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 
-export default function AddEmployee({
-  isOpen,
-  onClose,
-
-  employee,
-}) {
+export default function AddEmployee({ isOpen, onClose, employee }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     phoneNumber: "",
+    password: "",
   });
   const [errors, setErrors] = useState({});
 
@@ -77,6 +72,13 @@ export default function AddEmployee({
       newErrors.phoneNumber = "Invalid phone number format";
     }
 
+    if (Role === "admin") {
+      if (!formData?.password) {
+        newErrors.password = "Password is required";
+      } else if (formData?.password.length !== 8) {
+        newErrors.password = "Password must be 8 charachters long";
+      }
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -94,47 +96,89 @@ export default function AddEmployee({
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+  const [Role, setRole] = useState("");
+
+  useEffect(() => {
+    const role = Cookies.get("role");
+    setRole(role);
+  }, []);
 
   const [loading, setloading] = useState(false);
   const registerUser = async () => {
     try {
       setloading(true);
       const token = Cookies.get("token");
-
+      const role = Cookies.get("role");
+      setRole(role);
       const data = JSON.parse(localStorage.getItem("userData"));
-
       const response = await GlobalApi.registerEmp(
         formData,
         token,
-        data?.business?.id
+        data?.business?.id,
+        role
       );
-      console.log("rrr for employeees", response);
+      console.log("rrr for adding employeee", response);
 
-      if (response?.success === true) {
-        employee();
-        toast("Employee Added Successfully");
-        onClose();
-        setloading(false);
-        setFormData({
-          firstName: "",
-          lastName: "",
-          email: "",
-          phoneNumber: "",
-        });
+      if (role === "admin") {
+        console.log("i am here");
+
+        if (response?.status === 200) {
+          employee();
+          toast("Employee Added Successfully");
+          onClose();
+          setloading(false);
+          setFormData({
+            firstName: "",
+            lastName: "",
+            email: "",
+            phoneNumber: "",
+            password: "",
+          });
+        } else {
+          setloading(false);
+          toast(
+            response?.message ||
+              "User with this Email Firstname or Phonenumber exists. Please use a different one"
+          );
+          setloading(false);
+          onClose();
+          setFormData({
+            firstName: "",
+            lastName: "",
+            email: "",
+            phoneNumber: "",
+            password: "",
+          });
+        }
       } else {
-        setloading(false);
-        toast(
-          response?.message ||
-            "User with this Email Firstname or Phonenumber exists. Please use a different one"
-        );
-        setloading(false);
-        onClose();
-        setFormData({
-          firstName: "",
-          lastName: "",
-          email: "",
-          phoneNumber: "",
-        });
+        if (response?.success === true) {
+          employee();
+          toast("Employee Added Successfully");
+          onClose();
+          setloading(false);
+          setFormData({
+            firstName: "",
+            lastName: "",
+            email: "",
+            phoneNumber: "",
+            password: "",
+          });
+        } else {
+          setloading(false);
+          toast(
+            response?.data?.message ||
+              "User with this Email Firstname or Phonenumber exists. Please use a different one"
+          );
+          setloading(false);
+          onClose();
+          setFormData({
+            firstName: "",
+            lastName: "",
+            email: "",
+            phoneNumber: "",
+            password: "",
+          });
+        }
       }
     } catch (error) {
       console.log("error while registering user ", error);
@@ -146,6 +190,7 @@ export default function AddEmployee({
         lastName: "",
         email: "",
         phoneNumber: "",
+        password: "",
       });
       onClose();
     }
@@ -254,23 +299,26 @@ export default function AddEmployee({
                       )}
                     </div>
 
+                    {Role === "admin" && (
+                      <div>
+                        <Label htmlFor="password">Password</Label>
+                        <Input
+                          id="password"
+                          name="password"
+                          type="password"
+                          placeholder="password"
+                          value={formData.password}
+                          onChange={handleInputChange}
+                          className={errors.password ? "border-red-500" : ""}
+                        />
+                        {errors.password && (
+                          <p className="text-red-500 text-xs mt-1">
+                            {errors.password}
+                          </p>
+                        )}
+                      </div>
+                    )}
                     {/* Password
-                    <div>
-                      <Label htmlFor="password">Password</Label>
-                      <Input
-                        id="password"
-                        name="password"
-                        type="password"
-                        value={formData.password}
-                        onChange={handleInputChange}
-                        className={errors.password ? "border-red-500" : ""}
-                      />
-                      {errors.password && (
-                        <p className="text-red-500 text-xs mt-1">
-                          {errors.password}
-                        </p>
-                      )}
-                    </div>
 
                     {/* Permanent Address */}
                     {/* <div>

@@ -14,7 +14,6 @@ export default function editprofile() {
 
   try {
     userData = JSON.parse(localStorage.getItem("userData") || "{}");
-    console.log("uu", userData);
   } catch (error) {
     console.log("Failed to parse userData cookie:", error);
   }
@@ -41,6 +40,13 @@ export default function editprofile() {
     try {
       if (!isValid) {
         toast("All feilds are required.");
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (emailRegex.test(user?.fname || "")) {
+        toast("Please enter a valid Email");
         return;
       }
 

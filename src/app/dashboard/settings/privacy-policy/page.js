@@ -15,6 +15,8 @@ export default function privacypolicy() {
 
       if (response?.success === true) {
         setloading(false);
+        console.log("ddd", response?.data);
+
         setcontent(response?.data);
       } else {
         setloading(false);
@@ -34,7 +36,7 @@ export default function privacypolicy() {
   return (
     <InfoLayout
       heading={"Privacy Policy"}
-      content={content?.content}
+      content={content}
       loading={loading}
     />
   );

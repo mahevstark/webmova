@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Activity from "../../assets/Activity.svg";
 import Active from "../../assets/active.svg";
@@ -59,6 +59,11 @@ export default function Sidebar({ page }) {
   const [loading, setloading] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const router = useRouter();
+  const [Role, setRole] = useState(null);
+  useEffect(() => {
+    const role = Cookies.get("role");
+    setRole(role);
+  }, []);
 
   const handlelogout = () => {
     setloading(true);
@@ -147,35 +152,45 @@ export default function Sidebar({ page }) {
         <div className="mt-3">
           <Link href="/">
             <h1 className="text-3xl font-bold text-gray-800 cursor-pointer">
-              MOWA
+              MOWAPAY
             </h1>
           </Link>
         </div>
         <nav className="flex-1 mt-9">
           <ul>
-            {menuItems.map((item) => (
-              <li key={item.name} className="mt-1">
-                <Link
-                  href={item.href}
-                  className={`flex items-center px-4 py-4 rounded-lg text-sm ${
-                    activeItem === item.check
-                      ? "text-white button-background font-semibold"
-                      : "custom-p-color hover:bg-gray-200 font-semibold"
-                  }`}
-                  onClick={() => {
-                    setActiveItem(item.check);
-                    setSidebarOpen(false); // Close sidebar after click on mobile
-                  }}
-                >
-                  {activeItem === item.check ? (
-                    <item.icon className="mr-3" />
-                  ) : (
-                    <item.activeicon className="mr-3" />
-                  )}
-                  {item.name}
-                </Link>
-              </li>
-            ))}
+            {menuItems.map((item) => {
+              if (item.name === "Content Management" && Role !== "admin") {
+                return null; // Don't render this item for non-admins
+              }
+
+              return (
+                <li key={item.name} className="mt-1">
+                  <Link
+                    href={item.href}
+                    className={`flex items-center px-4 py-4 rounded-lg text-sm ${
+                      activeItem === item.check
+                        ? "text-white button-background font-semibold"
+                        : "custom-p-color hover:bg-gray-200 font-semibold"
+                    }`}
+                    onClick={() => {
+                      setActiveItem(item.check);
+                      setSidebarOpen(false); // Close sidebar after click on mobile
+                    }}
+                  >
+                    {activeItem === item.check ? (
+                      <item.icon className="mr-3" />
+                    ) : (
+                      <item.activeicon className="mr-3" />
+                    )}
+                    {item.name === "Employees"
+                      ? Role === "admin"
+                        ? "Users"
+                        : "Users"
+                      : item.name}{" "}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </nav>
         <div className="p-4">

@@ -41,16 +41,17 @@ export default function HeroSection() {
 
         try {
 
-            if (heroData?.title === '' || heroData?.content === '' || heroData?.ctaText === '' || heroData?.ctaLink === '') {
+
+            if (editData?.title === '' || editData?.content === '' || editData?.ctaText === '' || editData?.ctaLink === '') {
                 toast("All feilds are required")
                 setloading(false);
 
                 return;
             }
 
-            console.log(isValidLink(heroData?.ctaLink));
+            console.log(isValidLink(editData?.ctaLink));
 
-            if (isValidLink(heroData?.ctaLink) === false) {
+            if (isValidLink(editData?.ctaLink) === false) {
                 toast("Invalid link ")
                 setloading(false);
                 return;
@@ -59,8 +60,9 @@ export default function HeroSection() {
 
             setloading(true);
             const token = Cookies.get('token')
-            const response = await GlobalApi.UpdateHeroSection(heroData, token);
-            console.log('rr,', response);
+
+            const response = await GlobalApi.UpdateHeroSection(editData, token);
+
 
             if (response?.success === false) {
                 setIsEditing(false)

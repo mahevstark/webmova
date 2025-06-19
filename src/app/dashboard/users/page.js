@@ -36,7 +36,11 @@ export default function Employee() {
   const [loading, setLoading] = useState(false);
   const [deactivatingEmployees, setDeactivatingEmployees] = useState({});
   const [activatingEmployees, setActivatingEmployees] = useState({});
-
+  const [Role, setRole] = useState(null);
+  useEffect(() => {
+    const role = Cookies.get("role");
+    setRole(role);
+  }, []);
   const itemsPerPage = 10;
 
   const token = Cookies.get("token");
@@ -44,16 +48,31 @@ export default function Employee() {
   const getUsers = async (page) => {
     try {
       const user = JSON.parse(localStorage.getItem("userData"));
-
       setLoading(true);
-
-      const response = await GlobalApi.getAllUsers(user?.business?.id, token);
+      const role = Cookies.get("role");
+      console.log("Role 2", role);
+      setRole(role);
+      const response = await GlobalApi.getAllUsers(
+        user?.business?.id,
+        token,
+        role
+      );
 
       console.log("response from users", response);
-      if (response?.success === true) {
-        setEmployees(response?.data?.employees);
+
+      if (role === "admin") {
+        if (response?.status === 200) {
+          setEmployees(response?.data?.users);
+          console.log("i got it", response?.data?.users);
+        } else {
+          console.log("Failed to fetch users");
+        }
       } else {
-        console.log("Failed to fetch users");
+        if (response?.data?.success === true) {
+          setEmployees(response?.data?.data?.employees);
+        } else {
+          console.log("Failed to fetch users");
+        }
       }
     } catch (error) {
       console.log("Error while getting users", error);
@@ -87,7 +106,11 @@ export default function Employee() {
   };
 
   const filteredEmployees = employees?.filter((employee) =>
-    employee?.user?.firstName.toLowerCase().includes(searchTerm.toLowerCase())
+    Role === "admin"
+      ? employee?.firstName.toLowerCase().includes(searchTerm.toLowerCase())
+      : employee?.user?.firstName
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
   );
 
   const indexOfLastEmployee = currentPage * itemsPerPage;
@@ -104,8 +127,6 @@ export default function Employee() {
       setDeactivatingEmployees((prev) => ({ ...prev, [id]: true }));
 
       const response = await GlobalApi.deActUser(id, token);
-
-      console.log("deactivnagting", response);
 
       if (response?.success === true) {
         toast("User DeActivated Successfully");
@@ -166,9 +187,12 @@ export default function Employee() {
         onClose={() => setIsDeleteDialogOpen(false)}
         onDelete={handleDelete}
         selectedEmployee={selectedEmployee}
+        Role={Role}
       />
       <div className=" px-4 sm:px-6 md:px-10 pb-12">
-        <h1 className="text-2xl font-semibold mb-4">Employees</h1>
+        <h1 className="text-2xl font-semibold mb-4">
+          {Role === "admin" ? "Users" : "Employees"}
+        </h1>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
           <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
             <div className="relative w-full">
@@ -189,7 +213,7 @@ export default function Employee() {
             className="button-border btn-txt-color bg-white hover:bg-white border"
             onClick={() => setIsAddEmployeeDialogOpen(true)}
           >
-            Add Employee
+            {Role === "admin" ? "Add User" : "Add Employee"}
           </Button>
         </div>
 
@@ -228,6 +252,63 @@ export default function Employee() {
                       No Employee found.
                     </TableCell>
                   </TableRow>
+                ) : Role === "admin" ? (
+                  currentEmployees
+                    ?.sort(
+                      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                    )
+                    ?.map((employee, index) => (
+                      <TableRow
+                        key={employee.id || `employee-${index}`}
+                        className="text-muted-foreground border-0"
+                      >
+                        <TableCell>{`${employee?.firstName} ${employee?.lastName}`}</TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          {employee?.email}
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          {employee?.phoneNumber}
+                        </TableCell>
+                        <TableCell>
+                          <button
+                            className={`px-2 py-1 text-xs flex items-center gap-2 font-semibold ${
+                              employee?.isActive
+                                ? "active-status"
+                                : "text-red-700 gap-2"
+                            }`}
+                          >
+                            {employee?.isActive ? <Active /> : <Nonactive />}{" "}
+                            {employee?.isActive ? "Active" : "Inactive"}
+                          </button>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          {employee?.wallet?.balance}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3 items-center">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-blue-500 font-semibold border text-left"
+                              onClick={() => {
+                                handleViewClick(employee);
+                              }}
+                            >
+                              View
+                            </Button>
+
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-blue-500 font-semibold border text-left"
+                              onClick={() => openDeleteDialog(employee)}
+                            >
+                              Delete
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
                 ) : (
                   currentEmployees
                     ?.sort(

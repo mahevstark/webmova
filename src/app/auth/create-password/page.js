@@ -84,8 +84,8 @@ export default function createpassword() {
               Create Password
             </h2>
             <p className="text-center text-sm font-medium p-color leading-6 w-3/4 mx-auto">
-              Donec porta gravida rutrum. Etiam ultrices odio non dui facilisis,
-              sollicitudin tincidunt{" "}
+              Your password must be at least 8 characters long.Use a mix of
+              uppercase, lowercase, numbers, and symbols.
             </p>
           </div>
           <form
