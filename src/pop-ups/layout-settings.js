@@ -25,9 +25,6 @@ export default function Settings({ page }) {
   const [Role, setRole] = useState(false);
   let links = [];
 
-  const user = localStorage.getItem("userData");
-  console.log("user", user);
-
   useEffect(() => {
     const role = Cookies.get("role");
     setRole(role);
