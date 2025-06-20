@@ -23,6 +23,12 @@ const AddBalance = ({
     employee: "",
     payment: "",
   });
+  const [Roles, setRoles] = useState(null);
+
+  useEffect(() => {
+    const role = Cookies.get("role");
+    setRoles(role);
+  }, []);
 
   useEffect(() => {
     if (appElement) {
@@ -37,11 +43,17 @@ const AddBalance = ({
 
   // Handle first step - validate amount and show PIN modal
   const handleConfirmAmount = () => {
+    const role = Cookies.get("role");
+
     const numAmount = parseFloat(amount);
     if (amount && !isNaN(numAmount) && numAmount > 0) {
       // Open PIN verification modal
-      onRequestClose();
-      setIsPinModalOpen(true);
+      if (role === "admin") {
+        handleAddBalance();
+      } else {
+        onRequestClose();
+        setIsPinModalOpen(true);
+      }
     } else {
       toast("Enter a Valid Amount ");
     }
@@ -65,12 +77,13 @@ const AddBalance = ({
   // Process the actual balance addition after PIN verification
   const handleAddBalance = async () => {
     // Check if PIN is complete
+    const role = Cookies.get("role");
 
-    console.log("employee meee", employee?.user);
-
-    if (pin.join("").length !== 6) {
-      setPinError("Please enter a complete 4-digit PIN");
-      return;
+    if (role !== "admin") {
+      if (pin.join("").length !== 6) {
+        setPinError("Please enter a complete 4-digit PIN");
+        return;
+      }
     }
     setloading(true);
 
@@ -78,7 +91,6 @@ const AddBalance = ({
       const login_data = JSON.parse(localStorage.getItem("userData"));
       const token = Cookies.get("token");
 
-      const role = Cookies.get("role");
       let formData = null;
       role === "admin"
         ? (formData = {
@@ -237,7 +249,11 @@ const AddBalance = ({
               onClick={handleConfirmAmount}
               className="flex-1 px-4 py-2 btn-backg text-white rounded-md"
             >
-              Confirm
+              {loading
+                ? "Almost there..."
+                : Roles === "admin"
+                ? "Add Balance"
+                : " Confirm"}
             </button>
           </div>
         </div>

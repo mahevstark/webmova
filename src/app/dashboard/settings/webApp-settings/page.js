@@ -113,7 +113,7 @@ export default function WebAppsettings() {
 
   return (
     <Layout page="settings">
-      <div className="flex sm:flex-row flex-col">
+      <div className="flex sm:flex-row flex-col 2xl:h-[88vh] xl:h-[84vh] lg:h-[78vh] md:h-[80vh]">
         <Layoutsettings page="profile" />
 
         <div className="mx-6 w-auto border rounded-md pt-4 sm:w-full space-y-8 mt-16 sm:mt-0 mb-12 sm:mb-0 pb-4 sm:pb-0 shadow-lg xl:pb-8">

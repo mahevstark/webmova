@@ -67,13 +67,16 @@ export default function Sidebar({ page }) {
 
   const handlelogout = () => {
     setloading(true);
-
+    const role = Cookies.get("role");
     setTimeout(() => {
       Cookies.remove("userData");
       Cookies.remove("token");
+      Cookies.remove("role");
       localStorage.removeItem("emailtoSignup");
       localStorage.removeItem("userData");
-      router.push("/auth/signin");
+      role === "admin"
+        ? router.push("/auth/signin?role=admin")
+        : router.push("/auth/signin");
       setloading(false);
       setShowLogoutDialog(false);
     }, 1000);
