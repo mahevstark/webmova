@@ -415,7 +415,7 @@ const changePass = async (id, oldp, newp, token) => {
   }
 };
 
-const UpdateProfile = async (id, user, token) => {
+const UpdateProfile = async (id, user, token, role) => {
   try {
     let data = JSON.stringify({
       userId: Number(id),
@@ -423,7 +423,7 @@ const UpdateProfile = async (id, user, token) => {
       lastName: user?.lname,
       email: user?.email,
       dob: user?.dob,
-      isAdmin: true,
+      isAdmin: role === "admin" ? true : false,
       permanentAddress: user?.address,
     });
 

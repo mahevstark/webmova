@@ -52,7 +52,9 @@ export default function editprofile() {
 
       setloading(true);
 
-      const response = await GlobalApi.UpdateProfile(id, user, token);
+      const role = Cookies.get("role");
+
+      const response = await GlobalApi.UpdateProfile(id, user, token, role);
 
       if (response?.success === true) {
         setloading(false);
