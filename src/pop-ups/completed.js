@@ -139,8 +139,8 @@ export default function Component({ paymentData, isOpen, onClose, request }) {
                 <span className="txt-detail">Amount Sent</span>
                 <span className="txt-detail">
                   $
-                  {paymentData?.payment?.transferAmount
-                    ? paymentData?.payment?.transferAmount
+                  {paymentData?.payment?.data?.transferAmount
+                    ? paymentData?.payment?.data?.transferAmount
                     : paymentData?.payment?.addedAmount}
                 </span>
               </div>
