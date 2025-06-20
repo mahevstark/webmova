@@ -273,7 +273,7 @@ export default function CreateProfile() {
                                 name="transactionPIN"
                                 value={formData.transactionPIN}
                                 onChange={handleInputChange}
-                                placeholder="4-Digit Transaction PIN"
+                                placeholder="6-Digit Transaction PIN"
                                 maxLength="6"
                                 className={`w-full h-12 px-4 border-2 rounded-lg outline-none focus:ring-0 ${errors.transactionPIN ? 'border-red-500' : 'border-color-input'
                                     }`}
