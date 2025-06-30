@@ -388,9 +388,9 @@ export default function PartnersPage() {
                                                     <Image
                                                         src={partner.logoUrl || "/placeholder.svg?height=60&width=120"}
                                                         alt={partner.name}
-                                                        height={200}
-                                                        width={200}
-                                                        className="w-32 h-16 object-contain bg-gray-50 rounded p-2"
+                                                        height={300}
+                                                        width={300}
+                                                        className="w-56 h-24 object-contain bg-gray-50 rounded p-2"
                                                     />
                                                     <div className="text-center">
                                                         <h3 className="font-semibold text-lg">{partner.name}</h3>

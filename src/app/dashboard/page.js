@@ -303,7 +303,8 @@ export default function Dashboard() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div
+                  <Link
+                    href="dashboard/users"
                     className="flex justify-normal 2xl:justify-around  md:justify-around  items-center 
              2xl:flex-nowrap xl:flex-nowrap max-sm:flex-wrap   gap-5 sm:gap-auto"
                   >
@@ -323,7 +324,7 @@ export default function Dashboard() {
                           : 0}
                       </p>
                     </div>
-                  </div>
+                  </Link>
                 </CardContent>
               </Card>
               <Card className="mt-4 shadow-md border">
@@ -335,7 +336,8 @@ export default function Dashboard() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div
+                  <Link
+                    href="/dashboard/transaction-history"
                     className="flex justify-normal 2xl:justify-around  md:justify-around  items-center 
              2xl:flex-nowrap xl:flex-nowrap max-sm:flex-wrap   gap-5 sm:gap-auto"
                   >
@@ -361,7 +363,7 @@ export default function Dashboard() {
                         {TransStats[0]?._count ? TransStats[2]?._count : 0}
                       </p>
                     </div>
-                  </div>
+                  </Link>
                 </CardContent>
               </Card>
             </div>

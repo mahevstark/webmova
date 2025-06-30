@@ -154,7 +154,7 @@ export default function Sidebar({ page }) {
 
         <div className="mt-3">
           <Link href="/">
-            <h1 className="text-3xl font-bold text-gray-800 cursor-pointer">
+            <h1 className="text-3xl font-bold text-white py-3 cursor-pointer bg-[#544AF1]">
               MOWAPAY
             </h1>
           </Link>
