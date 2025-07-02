@@ -1,0 +1,89 @@
+{
+    "Dashboard": {
+  "Hey": "Salut",
+    "Check":"Vérifions votre tableau de bord aujourd'hui",
+  "Insights":"Informations sur les utilisateurs",
+  "Transactions":"Informations sur les transactions",
+  "active":"Utilisateurs actifs",
+  "total-users":"Utilisateurs totaux",
+  "total-trans":"Transactions totales",
+  "transfer":"Transfert",
+  "admin-credit":"Crédit administrateur",
+  "users":"Users"
+
+},
+  "auth": {
+    "signin": "Se connecter",
+    "signup": "S'inscrire",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "createAccount": "Créer un compte",
+    "welcomeBack": "Bon retour",
+    "logout": "Se déconnecter",
+    "loginSuccess": "Connexion réussie",
+    "loginError": "Erreur de connexion",
+    "networkError": "Erreur réseau"
+  },
+  "Users": {
+  "users": "Utilisateurs",
+  "emp": "Employés",
+  "search-key": "Mot-clé de recherche",
+  "add-user": "Ajouter un utilisateur",
+  "add-emp": "Ajouter un employé",
+  "name": "Nom",
+  "email": "E-mail",
+  "phone": "Numéro de téléphone",
+  "status": "Statut",
+  "balance": "Solde",
+  "action": "Action",
+  "delete-user": "Supprimer l'utilisateur",
+  "delete-emp": "Supprimer l'employé",
+  "confirm-delete": "Êtes-vous sûr de vouloir supprimer ce membre ?",
+  "almost-there": "Presque terminé",
+  "delete-member": "Supprimer le membre",
+  "cancel": "Annuler",
+  "view": "Voir",
+"delete": "Supprimer"
+
+},
+"Transactions":{
+  "transaction-history": "Historique des transactions",
+  "filter-type": "Filtrer par type de transaction",
+  "transfer": "Transfert",
+  "deposit": "Dépôt",
+  "requested": "Demandé",
+  "admin-credit": "Crédit administrateur",
+  "filter-status": "Filtrer par statut de transaction",
+  "completed": "Terminé",
+  "pending": "En attente",
+  "failed": "Échoué",
+    "total-amount": "Montant total",
+  "id": "ID",
+  "name": "Nom",
+  "account-number": "Numéro de compte",
+  "day": "Jour",
+  "time": "Heure",
+  "type": "Type",
+  "amount": "Montant",
+  "currency": "Devise"
+},
+"Settings":{
+  "profile": "Profil",
+  "change-password": "Changer le mot de passe",
+  "privacy-policy": "Politique de confidentialité",
+  "terms": "Conditions générales",
+  "about-app": "À propos de l'application",
+  "help-center": "Centre d'aide",
+  "language": "Langue",
+  "webapp-settings": "Paramètres de l'application Web"
+}
+,"Dash-layout":{
+    "dashboard": "Tableau de bord",
+  "users": "Utilisateurs",
+  "transaction-history": "Historique des transactions",
+  "setting": "Paramètre",
+  "content-management": "Gestion de contenu"
+}
+
+}

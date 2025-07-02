@@ -25,6 +25,7 @@ import { Search } from "lucide-react";
 import GlobalApi from "@/lib/GlobalApi";
 import Cookies from "js-cookie";
 import { Spinner } from "@/components/ui/spinner";
+import { useTranslations } from "use-intl";
 
 export default function TransactionHistory() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -170,6 +171,7 @@ export default function TransactionHistory() {
 
   // Total pages
   const totalPages = Math.ceil(filteredEmployees.length / rowsPerPage);
+  const t = useTranslations("Transactions");
 
   if (!isClient) {
     return null; // Return null on server-side to prevent hydration mismatch
@@ -187,7 +189,9 @@ export default function TransactionHistory() {
       )}
 
       <div className=" px-4 sm:px-6 md:px-10 pb-12 2xl:w-full  sm:w-full">
-        <h1 className="text-2xl font-semibold mb-4">Transaction History</h1>
+        <h1 className="text-2xl font-semibold mb-4">
+          {t("transaction-history")}
+        </h1>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
           <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
             <Select
@@ -199,18 +203,19 @@ export default function TransactionHistory() {
               <SelectTrigger className="border-class-employee select-color font-medium">
                 <SelectValue
                   placeholder={
-                    role === "admin"
-                      ? "Filter Transactions Type"
-                      : "Filter Transactions"
+                    role === "admin" ? t("filter-type") : "Filter Transactions"
                   }
                 />
               </SelectTrigger>
               {role === "admin" ? (
                 <SelectContent>
-                  <SelectItem value="TRANSFER">Transfer</SelectItem>
-                  <SelectItem value="DEPOSIT">Deposit</SelectItem>
-                  <SelectItem value="REQUESTED">Requested</SelectItem>
-                  <SelectItem value="ADMIN_CREDIT">Admin Credit</SelectItem>
+                  <SelectItem value="TRANSFER"> {t("transfer")}</SelectItem>
+                  <SelectItem value="DEPOSIT"> {t("deposit")}</SelectItem>
+                  <SelectItem value="REQUESTED"> {t("requested")}</SelectItem>
+                  <SelectItem value="ADMIN_CREDIT">
+                    {" "}
+                    {t("admin-credit")}
+                  </SelectItem>
                 </SelectContent>
               ) : (
                 <SelectContent>
@@ -229,13 +234,13 @@ export default function TransactionHistory() {
                 }}
               >
                 <SelectTrigger className="border-class-employee select-color font-medium">
-                  <SelectValue placeholder="Filter Transactions Status" />
+                  <SelectValue placeholder={t("filter-status")} />
                 </SelectTrigger>
 
                 <SelectContent>
-                  <SelectItem value="COMPLETED">Completed</SelectItem>
-                  <SelectItem value="PENDING">Pending</SelectItem>
-                  <SelectItem value="FAILED">Failed</SelectItem>
+                  <SelectItem value="COMPLETED">{t("completed")} </SelectItem>
+                  <SelectItem value="PENDING">{t("pending")} </SelectItem>
+                  <SelectItem value="FAILED">{t("failed")} </SelectItem>
                 </SelectContent>
               </Select>
             )}
@@ -257,7 +262,7 @@ export default function TransactionHistory() {
           {role === "admin" && (
             <>
               <div className=" px-4 py-2  rounded-md border-class-employee select-color font-medium  text-sm flex gap-2">
-                <span className="block">Total Amount:</span>
+                <span className="block">{t("total-amount")} : </span>
                 <span className="select-color font-semibold">
                   {totalTrans?.totalAmount || 0}
                 </span>
@@ -272,29 +277,29 @@ export default function TransactionHistory() {
                 <TableHeader className="tb-col">
                   <TableRow>
                     <TableHead className="sm:table-cel font-semibold text-black">
-                      ID
+                      {t("id")}
                     </TableHead>
                     <TableHead className="font-semibold text-black">
-                      Name
+                      {t("name")}
                     </TableHead>
                     <TableHead className="sm:table-cell font-semibold text-black">
-                      Account Number
+                      {t("account-number")}
                     </TableHead>
                     <TableHead className="sm:table-cell font-semibold text-black">
-                      Day
+                      {t("day")}
                     </TableHead>
                     <TableHead className="font-semibold text-black">
-                      Time
+                      {t("time")}
                     </TableHead>
                     <TableHead className="sm:table-cell font-semibold text-black">
-                      Type
+                      {t("type")}
                     </TableHead>
                     <TableHead className="sm:table-cell font-semibold text-black">
-                      Amount
+                      {t("amount")}
                     </TableHead>
 
                     <TableHead className="sm:table-cell font-semibold text-black">
-                      Currency
+                      {t("currency")}
                     </TableHead>
                   </TableRow>
                 </TableHeader>

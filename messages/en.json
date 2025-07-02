@@ -1,0 +1,76 @@
+{
+    "Dashboard": {
+  "Hey": "Hi",
+  "Check":"Let’s check your Dashboard today",
+  "Insights":"Users Insights",
+  "Transactions":"Transaction Insights",
+  "active":"Active Users",
+  "total-users":"Total Users",
+  "total-trans":"Total Transactions",
+  "transfer":"Transfer",
+  "admin-credit":"Admin Credit",
+  "users":"Users"
+
+},
+"Users": {
+  "users": "Users",
+  "emp": "Employees",
+  "search-key": "Search Keyword",
+  "add-user": "Add User",
+  "add-emp": "Add Employee",
+  "name": "Name",
+  "email": "Email",
+  "phone": "Phone Number",
+  "status": "Status",
+  "balance": "Balance",
+  "action": "Action",
+  "delete-user": "Delete User",
+  "delete-emp": "Delete Employee",
+  "confirm-delete": "Are you sure that you want to delete your member?",
+  "almost-there": "Almost there",
+  "delete-member": "Delete Member",
+  "cancel": "Cancel",
+  "view": "View",
+"delete": "Delete"
+
+},
+"Transactions":{
+  "transaction-history": "Transaction History",
+  "filter-type": "Filter Transaction Type",
+  "transfer": "Transfer",
+  "deposit": "Deposit",
+  "requested": "Requested",
+  "admin-credit": "Admin Credit",
+  "filter-status": "Filter Transaction Status",
+  "completed": "Completed",
+  "pending": "Pending",
+  "failed": "Failed",
+  "total-amount": "Total Amount",
+  "id": "ID",
+  "name": "Name",
+  "account-number": "Account Number",
+  "day": "Day",
+  "time": "Time",
+  "type": "Type",
+  "amount": "Amount",
+  "currency": "Currency"
+},
+"Settings":{
+  "profile": "Profile",
+  "change-password": "Change Password",
+  "privacy-policy": "Privacy Policy",
+  "terms": "Terms & Conditions",
+  "about-app": "About App",
+  "help-center": "Help Center",
+  "language": "Language",
+  "webapp-settings": "WebApp Settings"
+},
+"Dash-layout":{
+  "dashboard": "Dashboard",
+  "users": "Users",
+  "transaction-history": "Transaction History",
+  "setting": "Setting",
+  "content-management": "Content Management"
+}
+
+}

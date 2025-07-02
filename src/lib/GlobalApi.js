@@ -1290,6 +1290,59 @@ const transactioninsights = async (token) => {
   }
 };
 
+const createCTA = async (formdata) => {
+  try {
+    let data = JSON.stringify({
+      heading: formdata?.title,
+      description: formdata?.content,
+      backgroundImage: "https://example.com/hero-bg.jpg",
+      ctaButton: {
+        text: formdata?.ctaText,
+        link: formdata?.ctaLink,
+        type: "primary",
+      },
+    });
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "hero-section",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    const response = await axiosClient.request(config);
+
+    return response?.data;
+  } catch (error) {
+    console.log("error adding cta", error);
+
+    return error?.message;
+  }
+};
+
+const getCta = async () => {
+  try {
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: "hero-section",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error getting CTA", error);
+
+    return error?.message;
+  }
+};
+
 export default {
   login,
   getAllUsers,
@@ -1341,4 +1394,6 @@ export default {
   UpdatePartner,
   dashboardStats,
   transactioninsights,
+  createCTA,
+  getCta,
 };
