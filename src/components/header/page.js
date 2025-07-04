@@ -4,6 +4,7 @@ import { useUser } from "@/app/provider/UserProvider";
 import Avatar from "../../assets/Avatar.png";
 import Image from "next/image";
 import { User } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function Header() {
   const fileInputRef = useRef(null);
@@ -13,17 +14,16 @@ export default function Header() {
   };
 
   const { user } = useUser();
+  const t = useTranslations("Dashboard");
 
   return (
     <div className="flex shadow-md justify-between px-10 w-full pt-4 pb-4 border-b mb-8 md:sticky top-0 bg-white z-10 flex-wrap">
       {/* Left section with greeting and subtext */}
       <span>
         <p className="font-semibold text-xl text-gray-800">
-          Hi, {user?.firstName || "Bussiness User"} {user?.lastName}
+          {t("Hey")}, {user?.firstName || "Bussiness User"} {user?.lastName}
         </p>
-        <p className="text-sm text-gray-500">
-          Let’s check your Dashboard today
-        </p>
+        <p className="text-sm text-gray-500">{t("Check")}</p>
       </span>
 
       {/* Right section with avatar and name */}

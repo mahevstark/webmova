@@ -1,16 +1,43 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../../../../components/layout/layout";
 import Layoutsettings from "../../../../pop-ups/layout-settings";
+import { useRouter } from "next/navigation";
 
 const lang = [
-  { language: "English" },
-  { language: "French" },
-  { language: "Espagnol" },
+  { language: "English", code: "en" },
+  { language: "French", code: "fr" },
+  { language: "Espagnol", code: "sp" },
 ];
 
-export default function languages() {
+export default function Languages() {
   const [selectedLanguage, setSelectedLanguage] = useState(null);
+  const [locale, setlocale] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    const cookieLocale = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("MYNEXTAPP_LOCALE="))
+      ?.split("=")[1];
+
+    if (cookieLocale) {
+      setlocale(cookieLocale);
+    } else {
+      const browserLocale = navigator.language.slice(0, 2);
+      setlocale(browserLocale);
+      document.cookie = `MYNEXTAPP_LOCALE=${browserLocale}`;
+      router.refresh();
+    }
+  }, [router]);
+
+  const changeLocal = (ln) => {
+    console.log("Language changed to:", ln);
+    setlocale(ln);
+    document.cookie = `MYNEXTAPP_LOCALE=${ln}`;
+    router.refresh();
+  };
+
   return (
     <Layout page={"settings"}>
       <div className="flex sm:flex-row flex-col ">
@@ -38,19 +65,18 @@ export default function languages() {
                   <input
                     type="radio"
                     name="language"
-                    onChange={() => setSelectedLanguage(i.language)}
-                    checked={selectedLanguage === i.language}
+                    onChange={() => changeLocal(i.code)}
+                    checked={locale === i.code}
                   />
-
                   <p
                     className={`custom-p-color ${
-                      selectedLanguage === i.language ? "settings-p" : ""
+                      locale === i.code ? "settings-p" : "" // Fixed: compare code to code
                     }`}
                   >
                     {i.language}
                   </p>
                 </div>
-              ))}{" "}
+              ))}
             </div>
           </div>
         </div>

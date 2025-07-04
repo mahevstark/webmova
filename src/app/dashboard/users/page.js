@@ -23,6 +23,7 @@ import Cookies from "js-cookie";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "use-intl";
 
 const page = "Employees";
 
@@ -175,6 +176,8 @@ export default function Employee() {
     });
   };
 
+  const t = useTranslations("Users");
+
   return (
     <Layout page={page}>
       <AddEmploye
@@ -191,7 +194,7 @@ export default function Employee() {
       />
       <div className=" px-4 sm:px-6 md:px-10 pb-12">
         <h1 className="text-2xl font-semibold mb-4">
-          {Role === "admin" ? "Users" : "Employees"}
+          {Role === "admin" ? t("users") : t("emp")}
         </h1>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
           <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
@@ -202,7 +205,7 @@ export default function Employee() {
               />
               <Input
                 type="text"
-                placeholder="Search keyword"
+                placeholder={t("search-key")}
                 className="pl-10 pr-4 py-2 w-full border-class-employee placeholder:text-[#c2c2c2] font-medium"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -213,7 +216,7 @@ export default function Employee() {
             className="button-border btn-txt-color bg-white hover:bg-white border"
             onClick={() => setIsAddEmployeeDialogOpen(true)}
           >
-            {Role === "admin" ? "Add User" : "Add Employee"}
+            {Role === "admin" ? t("add-user") : t("add-emp")}
           </Button>
         </div>
 
@@ -223,22 +226,22 @@ export default function Employee() {
               <TableHeader className="tb-col">
                 <TableRow>
                   <TableHead className="font-semibold text-black">
-                    Name
+                    {t("name")}
                   </TableHead>
                   <TableHead className="hidden sm:table-cell font-semibold text-black">
-                    Email
+                    {t("email")}
                   </TableHead>
                   <TableHead className="hidden sm:table-cell font-semibold text-black">
-                    Phone Number
+                    {t("phone")}
                   </TableHead>
                   <TableHead className="font-semibold text-black">
-                    Status
+                    {t("status")}
                   </TableHead>
                   <TableHead className="hidden sm:table-cell font-semibold text-black">
-                    Balance
+                    {t("balance")}
                   </TableHead>
                   <TableHead className="font-semibold text-black flex justify-center items-center">
-                    Action
+                    {t("action")}
                   </TableHead>
                 </TableRow>
               </TableHeader>
@@ -294,7 +297,7 @@ export default function Employee() {
                                 handleViewClick(employee);
                               }}
                             >
-                              View
+                              {t("view")}
                             </Button>
 
                             <Button
@@ -303,7 +306,7 @@ export default function Employee() {
                               className="text-blue-500 font-semibold border text-left"
                               onClick={() => openDeleteDialog(employee)}
                             >
-                              Delete
+                              {t("delete")}
                             </Button>
                           </div>
                         </TableCell>

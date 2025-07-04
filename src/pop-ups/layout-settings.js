@@ -19,11 +19,14 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import { useTranslations } from "use-intl";
 
 export default function Settings({ page }) {
   const pathname = usePathname();
   const [Role, setRole] = useState(false);
   let links = [];
+
+  const t = useTranslations("Settings");
 
   useEffect(() => {
     const role = Cookies.get("role");
@@ -34,7 +37,7 @@ export default function Settings({ page }) {
       {
         href: "/dashboard/settings/profile",
         icon: User,
-        label: "Profile",
+        label: t("profile"),
       },
       // {
       //   href: "/dashboard/settings/notification-settings",
@@ -49,17 +52,17 @@ export default function Settings({ page }) {
       {
         href: "/dashboard/settings/change-password",
         icon: Key,
-        label: "Change Password",
+        label: t("change-password"),
       },
       {
         href: "/dashboard/settings/privacy-policy",
         icon: Lock,
-        label: "Privacy Policy",
+        label: t("privacy-policy"),
       },
       {
         href: "/dashboard/settings/terms",
         icon: ScrollText,
-        label: "Terms & Conditions",
+        label: t("terms"),
       },
       // {
       //   href: "/dashboard/settings/devices",
@@ -69,22 +72,22 @@ export default function Settings({ page }) {
       {
         href: "/dashboard/settings/about",
         icon: Info,
-        label: "About App",
+        label: t("about-app"),
       },
       {
         href: "/dashboard/settings/help-center",
         icon: HelpCircle,
-        label: "Help Center",
+        label: t("help-center"),
       },
-      // {
-      //   href: "/dashboard/settings/languages",
-      //   icon: Globe,
-      //   label: "Language",
-      // },
+      {
+        href: "/dashboard/settings/languages",
+        icon: Globe,
+        label: t("language"),
+      },
       {
         href: "/dashboard/settings/webApp-settings",
         icon: LayoutGrid,
-        label: "WebApp Settings",
+        label: t("webapp-settings"),
       },
     ];
   } else {
@@ -92,7 +95,7 @@ export default function Settings({ page }) {
       {
         href: "/dashboard/settings/profile",
         icon: User,
-        label: "Profile",
+        label: t("profile"),
       },
       // {
       //   href: "/dashboard/settings/notification-settings",
@@ -107,17 +110,17 @@ export default function Settings({ page }) {
       {
         href: "/dashboard/settings/change-password",
         icon: Key,
-        label: "Change Password",
+        label: t("change-password"),
       },
       {
         href: "/dashboard/settings/privacy-policy",
         icon: Lock,
-        label: "Privacy Policy",
+        label: t("privacy-policy"),
       },
       {
         href: "/dashboard/settings/terms",
         icon: ScrollText,
-        label: "Terms & Conditions",
+        label: t("terms"),
       },
       // {
       //   href: "/dashboard/settings/devices",
@@ -127,12 +130,12 @@ export default function Settings({ page }) {
       {
         href: "/dashboard/settings/about",
         icon: Info,
-        label: "About App",
+        label: t("about-app"),
       },
       {
         href: "/dashboard/settings/help-center",
         icon: HelpCircle,
-        label: "Help Center",
+        label: t("help-center"),
       },
       // {
       //   href: "/dashboard/settings/languages",

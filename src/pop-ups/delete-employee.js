@@ -11,6 +11,7 @@ import {
 import InfoModal from "./info";
 import GlobalApi from "@/lib/GlobalApi";
 import Cookies from "js-cookie";
+import { useTranslations } from "next-intl";
 
 export default function DeleteConfirmation({
   isOpen,
@@ -77,6 +78,7 @@ export default function DeleteConfirmation({
     setIsModalOpen(false);
   };
 
+  const t = useTranslations("Users");
   return (
     <>
       {isOpen && (
@@ -93,12 +95,12 @@ export default function DeleteConfirmation({
             <Card className="shadow-none border-none">
               <CardHeader>
                 <CardTitle className="text-xl font-semibold text-center shadow-none">
-                  {Role === "admin" ? "Delete User" : "Delete Employee"}
+                  {Role === "admin" ? t("delete-user") : t("delete-emp")}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-p font-medium text-center">
-                  Are you sure that you want to delete your member?
+                  {t("confirm-delete")}
                 </p>
               </CardContent>
               <CardFooter className="flex justify-center gap-4 mt-4">
@@ -107,13 +109,13 @@ export default function DeleteConfirmation({
                   onClick={onClose}
                   className="btn-border btn-txt-color w-80 text-white font-semibold border rounded-lg mt-4 mx-auto p-2 no-hover"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
                 <button
                   onClick={handleDelete} // Call handleDelete to perform the deletion
                   className="button-background text-white w-80 font-semibold border rounded-lg mt-4 mx-auto p-2 no-hover"
                 >
-                  {loading ? "Almost there..." : " Delete Member"}
+                  {loading ? t("almost-there") : t("delete-member")}
                 </button>
               </CardFooter>
             </Card>

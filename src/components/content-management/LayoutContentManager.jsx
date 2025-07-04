@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-import { ChevronRight, Handshake, HelpCircle, Info, LayoutGrid, MessageSquareText, Phone } from "lucide-react";
+import { ChevronRight, Handshake, HelpCircle, Info, LayoutGrid, MessageSquareText, Phone, Rocket } from "lucide-react";
 
 export default function LayoutContentManager({ page }) {
     const pathname = usePathname();
@@ -39,6 +39,11 @@ export default function LayoutContentManager({ page }) {
             href: "/dashboard/manage-contact",
             icon: Phone,
             label: "Contact",
+        },
+        {
+            href: "/dashboard/cta-section",
+            icon: Rocket,
+            label: "CTA Section",
         },
 
     ];

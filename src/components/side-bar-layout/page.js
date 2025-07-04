@@ -6,53 +6,55 @@ import Active from "../../assets/active.svg";
 import Cookies from "js-cookie";
 import { LogOut, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-
-const menuItems = [
-  {
-    name: "Dashboard",
-    icon: Activity,
-    href: "/",
-    activeicon: Active,
-    check: "Dashboard",
-  },
-  {
-    name: "Employees",
-    icon: Activity,
-    href: "/dashboard/users",
-    activeicon: Active,
-    check: "Employees",
-  },
-  {
-    name: "Transaction History",
-    icon: Activity,
-    href: "/dashboard/transaction-history",
-    activeicon: Active,
-    check: "transactionhistory",
-  },
-  // {
-  //   name: "Payment Request",
-  //   icon: Activity,
-  //   href: "/dashboard/payment-request",
-  //   activeicon: Active,
-  //   check: "paymentrequest",
-  // },
-  {
-    name: "Setting",
-    icon: Activity,
-    href: "/dashboard/settings/profile",
-    activeicon: Active,
-    check: "settings",
-  },
-  {
-    name: "Content Management",
-    icon: Activity,
-    href: "/dashboard/hero-section",
-    activeicon: Active,
-    check: "Content",
-  },
-];
+import { useTranslations } from "use-intl";
 
 export default function Sidebar({ page }) {
+  const t = useTranslations("Dash-layout");
+  const menuItems = [
+    {
+      name: t("dashboard"),
+      icon: Activity,
+      href: "/",
+      activeicon: Active,
+      check: "Dashboard",
+    },
+    {
+      name: t("users"),
+      icon: Activity,
+      href: "/dashboard/users",
+      activeicon: Active,
+      check: "Employees",
+    },
+    {
+      name: t("transaction-history"),
+      icon: Activity,
+      href: "/dashboard/transaction-history",
+      activeicon: Active,
+      check: "transactionhistory",
+    },
+    // {
+    //   name: "Payment Request",
+    //   icon: Activity,
+    //   href: "/dashboard/payment-request",
+    //   activeicon: Active,
+    //   check: "paymentrequest",
+    // },
+    {
+      name: t("setting"),
+      icon: Activity,
+      href: "/dashboard/settings/profile",
+      activeicon: Active,
+      check: "settings",
+    },
+    {
+      name: t("content-management"),
+      icon: Activity,
+      href: "/dashboard/hero-section",
+      activeicon: Active,
+      check: "Content",
+    },
+  ];
+
   const place = page;
   const [activeItem, setActiveItem] = useState(page);
   const [sidebarOpen, setSidebarOpen] = useState(false);

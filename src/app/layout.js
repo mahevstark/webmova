@@ -2,6 +2,9 @@ import { Nunito } from "next/font/google"; // Import Nunito from Google Fonts
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { UserProvider } from "./provider/UserProvider";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
+import { cookies } from "next/headers";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -14,9 +17,13 @@ export const metadata = {
   description: "MOWAPAY",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const cookieStore = await cookies();
+  const locale = cookieStore.get("MYNEXTAPP_LOCALE")?.value;
+  const messages = await getMessages(locale);
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
         <meta
           name="simpledcver"
@@ -25,7 +32,9 @@ export default function RootLayout({ children }) {
       </head>
       <body className={`${nunito.variable} antialiased`}>
         <UserProvider>
-          {children}
+          <NextIntlClientProvider messages={messages}>
+            {children}
+          </NextIntlClientProvider>
 
           <Toaster />
         </UserProvider>

@@ -10,18 +10,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import Link from "next/link";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import GlobalApi from "@/lib/GlobalApi";
 import Cookies from "js-cookie";
 import { Spinner } from "@/components/ui/spinner";
 import CardMowa from "../../components/Card";
 import { toast } from "sonner";
 import Loading from "@/components/loading";
+import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 export default function Dashboard() {
   var page = "Dashboard";
-
+  const t = useTranslations("Dashboard");
+  const s = useTranslations("Dashboard");
   const [Role, setRole] = useState(null);
   useEffect(() => {
     const role = Cookies.get("role");
@@ -71,7 +73,7 @@ export default function Dashboard() {
             }),
             type: txn.action,
             amount: `$${txn.amount}`,
-            action: "View",
+            action: s("view"),
             currency: txn?.currency || "USA",
           };
         });
@@ -163,6 +165,10 @@ export default function Dashboard() {
       getTrans();
     }
   }, [Role]);
+
+  // console.log(props());
+
+  // const t = () => {};
 
   if (Role === null || loading) {
     return <Loading />;
@@ -298,7 +304,7 @@ export default function Dashboard() {
                 <CardHeader>
                   <CardTitle className="flex justify-between items-center">
                     <p className="btn-txt-color font-semibold text-lg">
-                      Users Insights
+                      {t("Insights")}
                     </p>
                   </CardTitle>
                 </CardHeader>
@@ -309,7 +315,9 @@ export default function Dashboard() {
              2xl:flex-nowrap xl:flex-nowrap max-sm:flex-wrap   gap-5 sm:gap-auto"
                   >
                     <div className="flex  gap-3 items-center border shadow-md px-4 sm:px-5 pt-4 pb-4 rounded-lg ">
-                      <p className="text-sm text-gray-700">Total Users</p>
+                      <p className="text-sm text-gray-700">
+                        {t("total-users")}
+                      </p>
                       <p className="text-2xl font-bold text-gray-700">
                         {dashboardStats?.totalUsers
                           ? dashboardStats?.totalUsers
@@ -317,7 +325,7 @@ export default function Dashboard() {
                       </p>
                     </div>
                     <div className="flex  gap-3 items-center border shadow-md px-4 sm:px-5 pt-4 pb-4 rounded-lg ">
-                      <p className="text-sm text-gray-700">Active Users</p>
+                      <p className="text-sm text-gray-700">{t("active")}</p>
                       <p className="text-2xl font-bold text-gray-700">
                         {dashboardStats?.activeUsers
                           ? dashboardStats?.activeUsers
@@ -331,7 +339,7 @@ export default function Dashboard() {
                 <CardHeader>
                   <CardTitle className="flex justify-between items-center">
                     <p className="btn-txt-color font-semibold text-lg">
-                      Transaction Insights
+                      {t("Transactions")}
                     </p>
                   </CardTitle>
                 </CardHeader>
@@ -343,7 +351,7 @@ export default function Dashboard() {
                   >
                     <div className="flex  gap-3 items-center border shadow-md px-4 sm:px-5 pt-4 pb-4 rounded-lg ">
                       <p className="text-sm text-gray-700">
-                        Total Transactions
+                        {t("total-trans")}
                       </p>
                       <p className="text-2xl font-bold text-gray-700">
                         {dashboardStats?.totalTransactions
@@ -352,13 +360,15 @@ export default function Dashboard() {
                       </p>
                     </div>
                     <div className="flex  gap-3 items-center border shadow-md px-4 sm:px-5 pt-4 pb-4 rounded-lg ">
-                      <p className="text-sm text-gray-700"> Transfer</p>
+                      <p className="text-sm text-gray-700">{t("transfer")}</p>
                       <p className="text-2xl font-bold text-gray-700">
                         {TransStats[0]?._count ? TransStats[0]?._count : 0}
                       </p>
                     </div>
                     <div className="flex  gap-3 items-center border shadow-md px-4 sm:px-5 pt-4 pb-4 rounded-lg ">
-                      <p className="text-sm text-gray-700">Admin Credit</p>
+                      <p className="text-sm text-gray-700">
+                        {t("admin-credit")}
+                      </p>
                       <p className="text-2xl font-bold text-gray-700">
                         {TransStats[0]?._count ? TransStats[2]?._count : 0}
                       </p>
