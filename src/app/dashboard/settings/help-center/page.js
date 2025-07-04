@@ -7,9 +7,9 @@ import chat from "../../../../assets/chat.png";
 import site from "../../../../assets/site.png";
 
 import Image from "next/image";
-import GlobalApi from "@/lib/GlobalApi";
+import GlobalApi from "../../../../lib/GlobalApi";
 import { useEffect, useState } from "react";
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "../../../../components/ui/spinner";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
 

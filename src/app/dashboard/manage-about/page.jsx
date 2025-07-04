@@ -2,12 +2,12 @@
 import LayoutContentManager from "../../../components/content-management/LayoutContentManager";
 import Layout from "../../../components/layout/layout";
 import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "../../../components/ui/button"
+import { Textarea } from "../../../components/ui/textarea"
+import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card"
 import { Plus, Edit, Trash2, Save, X, ArrowLeft, Eye, FileText } from "lucide-react"
-import GlobalApi from "@/lib/GlobalApi";
-import { Spinner } from "@/components/ui/spinner";
+import GlobalApi from "../../../lib/GlobalApi";
+import { Spinner } from "../../../components/ui/spinner";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
 

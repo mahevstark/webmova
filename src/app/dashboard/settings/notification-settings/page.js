@@ -1,6 +1,6 @@
 import Layout from "../../../../components/layout/layout";
 import Layoutsettings from "../../../../pop-ups/layout-settings";
-import { Switch } from "@/components/ui/switch";
+import { Switch } from "../../../../components/ui/switch";
 
 export default function notificationsettings() {
   return (

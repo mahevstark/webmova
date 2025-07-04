@@ -1,7 +1,12 @@
 "use client";
 import Layout from "../../components/layout/layout";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "../../components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../components/ui/card";
 import {
   Table,
   TableBody,
@@ -9,15 +14,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "../../components/ui/table";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import GlobalApi from "@/lib/GlobalApi";
+import GlobalApi from "../../lib/GlobalApi";
 import Cookies from "js-cookie";
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "../../components/ui/spinner";
 import CardMowa from "../../components/Card";
 import { toast } from "sonner";
-import Loading from "@/components/loading";
+import Loading from "../../components/loading";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 export default function Dashboard() {

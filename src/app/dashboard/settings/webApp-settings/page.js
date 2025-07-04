@@ -5,9 +5,9 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import Layout from "../../../../components/layout/layout";
 import Layoutsettings from "../../../../pop-ups/layout-settings";
-import GlobalApi from "@/lib/GlobalApi";
+import GlobalApi from "../../../../lib/GlobalApi";
 import Cookies from "js-cookie";
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "../../../../components/ui/spinner";
 import { toast } from "sonner";
 
 export default function WebAppsettings() {

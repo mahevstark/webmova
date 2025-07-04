@@ -1,17 +1,17 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "../../../components/ui/button"
+import { Input } from "../../../components/ui/input"
+import { Textarea } from "../../../components/ui/textarea"
+import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card"
 import { Plus, Edit, Trash2, Save, X, Star, ArrowLeft, Search, Filter } from "lucide-react"
 import Layout from "../../../components/layout/layout";
-import LayoutContentManager from "@/components/content-management/LayoutContentManager"
-import GlobalApi from "@/lib/GlobalApi"
+import LayoutContentManager from "../../../components/content-management/LayoutContentManager"
+import GlobalApi from "../../../lib/GlobalApi"
 import { toast } from "sonner"
 import Cookies from "js-cookie"
-import { Spinner } from "@/components/ui/spinner"
+import { Spinner } from "../../../components/ui/spinner"
 export default function TestimonialsPage() {
     const [testimonials, setTestimonials] = useState([])
 

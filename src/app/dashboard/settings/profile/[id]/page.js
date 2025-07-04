@@ -1,11 +1,12 @@
 "use client";
 import Layout from "../../../../../components/layout/layout";
 import Layoutsettings from "../../../../../pop-ups/layout-settings";
-import GlobalApi from "@/lib/GlobalApi";
+import GlobalApi from "../../../../../lib/GlobalApi";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
+
 export default function editprofile() {
   const router = useParams();
   const id = router.id;

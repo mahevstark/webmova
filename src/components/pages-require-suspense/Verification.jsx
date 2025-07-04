@@ -3,7 +3,7 @@ import Image from "next/image";
 import { React, useState, useRef, useEffect } from "react";
 import signinbg from "../../assets/signin-bg.png";
 import Button from "../button/page";
-import GlobalApi from "@/lib/GlobalApi";
+import GlobalApi from "../../lib/GlobalApi";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";

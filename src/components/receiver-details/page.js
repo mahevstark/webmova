@@ -4,9 +4,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "../../components/Card";
 import Pin from "../../pop-ups/pin";
-import { Button } from "../ui/button";
+import { Button } from "../../components/ui/button";
 import { useEffect, useState } from "react";
 export default function receiverdetails({
   selectedUser,

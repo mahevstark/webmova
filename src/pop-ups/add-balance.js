@@ -2,7 +2,7 @@
 import React, { useState, useEffect, use } from "react";
 import Modal from "react-modal";
 import Paymentsent from "../pop-ups/completed";
-import GlobalApi from "@/lib/GlobalApi";
+import GlobalApi from "../lib/GlobalApi";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
 
@@ -327,7 +327,7 @@ export default AddBalance;
 // import React, { useState, useEffect } from "react";
 // import Modal from "react-modal";
 // import Paymentsent from "../pop-ups/completed";
-// import GlobalApi from "@/lib/GlobalApi";
+// import GlobalApi from "../.../lib//GlobalApi";
 // import { toast } from "sonner";
 
 // const details = {

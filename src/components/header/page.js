@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef } from "react";
-import { useUser } from "@/app/provider/UserProvider";
+import { useUser } from "../../app/provider/UserProvider";
 import Avatar from "../../assets/Avatar.png";
 import Image from "next/image";
 import { User } from "lucide-react";

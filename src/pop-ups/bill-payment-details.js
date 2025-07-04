@@ -7,7 +7,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "../components/ui/card";
 import Billpaid from "./bill-paid-details";
 
 const bill = {
@@ -51,29 +51,38 @@ export default function Bilpayments({ details, isOpen, onClose, onPay }) {
           bill={bill}
         />
       ) : (
-        <div
-          className="fixed inset-0 cls bg-black bg-opacity-50 flex items-center justify-center p-4 transition-opacity duration-300"
-        >
+        <div className="fixed inset-0 cls bg-black bg-opacity-50 flex items-center justify-center p-4 transition-opacity duration-300">
           <Card className="w-full max-w-sm mx-auto bg-white">
             <CardHeader className="text-center space-y-2">
-              <CardTitle className="text-xl font-semibold">Bill Payment Details</CardTitle>
+              <CardTitle className="text-xl font-semibold">
+                Bill Payment Details
+              </CardTitle>
               <p className="text-sm text-gray-600 text-left">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed gravida mi id purus
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                gravida mi id purus
               </p>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-black font-normal">Sender Name</span>
-                  <span className="text-black font-normal">{details.senderName}</span>
+                  <span className="text-black font-normal">
+                    {details.senderName}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-black font-normal">Receiver Name</span>
-                  <span className="text-black font-normal">{details.receiverName}</span>
+                  <span className="text-black font-normal">
+                    {details.receiverName}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-black font-normal">Receiver Account Type</span>
-                  <span className="text-black font-normal">{details.receiverAccountType}</span>
+                  <span className="text-black font-normal">
+                    Receiver Account Type
+                  </span>
+                  <span className="text-black font-normal">
+                    {details.receiverAccountType}
+                  </span>
                 </div>
                 <div>
                   <p className="line-color">
@@ -82,11 +91,15 @@ export default function Bilpayments({ details, isOpen, onClose, onPay }) {
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-black font-normal">Amount to send</span>
-                  <span className="text-black font-normal">${details.amountToSend}</span>
+                  <span className="text-black font-normal">
+                    ${details.amountToSend}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-black font-normal">Service Fee</span>
-                  <span className="text-black font-normal">${details.serviceFee}</span>
+                  <span className="text-black font-normal">
+                    ${details.serviceFee}
+                  </span>
                 </div>
               </div>
             </CardContent>

@@ -4,7 +4,7 @@ import Layoutsettings from "../../../../pop-ups/layout-settings";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
-import GlobalApi from "@/lib/GlobalApi";
+import GlobalApi from "../../../../lib/GlobalApi";
 import { toast } from "sonner";
 import Pin from "../../../../pop-ups/pin";
 import Cookies from "js-cookie";

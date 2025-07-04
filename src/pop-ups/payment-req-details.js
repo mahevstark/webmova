@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button";
 import Paymentsent from "../pop-ups/completed";
 import { useState } from "react";
 
@@ -16,7 +16,7 @@ const details = {
 export default function PaymentRequestPopup({
   isOpen,
   onClose,
-  
+
   onDecline,
   data = {
     senderName: "Miran Butt",

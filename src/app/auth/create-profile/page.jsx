@@ -3,9 +3,9 @@ import Image from "next/image";
 import { React, useState } from "react";
 import signinbg from "../../../assets/signin-bg.png";
 import Button from "../../../components/button/page";
-import GlobalApi from "@/lib/GlobalApi";
+import GlobalApi from "../../../lib/GlobalApi";
 import { toast } from "sonner";
-import { useUser } from "@/app/provider/UserProvider";
+import { useUser } from "../../provider/UserProvider";
 import { useRouter } from "next/navigation";
 
 export default function CreateProfile() {

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "../components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "../components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import paid from "../assets/paid/paid.png";
 import Image from "next/image";
