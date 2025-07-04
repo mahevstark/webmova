@@ -285,6 +285,13 @@
   "keep-title-clear-compelling": "Mantenga su título claro y convincente (menos de 10 palabras)",
   "focus-on-benefits-not-features": "Enfóquese en los beneficios, no solo en las características",
   "use-action-oriented-cta-text": "Use texto CTA orientado a la acción (ej: \"Comenzar Prueba Gratuita\")",
-  "test-different-versions-converts": "Pruebe diferentes versiones para ver qué convierte mejor"
+  "test-different-versions-converts": "Pruebe diferentes versiones para ver qué convierte mejor",
+  "sidebar-hero-section": "Sección Héroe",
+  "sidebar-faqs": "FAQs",
+  "sidebar-partners": "Socios",
+  "sidebar-testimonials": "Testimonios",
+  "sidebar-about": "Acerca de",
+  "sidebar-contact": "Contacto",
+  "sidebar-cta-section": "Sección CTA"
 }
 }

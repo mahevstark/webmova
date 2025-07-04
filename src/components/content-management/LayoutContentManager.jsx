@@ -2,50 +2,49 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from '../../lib/utils'
-
 import { ChevronRight, Handshake, HelpCircle, Info, LayoutGrid, MessageSquareText, Phone, Rocket } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function LayoutContentManager({ page }) {
     const pathname = usePathname();
+    const t = useTranslations("Content-management");
 
     const links = [
         {
             href: "/dashboard/hero-section",
             icon: LayoutGrid,
-            label: "Hero Section",
+            label: t("sidebar-hero-section"),
         },
-
         {
             href: "/dashboard/faqs",
             icon: HelpCircle,
-            label: "Faqs",
+            label: t("sidebar-faqs"),
         },
         {
             href: "/dashboard/partners",
             icon: Handshake,
-            label: "Partners",
+            label: t("sidebar-partners"),
         },
         {
             href: "/dashboard/testimonials",
             icon: MessageSquareText,
-            label: "Testimonials",
+            label: t("sidebar-testimonials"),
         },
         {
             href: "/dashboard/manage-about",
             icon: Info,
-            label: "About",
+            label: t("sidebar-about"),
         },
         {
             href: "/dashboard/manage-contact",
             icon: Phone,
-            label: "Contact",
+            label: t("sidebar-contact"),
         },
         {
             href: "/dashboard/cta-section",
             icon: Rocket,
-            label: "CTA Section",
+            label: t("sidebar-cta-section"),
         },
-
     ];
 
     return (
