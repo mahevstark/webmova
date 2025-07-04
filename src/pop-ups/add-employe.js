@@ -7,9 +7,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
 // import {
 //   Select,
 //   SelectContent,
@@ -25,8 +25,8 @@ import InfoModal from "./info";
 //   PopoverContent,
 //   PopoverTrigger,
 // } from "@/components/ui/popover";
-// import { cn } from "@/lib/utils";
-import GlobalApi from "@/lib/GlobalApi";
+// import { cn } from "../../lib/utils";
+import GlobalApi from "../lib/GlobalApi";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 

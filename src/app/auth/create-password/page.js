@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import signinbg from "../../../assets/signin-bg.png";
 import Keyicon from "../../../assets/key.svg";
-import GlobalApi from "@/lib/GlobalApi";
+import GlobalApi from "../../../lib/GlobalApi";
 import { toast } from "sonner";
 
 export default function createpassword() {

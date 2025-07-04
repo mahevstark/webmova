@@ -5,7 +5,7 @@ import Layoutsettings from "../../../../pop-ups/layout-settings";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "../../../../components/ui/spinner";
 export default function profile() {
   let userData = {};
 

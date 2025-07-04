@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import InfoLayout from "@/components/InfoLayout";
-import GlobalApi from "@/lib/GlobalApi";
+import InfoLayout from "../../../../components/InfoLayout";
+import GlobalApi from "../../../../lib/GlobalApi";
 
 export default function terms() {
   const [loading, setloading] = useState(false);

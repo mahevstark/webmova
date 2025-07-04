@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
-import { useUser } from "@/app/provider/UserProvider";
+import { useUser } from "../../app/provider/UserProvider";
 import { useSearchParams } from "next/navigation";
 
 export default function signin() {

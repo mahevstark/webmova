@@ -1,18 +1,18 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "../../../components/ui/button"
+import { Input } from "../../../components/ui/input"
+import { Textarea } from "../../../components/ui/textarea"
+import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card"
 import { Edit, Save, X, MapPin, Phone, Mail, Clock, Plus, Trash2, ArrowLeft, Globe } from "lucide-react"
 import Link from "next/link"
-import LayoutContentManager from "@/components/content-management/LayoutContentManager"
+import LayoutContentManager from "../../../components/content-management/LayoutContentManager"
 import Layout from "../../../components/layout/layout";
-import GlobalApi from "@/lib/GlobalApi"
+import GlobalApi from "../../../lib/GlobalApi"
 import { toast } from "sonner"
 import Cookies from "js-cookie"
-import { Spinner } from "@/components/ui/spinner"
+import { Spinner } from "../../../components/ui/spinner"
 
 export default function ContactPage() {
     const [isEditing, setIsEditing] = useState(false)

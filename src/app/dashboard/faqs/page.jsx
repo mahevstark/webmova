@@ -1,17 +1,17 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "../../../components/ui/button"
+import { Input } from "../../../components/ui/input"
+import { Textarea } from "../../../components/ui/textarea"
+import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card"
 import { Plus, Edit, Trash2, Save, X, ChevronDown, ChevronUp, ArrowLeft, Search, Eye } from "lucide-react"
-import LayoutContentManager from "@/components/content-management/LayoutContentManager"
+import LayoutContentManager from "../../../components/content-management/LayoutContentManager"
 import Layout from "../../../components/layout/layout";
-import GlobalApi from "@/lib/GlobalApi"
+import GlobalApi from "../../../lib/GlobalApi"
 import Cookies from "js-cookie"
 import { toast } from "sonner"
-import { Spinner } from "@/components/ui/spinner"
+import { Spinner } from "../../../components/ui/spinner"
 
 export default function FaqsPage() {
     const [faqs, setFaqs] = useState([])

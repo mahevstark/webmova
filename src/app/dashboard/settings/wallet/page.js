@@ -1,6 +1,6 @@
 import Layout from "../../../../components/layout/layout";
 import Layoutsettings from "../../../../pop-ups/layout-settings";
-import { Switch } from "@/components/ui/switch";
+import { Switch } from "../../../../components/ui/switch";
 import Image from "next/image";
 import pin from "../../../../assets/pin.png";
 import Notification from "../../../../assets/Notification.png";

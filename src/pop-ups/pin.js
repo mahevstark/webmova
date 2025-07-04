@@ -9,11 +9,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from "../components/ui/alert-dialog";
 import Paymentsent from "../pop-ups/completed";
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button";
 import { toast } from "sonner";
-import GlobalApi from "@/lib/GlobalApi";
+import GlobalApi from "../lib/GlobalApi";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 

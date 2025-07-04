@@ -7,9 +7,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "../components/ui/card";
 import InfoModal from "./info";
-import GlobalApi from "@/lib/GlobalApi";
+import GlobalApi from "../lib/GlobalApi";
 import Cookies from "js-cookie";
 import { useTranslations } from "next-intl";
 

@@ -1,13 +1,13 @@
 "use client";
 import Layout from "../../../components/layout/layout";
 import { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "../../../components/ui/input";
+import { Button } from "../../../components/ui/button";
 import Recieverdetail from "../../../components/receiver-details/page";
-import GlobalApi from "@/lib/GlobalApi";
+import GlobalApi from "../../../lib/GlobalApi";
 import Cookie from "js-cookie";
 import { toast } from "sonner";
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "../../../components/ui/spinner";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 

@@ -2,9 +2,9 @@
 
 import Layout from "../../../components/layout/layout";
 import { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "../../../components/ui/card";
+import { Input } from "../../../components/ui/input";
+import { Button } from "../../../components/ui/button";
 import {
   Table,
   TableBody,
@@ -12,19 +12,19 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "../../../components/ui/table";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "../../../components/ui/select";
 import { Search } from "lucide-react";
 import PaymentRequestPopup from "../../../pop-ups/payment-req-details"; // Adjust the path as necessary
-import GlobalApi from "@/lib/GlobalApi";
+import GlobalApi from "../../../lib/GlobalApi";
 import Cookies from "js-cookie";
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "../../../components/ui/spinner";
 
 const employees = [
   {

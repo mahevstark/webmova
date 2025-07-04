@@ -1,6 +1,6 @@
 import { Nunito } from "next/font/google"; // Import Nunito from Google Fonts
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "sonner";
 import { UserProvider } from "./provider/UserProvider";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";

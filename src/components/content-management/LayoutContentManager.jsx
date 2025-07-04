@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { cn } from '../../lib/utils'
 
 import { ChevronRight, Handshake, HelpCircle, Info, LayoutGrid, MessageSquareText, Phone, Rocket } from "lucide-react";
 

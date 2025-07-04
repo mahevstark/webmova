@@ -5,10 +5,10 @@ import Keyicon from "../../../../assets/key.svg";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import InfoModal from "../../../../pop-ups/info";
-import GlobalApi from "@/lib/GlobalApi";
+import GlobalApi from "../../../../lib/GlobalApi";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
-import { useUser } from "@/app/provider/UserProvider";
+import { useUser } from "../../../provider/UserProvider";
 
 export default function ChangePassword() {
   const [showPassword, setShowPassword] = useState(false);

@@ -1,8 +1,8 @@
 "use client";
 import Layout from "../../../components/layout/layout";
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "../../../components/ui/input";
+import { Button } from "../../../components/ui/button";
 import BillPaymentPopup from "../../../pop-ups/bill-payment-details";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";

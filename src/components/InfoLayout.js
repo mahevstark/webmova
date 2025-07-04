@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 import Cookies from "js-cookie";
 import { Button } from "./ui/button";
 import { Pencil, Save, X } from "lucide-react";
-import GlobalApi from "@/lib/GlobalApi";
+import GlobalApi from "../lib/GlobalApi";
 import { toast } from "sonner";
 
 export default function InfoLayout({ heading, content, loading }) {

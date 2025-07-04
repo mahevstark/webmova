@@ -7,8 +7,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+} from "../components/ui/card";
+import { Button } from "../components/ui/button";
 import Paid from "../assets/paid/paid.png";
 import Image from "next/image";
 

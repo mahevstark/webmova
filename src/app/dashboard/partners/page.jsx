@@ -1,18 +1,18 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "../../../components/ui/button"
+import { Input } from "../../../components/ui/input"
+import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card"
 import { Plus, Edit, Trash2, Save, X, Upload, Search } from "lucide-react"
-import LayoutContentManager from "@/components/content-management/LayoutContentManager"
+import LayoutContentManager from "../../../components/content-management/LayoutContentManager"
 import Layout from "../../../components/layout/layout";
-import GlobalApi from "@/lib/GlobalApi"
+import GlobalApi from "../../../lib/GlobalApi"
 import Cookies from "js-cookie"
-import ImageUpload from "@/components/ImageUpload"
+import ImageUpload from "../../../components/ImageUpload"
 import { toast } from "sonner"
 import Image from "next/image"
-import { Spinner } from "@/components/ui/spinner"
+import { Spinner } from "../../../components/ui/spinner"
 
 export default function PartnersPage() {
     const [partners, setPartners] = useState([

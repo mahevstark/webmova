@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useState } from "react";
 import signinbg from "../../../assets/signin-bg.png";
 import Callicon from "../../../assets/call-icon.svg";
-import GlobalApi from "@/lib/GlobalApi";
+import GlobalApi from "../../../lib/GlobalApi";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 export default function forgotpassword() {

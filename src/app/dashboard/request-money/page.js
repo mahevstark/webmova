@@ -1,10 +1,10 @@
 "use client";
 import Layout from "../../../components/layout/layout";
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "../../../components/ui/input";
+import { Button } from "../../../components/ui/button";
 import Pin from "../../../pop-ups/pin";
-import GlobalApi from "@/lib/GlobalApi";
+import GlobalApi from "../../../lib/GlobalApi";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 import Paymentsent from "../../../pop-ups/completed";

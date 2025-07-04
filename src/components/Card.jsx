@@ -1,4 +1,4 @@
-import GlobalApi from "@/lib/GlobalApi";
+import GlobalApi from "../lib/GlobalApi";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
