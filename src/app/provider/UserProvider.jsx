@@ -13,12 +13,13 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         try {
             const storedUser = localStorage.getItem('userData');
+            const parsedUser = JSON.parse(storedUser);
             const storedToken = Cookies.get('token');
             const role = Cookies.get('role')
 
 
             if (storedUser) {
-                setUser(JSON.parse(storedUser));
+                setUser(parsedUser);
                 setRole(role)
             }
 

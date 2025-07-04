@@ -12,6 +12,7 @@ import GlobalApi from "../../../lib/GlobalApi"
 import Cookies from "js-cookie"
 import { toast } from "sonner"
 import { Spinner } from "../../../components/ui/spinner"
+import { useTranslations } from "next-intl"
 
 export default function FaqsPage() {
     const [faqs, setFaqs] = useState([])
@@ -23,6 +24,7 @@ export default function FaqsPage() {
     const [formData, setFormData] = useState({ question: "", answer: "" })
     const [loading, setloading] = useState(false)
     const [createLoading, setcreateLoading] = useState(false)
+    const t = useTranslations("Content-management")
 
     const filteredFaqs = faqs?.filter((faq) => {
         const matchesSearch =
@@ -55,12 +57,12 @@ export default function FaqsPage() {
 
             if (response?.success === false) {
                 setcreateLoading(false)
-                toast("Error while editing faq")
+                toast(t("error-editing-faq"))
                 setShowAddForm(false)
                 setFormData({ question: "", answer: "" })
             } else {
                 setcreateLoading(false)
-                toast("FAQ edited successfully")
+                toast(t("faq-edited-successfully"))
 
                 // Update the FAQ in the state
                 setFaqs(faqs.map((f) => (f.id === editingId ? { ...formData, id: editingId } : f)))
@@ -73,7 +75,7 @@ export default function FaqsPage() {
         } catch (error) {
             setcreateLoading(false)
             console.log('error while editing faq', error)
-            toast("Network error")
+            toast(t("network-error"))
             setFormData({ question: "", answer: "" })
             setShowAddForm(false)
 
@@ -98,16 +100,16 @@ export default function FaqsPage() {
 
             if (response?.success === false) {
                 setloading(false)
-                toast("Error deleting faq")
+                toast(t("error-deleting-faq"))
             } else {
                 setFaqs(faqs.filter((f) => f.id !== id))
                 setloading(false)
-                toast("FAQ deleted successfully")
+                toast(t("faq-deleted-successfully"))
             }
         } catch (error) {
             console.log('error while deleting faq', error)
             setloading(false)
-            toast("Networking error")
+            toast(t("network-error"))
         }
     }
 
@@ -154,20 +156,20 @@ export default function FaqsPage() {
                 setcreateLoading(false)
                 setEditingId(null)
                 setFormData({ question: "", answer: "" })
-                toast("Error creating faq")
+                toast(t("error-creating-faq"))
             } else {
                 setcreateLoading(false)
                 setFaqs([...faqs, { ...formData, id: Date.now() }])
                 setShowAddForm(false)
                 setFormData({ question: "", answer: "" })
-                toast("FAQ created successfully")
+                toast(t("faq-created-successfully"))
             }
         } catch (error) {
             setcreateLoading(false)
             console.log('error while creating faq', error)
             setEditingId(null)
             setFormData({ question: "", answer: "" })
-            toast("Networking error")
+            toast(t("network-error"))
         }
     }
 
@@ -180,13 +182,13 @@ export default function FaqsPage() {
                     <div className="flex justify-between md:items-left md:gap-4 max-sm:flex-col max-sm:gap-4 
                     2xl:flex-row xl:flex-row lg:flex-col md:flex-col ">
                         <div>
-                            <h1 className="2xl:text-3xl xl:text-3xl lg:text-xl max-sm:text-lg font-bold text-gray-900">FAQs Management</h1>
-                            <p className="text-gray-600 mt-2">Manage frequently asked questions and help content</p>
+                            <h1 className="2xl:text-3xl xl:text-3xl lg:text-xl max-sm:text-lg font-bold text-gray-900">{t("faqs-management")}</h1>
+                            <p className="text-gray-600 mt-2">{t("faqs-management-description")}</p>
                         </div>
                         <div className="flex gap-3">
                             <Button onClick={() => setShowAddForm(true)} className="bg-[#6c5dd3] hover:bg-[#6c5dd3]">
                                 <Plus className="w-4 h-4 mr-2" />
-                                Add FAQ
+                                {t("add-faq")}
                             </Button>
                         </div>
                     </div>
@@ -197,19 +199,19 @@ export default function FaqsPage() {
                             <Card>
                                 <CardContent className="p-4 text-center">
                                     <p className="text-2xl font-bold text-[#6c5dd3]">{faqs?.length}</p>
-                                    <p className="text-sm text-gray-600">Total FAQs</p>
+                                    <p className="text-sm text-gray-600">{t("total-faqs")}</p>
                                 </CardContent>
                             </Card>
                             <Card>
                                 <CardContent className="p-4 text-center">
                                     <p className="text-2xl font-bold text-green-600">{faqs?.length}</p>
-                                    <p className="text-sm text-gray-600">Published</p>
+                                    <p className="text-sm text-gray-600">{t("published")}</p>
                                 </CardContent>
                             </Card>
                             <Card>
                                 <CardContent className="p-4 text-center">
                                     <p className="text-2xl font-bold text-yellow-600">0</p>
-                                    <p className="text-sm text-gray-600">Draft</p>
+                                    <p className="text-sm text-gray-600">{t("draft")}</p>
                                 </CardContent>
                             </Card>
                         </div>)
@@ -222,7 +224,7 @@ export default function FaqsPage() {
                                 <div className="relative flex-1">
                                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                                     <Input
-                                        placeholder="Search FAQs..."
+                                        placeholder={t("search-faqs")}
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                         className="pl-10"
@@ -236,24 +238,24 @@ export default function FaqsPage() {
                     {showAddForm && (
                         <Card>
                             <CardHeader>
-                                <CardTitle>Add New FAQ</CardTitle>
+                                <CardTitle>{t("add-new-faq")}</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Question *</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">{t("question")} *</label>
                                     <Input
                                         value={formData.question}
                                         onChange={(e) => setFormData({ ...formData, question: e.target.value })}
-                                        placeholder="Enter the question"
+                                        placeholder={t("enter-question")}
                                         required
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Answer *</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">{t("answer")} *</label>
                                     <Textarea
                                         value={formData.answer}
                                         onChange={(e) => setFormData({ ...formData, answer: e.target.value })}
-                                        placeholder="Enter the answer"
+                                        placeholder={t("enter-answer")}
                                         className='resize-none'
                                         rows={4}
                                         required
@@ -263,10 +265,10 @@ export default function FaqsPage() {
                                 <div className="flex gap-4 pt-4 border-t">
                                     <Button onClick={handleSave} className="bg-[#6c5dd3] hover:bg-[#6c5dd3]" disabled={createLoading}>
                                         <Save className="w-4 h-4 mr-2" />
-                                        {createLoading ? "Almost there" : "Add FAQ"}
+                                        {createLoading ? t("almost-there") : t("add-faq")}
                                     </Button>
                                     <Button variant="outline" onClick={handleCancel}>
-                                        Cancel
+                                        {t("cancel")}
                                     </Button>
                                 </div>
                             </CardContent>
@@ -288,19 +290,19 @@ export default function FaqsPage() {
                                             editingId === faq.id ? (
                                                 <div className="space-y-4">
                                                     <div>
-                                                        <label className="block text-sm font-medium text-gray-700 mb-2">Question</label>
+                                                        <label className="block text-sm font-medium text-gray-700 mb-2">{t("question")}</label>
                                                         <Input
                                                             value={formData.question}
                                                             onChange={(e) => setFormData({ ...formData, question: e.target.value })}
-                                                            placeholder="Question"
+                                                            placeholder={t("question")}
                                                         />
                                                     </div>
                                                     <div>
-                                                        <label className="block text-sm font-medium text-gray-700 mb-2">Answer</label>
+                                                        <label className="block text-sm font-medium text-gray-700 mb-2">{t("answer")}</label>
                                                         <Textarea
                                                             value={formData.answer}
                                                             onChange={(e) => setFormData({ ...formData, answer: e.target.value })}
-                                                            placeholder="Answer"
+                                                            placeholder={t("answer")}
                                                             className='resize-none'
                                                             rows={4}
                                                         />
@@ -314,11 +316,11 @@ export default function FaqsPage() {
                                                             disabled={createLoading}
                                                         >
                                                             <Save className="w-3 h-3 mr-1" />
-                                                            {createLoading ? "Saving..." : "Save"}
+                                                            {createLoading ? t("saving") : t("save")}
                                                         </Button>
                                                         <Button size="sm" variant="outline" onClick={handleCancel}>
                                                             <X className="w-3 h-3 mr-1" />
-                                                            Cancel
+                                                            {t("cancel")}
                                                         </Button>
                                                     </div>
                                                 </div>
@@ -377,7 +379,7 @@ export default function FaqsPage() {
                     {filteredFaqs.length === 0 && !loading && (
                         <Card>
                             <CardContent className="p-8 text-center">
-                                <p className="text-gray-500">No FAQs found matching your criteria.</p>
+                                <p className="text-gray-500">{t("no-faqs-found")}</p>
                             </CardContent>
                         </Card>
                     )}
@@ -385,15 +387,15 @@ export default function FaqsPage() {
                     {/* Tips */}
                     <Card className="bg-blue-50 border-[#6c5dd3]">
                         <CardHeader>
-                            <CardTitle className="text-[#6c5dd3]">💡 FAQ Best Practices</CardTitle>
+                            <CardTitle className="text-[#6c5dd3]">{t("faq-best-practices")}</CardTitle>
                         </CardHeader>
                         <CardContent className="text-[#6c5dd3]">
                             <ul className="space-y-2 text-sm">
-                                <li>• Keep questions clear and specific</li>
-                                <li>• Provide comprehensive but concise answers</li>
-                                <li>• Organize FAQs by categories for easy navigation</li>
-                                <li>• Update regularly based on customer feedback</li>
-                                <li>• Use simple language that your audience understands</li>
+                                <li>• {t("keep-questions-clear")}</li>
+                                <li>• {t("provide-comprehensive-answers")}</li>
+                                <li>• {t("organize-by-categories")}</li>
+                                <li>• {t("update-regularly")}</li>
+                                <li>• {t("use-simple-language")}</li>
                             </ul>
                         </CardContent>
                     </Card>
