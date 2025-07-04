@@ -21,7 +21,6 @@ export default async function RootLayout({ children }) {
   const cookieStore = await cookies();
   const locale = cookieStore.get("MYNEXTAPP_LOCALE")?.value;
   const messages = await getMessages(locale);
-  console.log("messages", messages);
 
   return (
     <html lang={locale}>

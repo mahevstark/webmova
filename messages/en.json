@@ -1,7 +1,7 @@
 {
     "Dashboard": {
   "Hey": "Hi",
-  "Check":"Let’s check your Dashboard today",
+  "Check":"Let's check your Dashboard today",
   "Insights":"Users Insights",
   "Transactions":"Transaction Insights",
   "active":"Active Users",
@@ -271,7 +271,14 @@
   "keep-title-clear-compelling": "Keep your title clear and compelling (under 10 words)",
   "focus-on-benefits-not-features": "Focus on benefits, not just features",
   "use-action-oriented-cta-text": "Use action-oriented CTA text (e.g., \"Start Free Trial\")",
-  "test-different-versions-converts": "Test different versions to see what converts better"
+  "test-different-versions-converts": "Test different versions to see what converts better",
+  "sidebar-hero-section": "Hero Section",
+  "sidebar-faqs": "FAQs",
+  "sidebar-partners": "Partners",
+  "sidebar-testimonials": "Testimonials",
+  "sidebar-about": "About",
+  "sidebar-contact": "Contact",
+  "sidebar-cta-section": "CTA Section"
 }
 
 
