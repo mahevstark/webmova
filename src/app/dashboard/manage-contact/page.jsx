@@ -13,8 +13,11 @@ import GlobalApi from "../../../lib/GlobalApi"
 import { toast } from "sonner"
 import Cookies from "js-cookie"
 import { Spinner } from "../../../components/ui/spinner"
+import { useTranslations } from "next-intl"
 
 export default function ContactPage() {
+    const t = useTranslations("Content-management")
+    
     const [isEditing, setIsEditing] = useState(false)
     const [contactInfo, setContactInfo] = useState({
         address: "",
@@ -43,7 +46,7 @@ export default function ContactPage() {
         try {
             const isValid = validateAllFields()
             if (!isValid) {
-                alert('Please fix all validation errors before saving.')
+                alert(t('fix-validation-errors'))
                 return
             }
 
@@ -65,7 +68,7 @@ export default function ContactPage() {
                 setIsEditing(false)
                 setNewPhone("")
                 setNewEmail("")
-                toast("Error while updating Contact")
+                toast(t("error-updating-contact"))
                 setsaveloading(false);
 
 
@@ -74,7 +77,7 @@ export default function ContactPage() {
                 setIsEditing(false)
                 setNewPhone("")
                 setNewEmail("")
-                toast("Contact Updated successfully")
+                toast(t("contact-updated-successfully"))
                 setsaveloading(false);
 
 
@@ -83,7 +86,7 @@ export default function ContactPage() {
 
         } catch (error) {
             console.error('Error saving contact info:', error)
-            toast("Network Error")
+            toast(t("network-error"))
             setsaveloading(false);
 
 
@@ -263,13 +266,13 @@ export default function ContactPage() {
                 <div className="space-y-8 2xl:w-full xl:w-[50vw] mb-12 max-sm:mx-6 2xl:mr-8 lg:w-auto max-sm:w-[93vw] md:mr-8 max-sm:pr-6">
                     <div className="flex flex-col sm:flex-row justify-between items-center sm:items-center gap-4">
                         <div>
-                            <h1 className="2xl:text-3xl xl:text-3xl lg:text-lg max-sm:text-lg font-bold text-gray-900">Contact Information</h1>
-                            <p className="text-gray-600 mt-2">Manage your business contact details and information</p>
+                            <h1 className="2xl:text-3xl xl:text-3xl lg:text-lg max-sm:text-lg font-bold text-gray-900">{t("contact-information")}</h1>
+                            <p className="text-gray-600 mt-2">{t("contact-information-description")}</p>
                         </div>
                         <div className="flex gap-3">
                             <Button onClick={() => setIsEditing(!isEditing)} className="bg-[#6c5dd3] hover:bg-[#6c5dd3]">
                                 {isEditing ? <X className="w-4 h-4 mr-2" /> : <Edit className="w-4 h-4 mr-2" />}
-                                {isEditing ? "Cancel" : "Edit Contact Info"}
+                                {isEditing ? t("cancel") : t("edit-contact-info")}
                             </Button>
                         </div>
                     </div>
@@ -288,7 +291,7 @@ export default function ContactPage() {
                                         <CardHeader>
                                             <CardTitle className="flex items-center gap-2">
                                                 <MapPin className="w-5 h-5 text-[#6c5dd3]" />
-                                                Address
+                                                {t("address")}
                                             </CardTitle>
                                         </CardHeader>
                                         <CardContent>
@@ -296,7 +299,7 @@ export default function ContactPage() {
                                                 <Textarea
                                                     value={editData.address}
                                                     onChange={(e) => setEditData({ ...editData, address: e.target.value })}
-                                                    placeholder="Enter business address"
+                                                    placeholder={t("enter-business-address")}
                                                     className="resize-none"
                                                     rows={3}
                                                 />
@@ -312,7 +315,7 @@ export default function ContactPage() {
                                         <CardHeader>
                                             <CardTitle className="flex items-center gap-2">
                                                 <Phone className="w-5 h-5 text-[#6c5dd3]" />
-                                                Phone Numbers
+                                                {t("phone-numbers")}
                                             </CardTitle>
                                         </CardHeader>
                                         <CardContent className="space-y-4">
@@ -330,7 +333,7 @@ export default function ContactPage() {
                                                         <Input
                                                             value={newPhone}
                                                             onChange={(e) => setNewPhone(e.target.value)}
-                                                            placeholder="Add new phone number"
+                                                            placeholder={t("add-new-phone-number")}
                                                             className="flex-1"
                                                             onKeyPress={(e) => {
                                                                 if (e.key === 'Enter') {
@@ -347,7 +350,7 @@ export default function ContactPage() {
                                                         </Button>
                                                     </div>
                                                     {newPhone.trim() && !isValidPhone(newPhone.trim()) && (
-                                                        <p className="text-red-500 text-sm">Please enter a valid phone number</p>
+                                                        <p className="text-red-500 text-sm">{t("enter-valid-phone-number")}</p>
                                                     )}
                                                 </div>
                                             ) : (
@@ -371,7 +374,7 @@ export default function ContactPage() {
                                         <CardHeader>
                                             <CardTitle className="flex items-center gap-2">
                                                 <Mail className="w-5 h-5 text-[#6c5dd3]" />
-                                                Email Addresses
+                                                {t("email-addresses")}
                                             </CardTitle>
                                         </CardHeader>
                                         <CardContent className="space-y-4">
@@ -389,7 +392,7 @@ export default function ContactPage() {
                                                         <Input
                                                             value={newEmail}
                                                             onChange={(e) => setNewEmail(e.target.value)}
-                                                            placeholder="Add new email address"
+                                                            placeholder={t("add-new-email-address")}
                                                             className="flex-1"
                                                             type="email"
                                                             onKeyPress={(e) => {
@@ -407,7 +410,7 @@ export default function ContactPage() {
                                                         </Button>
                                                     </div>
                                                     {newEmail.trim() && !isValidEmail(newEmail.trim()) && (
-                                                        <p className="text-red-500 text-sm">Please enter a valid email address</p>
+                                                        <p className="text-red-500 text-sm">{t("enter-valid-email-address")}</p>
                                                     )}
                                                 </div>
                                             ) : (
@@ -429,13 +432,13 @@ export default function ContactPage() {
                                 {shouldShowSection(contactInfo.socialMedia) && (
                                     <Card>
                                         <CardHeader>
-                                            <CardTitle>Social Media</CardTitle>
+                                            <CardTitle>{t("social-media")}</CardTitle>
                                         </CardHeader>
                                         <CardContent className="space-y-3">
                                             {isEditing ? (
                                                 <div className="space-y-3">
                                                     <div>
-                                                        <label className="text-sm text-gray-600">Twitter</label>
+                                                        <label className="text-sm text-gray-600">{t("twitter")}</label>
                                                         <Input
                                                             value={editData.socialMedia.twitter}
                                                             onChange={(e) =>
@@ -444,15 +447,15 @@ export default function ContactPage() {
                                                                     socialMedia: { ...editData.socialMedia, twitter: e.target.value },
                                                                 })
                                                             }
-                                                            placeholder="@username or username"
+                                                            placeholder={t("twitter-placeholder")}
                                                             className={!isValidTwitter(editData.socialMedia.twitter) ? "border-red-500" : ""}
                                                         />
                                                         {editData.socialMedia.twitter && !isValidTwitter(editData.socialMedia.twitter) && (
-                                                            <p className="text-red-500 text-sm mt-1">Please enter a valid Twitter username (1-15 characters, letters, numbers, underscore only)</p>
+                                                            <p className="text-red-500 text-sm mt-1">{t("twitter-validation-error")}</p>
                                                         )}
                                                     </div>
                                                     <div>
-                                                        <label className="text-sm text-gray-600">LinkedIn</label>
+                                                        <label className="text-sm text-gray-600">{t("linkedin")}</label>
                                                         <Input
                                                             value={editData.socialMedia.linkedin}
                                                             onChange={(e) =>
@@ -461,15 +464,15 @@ export default function ContactPage() {
                                                                     socialMedia: { ...editData.socialMedia, linkedin: e.target.value },
                                                                 })
                                                             }
-                                                            placeholder="company-name or full LinkedIn URL"
+                                                            placeholder={t("linkedin-placeholder")}
                                                             className={!isValidLinkedIn(editData.socialMedia.linkedin) ? "border-red-500" : ""}
                                                         />
                                                         {editData.socialMedia.linkedin && !isValidLinkedIn(editData.socialMedia.linkedin) && (
-                                                            <p className="text-red-500 text-sm mt-1">Please enter a valid LinkedIn profile (company name or full LinkedIn URL)</p>
+                                                            <p className="text-red-500 text-sm mt-1">{t("linkedin-validation-error")}</p>
                                                         )}
                                                     </div>
                                                     <div>
-                                                        <label className="text-sm text-gray-600">Facebook</label>
+                                                        <label className="text-sm text-gray-600">{t("facebook")}</label>
                                                         <Input
                                                             value={editData.socialMedia.facebook}
                                                             onChange={(e) =>
@@ -478,11 +481,11 @@ export default function ContactPage() {
                                                                     socialMedia: { ...editData.socialMedia, facebook: e.target.value },
                                                                 })
                                                             }
-                                                            placeholder="page-name or full Facebook URL"
+                                                            placeholder={t("facebook-placeholder")}
                                                             className={!isValidFacebook(editData.socialMedia.facebook) ? "border-red-500" : ""}
                                                         />
                                                         {editData.socialMedia.facebook && !isValidFacebook(editData.socialMedia.facebook) && (
-                                                            <p className="text-red-500 text-sm mt-1">Please enter a valid Facebook page (page name or full Facebook URL)</p>
+                                                            <p className="text-red-500 text-sm mt-1">{t("facebook-validation-error")}</p>
                                                         )}
                                                     </div>
                                                 </div>
@@ -490,7 +493,7 @@ export default function ContactPage() {
                                                 <div className="space-y-2">
                                                     {contactInfo.socialMedia.twitter && (
                                                         <p className="text-gray-700 flex items-center gap-2">
-                                                            <strong>Twitter:</strong>
+                                                            <strong>{t("twitter")}:</strong>
                                                             <a
                                                                 href={`https://twitter.com/${contactInfo.socialMedia.twitter.replace('@', '')}`}
                                                                 target="_blank"
@@ -503,7 +506,7 @@ export default function ContactPage() {
                                                     )}
                                                     {contactInfo.socialMedia.linkedin && (
                                                         <p className="text-gray-700 flex items-center gap-2">
-                                                            <strong>LinkedIn:</strong>
+                                                            <strong>{t("linkedin")}:</strong>
                                                             <a
                                                                 href={contactInfo.socialMedia.linkedin.includes('linkedin.com')
                                                                     ? contactInfo.socialMedia.linkedin
@@ -518,7 +521,7 @@ export default function ContactPage() {
                                                     )}
                                                     {contactInfo.socialMedia.facebook && (
                                                         <p className="text-gray-700 flex items-center gap-2">
-                                                            <strong>Facebook:</strong>
+                                                            <strong>{t("facebook")}:</strong>
                                                             <a
                                                                 href={contactInfo.socialMedia.facebook.includes('facebook.com')
                                                                     ? contactInfo.socialMedia.facebook
@@ -549,10 +552,10 @@ export default function ContactPage() {
                                 disabled={!validateAllFields()}
                             >
                                 <Save className="w-4 h-4 mr-2" />
-                                {saveloading ? 'Almost there...' : '  Save Changes'}
+                                {saveloading ? t('almost-there') : t('save-changes')}
                             </Button>
                             <Button variant="outline" onClick={handleCancel}>
-                                Cancel
+                                {t("cancel")}
                             </Button>
                         </div>
                     )}

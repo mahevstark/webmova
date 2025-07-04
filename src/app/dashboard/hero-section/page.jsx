@@ -13,6 +13,8 @@ import { toast } from "sonner"
 import Cookies from "js-cookie"
 import { Spinner } from "../../../components/ui/spinner"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
+
 export default function HeroSection() {
     const [isEditing, setIsEditing] = useState(false)
     const [heroData, setHeroData] = useState({
@@ -25,7 +27,7 @@ export default function HeroSection() {
 
     const [editData, setEditData] = useState(heroData)
     const [loading, setloading] = useState(false);
-
+    const t = useTranslations("Content-management");
 
     const isValidLink = (ctaLink) => {
 
@@ -149,68 +151,68 @@ export default function HeroSection() {
                     2xl:flex-row xl:flex-row lg:flex-col md:flex-col 
                     ">
                         <div>
-                            <h1 className="2xl:text-3xl xl:text-3xl lg:text-lg max-sm:text-lg font-bold text-gray-900 md:text-2xl">Hero Section Management</h1>
-                            <p className="text-gray-600 mt-2">Manage your homepage hero content and call-to-action</p>
+                            <h1 className="2xl:text-3xl xl:text-3xl lg:text-lg max-sm:text-lg font-bold text-gray-900 md:text-2xl">{t("hero-section")}</h1>
+                            <p className="text-gray-600 mt-2">{t("hero-section-description")}</p>
                         </div>
                         <div className="flex gap-3">
 
                             <Button onClick={() => setIsEditing(!isEditing)} className="bg-[#6c5dd3] hover:bg-[#6c5dd3]">
                                 {isEditing ? <X className="w-4 h-4 mr-2" /> : <Edit className="w-4 h-4 mr-2" />}
-                                {isEditing ? "Cancel" : "Edit Hero"}
+                                {isEditing ? t("cancel") : t("edit-hero")}
                             </Button>
                         </div>
                     </div>
                     {isEditing && (
                         <Card>
                             <CardHeader>
-                                <CardTitle>Edit Hero Section</CardTitle>
+                                <CardTitle>{t("edit-hero-section")}</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-6">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Hero Title *</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">{t("hero-section-title")} *</label>
                                     <Input
                                         value={editData.title}
                                         onChange={(e) => setEditData({ ...editData, title: e.target.value })}
-                                        placeholder="Enter hero title"
+                                        placeholder={t("hero-section-title-placeholder")}
                                         className="text-lg"
                                         required
                                     />
-                                    <p className="text-xs text-gray-500 mt-1">This will be the main headline on your homepage</p>
+                                    <p className="text-xs text-gray-500 mt-1">{t("hero-section-title-description")}</p>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Hero Content *</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">{t("hero-section-content")} *</label>
                                     <Textarea
                                         value={editData.content}
                                         onChange={(e) => setEditData({ ...editData, content: e.target.value })}
-                                        placeholder="Enter hero content"
+                                        placeholder={t("hero-section-content-placeholder")}
                                         rows={4}
                                         className="resize-none"
                                         required
                                     />
-                                    <p className="text-xs text-gray-500 mt-1">Describe your main value proposition</p>
+                                    <p className="text-xs text-gray-500 mt-1">{t("hero-section-content-description")}</p>
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">CTA Button Text *</label>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">{t("hero-section-cta-text")} *</label>
                                         <Input
                                             value={editData.ctaText}
                                             onChange={(e) => setEditData({ ...editData, ctaText: e.target.value })}
-                                            placeholder="Enter CTA text"
+                                            placeholder={t("hero-section-cta-text-placeholder")}
                                             required
                                         />
-                                        <p className="text-xs text-gray-500 mt-1">Text for the call-to-action button</p>
+                                        <p className="text-xs text-gray-500 mt-1">{t("hero-section-cta-text-description")}</p>
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">CTA Link *</label>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">{t("hero-section-cta-link")} *</label>
                                         <Input
                                             value={editData.ctaLink}
                                             onChange={(e) => setEditData({ ...editData, ctaLink: e.target.value })}
-                                            placeholder="Enter CTA link (e.g., /signup)"
+                                            placeholder={t("hero-section-cta-link-placeholder")}
                                             required
                                         />
-                                        <p className="text-xs text-gray-500 mt-1">Where the button should redirect</p>
+                                        <p className="text-xs text-gray-500 mt-1">{t("hero-section-cta-link-description")}</p>
                                     </div>
                                 </div>
 
@@ -220,11 +222,11 @@ export default function HeroSection() {
 
 
                                         {
-                                            loading ? "Almost there..." : "  Save Changes"
+                                            loading ? t("almost-there") : t("save-changes")
                                         }
                                     </Button>
                                     <Button variant="outline" onClick={handleCancel}>
-                                        Cancel
+                                        {t("cancel")}
                                     </Button>
                                 </div>
                             </CardContent>
@@ -238,7 +240,7 @@ export default function HeroSection() {
                                 <CardHeader>
                                     <CardTitle className="flex items-center gap-2">
                                         <Eye className="w-5 h-5" />
-                                        Live Preview
+                                        {t("live-preview")}
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="space-y-6">
@@ -266,14 +268,14 @@ export default function HeroSection() {
 
                     <Card className="bg-blue-50 border-[#6c5dd3]">
                         <CardHeader>
-                            <CardTitle className="text-[#6c5dd3]">💡 Tips for Effective Hero Sections</CardTitle>
+                            <CardTitle className="text-[#6c5dd3]">{t("tips-for-effective-hero-sections")}</CardTitle>
                         </CardHeader>
                         <CardContent className="text-[#6c5dd3]">
                             <ul className="space-y-2 text-sm">
-                                <li>• Keep your title clear and compelling (under 10 words)</li>
-                                <li>• Focus on benefits, not just features</li>
-                                <li>• Use action-oriented CTA text (e.g., "Start Free Trial")</li>
-                                <li>• Test different versions to see what converts better</li>
+                                <li>• {t("keep-your-title-clear-and-compelling")}</li>
+                                <li>• {t("focus-on-benefits-not-just-features")}</li>
+                                <li>• {t("use-action-oriented-cta-text")}</li>
+                                <li>• {t("test-different-versions-to-see-what-converts-better")}</li>
                             </ul>
                         </CardContent>
                     </Card>

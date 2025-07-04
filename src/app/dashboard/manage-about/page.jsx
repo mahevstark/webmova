@@ -10,8 +10,11 @@ import GlobalApi from "../../../lib/GlobalApi";
 import { Spinner } from "../../../components/ui/spinner";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export default function AboutPage() {
+    const t = useTranslations("Content-management")
+    
     const [aboutSections, setAboutSections] = useState({
         mainContent: "",
         mission: "",
@@ -51,7 +54,7 @@ export default function AboutPage() {
                 setIsEditing(false)
                 setFormData(formData)
                 setLoading(false);
-                toast("Error while saving about")
+                toast(t("error-saving-about"))
 
 
             } else {
@@ -61,7 +64,7 @@ export default function AboutPage() {
                 setIsEditing(false)
                 setFormData(formData)
                 setLoading(false);
-                toast("About saved successfully")
+                toast(t("about-saved-successfully"))
 
             }
 
@@ -71,7 +74,7 @@ export default function AboutPage() {
             console.log('Error saving about data:', error)
             setIsEditing(false)
             setLoading(false);
-            toast("Error while updating about")
+            toast(t("error-updating-about"))
 
 
 
@@ -154,10 +157,10 @@ export default function AboutPage() {
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div>
                             <h1 className="2xl:text-3xl xl:text-3xl lg:text-lg max-sm:text-lg font-bold text-gray-900 md:text-2xl">
-                                About Us Management
+                                {t("about-us-management")}
                             </h1>
                             <p className="text-gray-600 mt-2">
-                                Manage your company information, mission, vision, and policies
+                                {t("about-us-management-description")}
                             </p>
                         </div>
                     </div>
@@ -170,39 +173,39 @@ export default function AboutPage() {
                                     <div className="space-y-6">
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                                Main Content
+                                                {t("main-content")}
                                             </label>
                                             <Textarea
                                                 value={formData.mainContent}
                                                 onChange={(e) => setFormData({ ...formData, mainContent: e.target.value })}
                                                 className="resize-none"
                                                 rows={4}
-                                                placeholder="Enter main content about your company..."
+                                                placeholder={t("enter-main-content")}
                                             />
                                         </div>
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             <div>
                                                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                                                    Mission
+                                                    {t("mission")}
                                                 </label>
                                                 <Textarea
                                                     value={formData.mission}
                                                     onChange={(e) => setFormData({ ...formData, mission: e.target.value })}
                                                     rows={3}
-                                                    placeholder="Enter your company mission..."
+                                                    placeholder={t("enter-company-mission")}
                                                     className="resize-none"
                                                 />
                                             </div>
                                             <div>
                                                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                                                    Vision
+                                                    {t("vision")}
                                                 </label>
                                                 <Textarea
                                                     value={formData.vision}
                                                     onChange={(e) => setFormData({ ...formData, vision: e.target.value })}
                                                     rows={3}
-                                                    placeholder="Enter your company vision..."
+                                                    placeholder={t("enter-company-vision")}
                                                     className="resize-none"
                                                 />
                                             </div>
@@ -210,7 +213,7 @@ export default function AboutPage() {
 
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                                Values
+                                                {t("values")}
                                             </label>
                                             <Textarea
                                                 value={formData.values.join('\n')}
@@ -218,7 +221,7 @@ export default function AboutPage() {
                                                     setFormData({ ...formData, values: e.target.value.split('\n') })
                                                 }
                                                 rows={2}
-                                                placeholder="Enter your company values, one per line..."
+                                                placeholder={t("enter-company-values")}
                                                 className="resize-none"
                                             />
 
@@ -227,13 +230,13 @@ export default function AboutPage() {
 
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                                Privacy Policy
+                                                {t("privacy-policy")}
                                             </label>
                                             <Textarea
                                                 value={formData.privacyPolicy}
                                                 onChange={(e) => setFormData({ ...formData, privacyPolicy: e.target.value })}
                                                 rows={4}
-                                                placeholder="Enter your privacy policy..."
+                                                placeholder={t("enter-privacy-policy")}
                                                 className="resize-none"
                                             />
                                         </div>
@@ -251,11 +254,11 @@ export default function AboutPage() {
                                         <div className="flex gap-2">
                                             <Button onClick={handleSave} className="bg-[#6c5dd3] hover:bg-[#6c5dd3]/90">
                                                 <Save className="w-4 h-4 mr-2" />
-                                                {loading ? "Almost there..." : 'Save Changes'}
+                                                {loading ? t("almost-there") : t('save-changes')}
                                             </Button>
                                             <Button variant="outline" onClick={handleCancel}>
                                                 <X className="w-4 h-4 mr-2" />
-                                                Cancel
+                                                {t("cancel")}
                                             </Button>
                                         </div>
                                     </div>
@@ -268,10 +271,10 @@ export default function AboutPage() {
                                         <Spinner />
                                     </div>) : (<div className="space-y-6">
                                         <div className="flex justify-between items-start">
-                                            <h2 className="text-xl font-semibold text-gray-900">Preview</h2>
+                                            <h2 className="text-xl font-semibold text-gray-900">{t("preview")}</h2>
                                             <Button size="sm" variant="outline" onClick={handleEdit}>
                                                 <Edit className="w-3 h-3 mr-2" />
-                                                Edit
+                                                {t("edit")}
                                             </Button>
                                         </div>
 
@@ -282,7 +285,7 @@ export default function AboutPage() {
                                                     <div>
                                                         <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
                                                             <FileText className="w-5 h-5" />
-                                                            About Our Company
+                                                            {t("about-our-company")}
                                                         </h3>
                                                         <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
                                                             {aboutSections.mainContent}
@@ -294,7 +297,7 @@ export default function AboutPage() {
                                                     {aboutSections.mission && (
                                                         <div>
                                                             <h4 className="text-md font-semibold text-gray-900 mb-2">
-                                                                Our Mission
+                                                                {t("our-mission")}
                                                             </h4>
                                                             <p className="text-gray-700 whitespace-pre-wrap">
                                                                 {aboutSections.mission}
@@ -304,7 +307,7 @@ export default function AboutPage() {
                                                     {aboutSections.vision && (
                                                         <div>
                                                             <h4 className="text-md font-semibold text-gray-900 mb-2">
-                                                                Our Vision
+                                                                {t("our-vision")}
                                                             </h4>
                                                             <p className="text-gray-700 whitespace-pre-wrap">
                                                                 {aboutSections.vision}
@@ -316,7 +319,7 @@ export default function AboutPage() {
                                                 {aboutSections.values && (
                                                     <div>
                                                         <h4 className="text-md font-semibold text-gray-900 mb-2">
-                                                            Our Values
+                                                            {t("our-values")}
                                                         </h4>
                                                         {
                                                             aboutSections?.values?.map?.((i, j) => (
@@ -332,7 +335,7 @@ export default function AboutPage() {
                                                 {aboutSections.privacyPolicy && (
                                                     <div>
                                                         <h4 className="text-md font-semibold text-gray-900 mb-2">
-                                                            Privacy Policy
+                                                            {t("privacy-policy")}
                                                         </h4>
                                                         <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">
                                                             {aboutSections.privacyPolicy}
@@ -345,7 +348,7 @@ export default function AboutPage() {
                                                         ? 'bg-green-100 text-green-800'
                                                         : 'bg-gray-100 text-gray-800'
                                                         }`}>
-                                                        {aboutSections.published ? 'Published' : 'Draft'}
+                                                        {aboutSections.published ? t('published') : t('draft')}
                                                     </span>
                                                 </div>
                                             </>
@@ -353,7 +356,7 @@ export default function AboutPage() {
                                             <div className="text-center py-8">
                                                 <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
                                                 <p className="text-gray-500">
-                                                    No content added yet. Click "Edit" to add your company information.
+                                                    {t("no-content-added")}
                                                 </p>
                                             </div>
                                         )}

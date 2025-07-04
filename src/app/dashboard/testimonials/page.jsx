@@ -12,8 +12,11 @@ import GlobalApi from "../../../lib/GlobalApi"
 import { toast } from "sonner"
 import Cookies from "js-cookie"
 import { Spinner } from "../../../components/ui/spinner"
+import { useTranslations } from "next-intl"
+
 export default function TestimonialsPage() {
     const [testimonials, setTestimonials] = useState([])
+    const t = useTranslations("Content-management")
 
     const [editingId, setEditingId] = useState(null)
     const [showAddForm, setShowAddForm] = useState(false)
@@ -59,14 +62,14 @@ export default function TestimonialsPage() {
                 setSaveAdd(true);
                 const response = await GlobalApi.UpdateTestimonials(formData, token, editingId);
                 if (response?.success === false) {
-                    toast("Error Editing Testimonial")
+                    toast(t("error-editing-testimonial"))
                     setEditingId(null)
 
                     setSaveAdd(false);
                 } else {
                     setTestimonials(testimonials.map((t) => (t.id === editingId ? { ...formData, id: editingId } : t)))
                     setEditingId(null)
-                    toast("Testimonial Edited successfully")
+                    toast(t("testimonial-edited-successfully"))
 
                     setSaveAdd(false);
                     getTestimonials()
@@ -86,14 +89,14 @@ export default function TestimonialsPage() {
                 setSaveAdd(true);
                 const response = await GlobalApi.CreateTestimonials(formData, token);
                 if (response?.success === false) {
-                    toast("Error Adding Testimonial")
+                    toast(t("error-adding-testimonial"))
                     setShowAddForm(false)
                     setSaveAdd(false);
 
                 } else {
                     setTestimonials([...testimonials, { ...formData, id: Date.now() }])
                     setShowAddForm(false)
-                    toast("Testimonial Added successfully")
+                    toast(t("testimonial-added-successfully"))
                     setSaveAdd(false);
                     getTestimonials()
 
@@ -120,17 +123,17 @@ export default function TestimonialsPage() {
             const response = await GlobalApi.deleteTestimonial(token, id);
 
             if (response?.success === false) {
-                toast("Error while deleting testimonial");
+                toast(t("error-deleting-testimonial"));
                 setloading(false);
 
             } else {
-                toast("Testimonial deleted successfully");
+                toast(t("testimonial-deleted-successfully"));
                 setTestimonials(testimonials.filter((t) => t.id !== id))
                 setloading(false);
 
             }
         } catch (error) {
-            toast("Network Error");
+            toast(t("network-error"));
             console.log('error deleting testimonial', error);
             setloading(false);
 
@@ -205,58 +208,58 @@ export default function TestimonialsPage() {
                     <div className="flex justify-between md:items-left md:gap-4 max-sm:flex-col max-sm:gap-4 
                     2xl:flex-row xl:flex-row lg:flex-col md:flex-col ">
                         <div>
-                            <h1 className="2xl:text-3xl xl:text-3xl lg:text-lg max-sm:text-lg md:text-2xl  font-bold text-gray-900">Testimonials Management</h1>
-                            <p className="text-gray-600 mt-2">Manage customer testimonials and reviews</p>
+                            <h1 className="2xl:text-3xl xl:text-3xl lg:text-lg max-sm:text-lg md:text-2xl  font-bold text-gray-900">{t("testimonials-management")}</h1>
+                            <p className="text-gray-600 mt-2">{t("testimonials-management-description")}</p>
                         </div>
                         <div className="flex gap-3">
 
                             <Button onClick={() => setShowAddForm(true)} className="bg-[#6c5dd3] hover:bg-[#6c5dd3]">
                                 <Plus className="w-4 h-4 mr-2" />
-                                Add Testimonial
+                                {t("add-testimonial")}
                             </Button>
                         </div>
                     </div>
                     {showAddForm && (
                         <Card>
                             <CardHeader>
-                                <CardTitle>Add New Testimonial</CardTitle>
+                                <CardTitle>{t("add-new-testimonial")}</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Client Name *</label>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">{t("client-name")} *</label>
                                         <Input
                                             value={formData.clientName}
                                             onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
-                                            placeholder="Enter client name"
+                                            placeholder={t("enter-client-name")}
                                             required
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Position *</label>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">{t("position")} *</label>
                                         <Input
                                             value={formData.position}
                                             onChange={(e) => setFormData({ ...formData, position: e.target.value })}
-                                            placeholder="Enter position"
+                                            placeholder={t("enter-position")}
                                             required
                                         />
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Company *</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">{t("company")} *</label>
                                     <Input
                                         value={formData.company}
                                         onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                                        placeholder="Enter company name"
+                                        placeholder={t("enter-company-name")}
                                         required
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Testimonial Content *</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">{t("testimonial-content")} *</label>
                                     <Textarea
                                         value={formData.content}
                                         onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                                        placeholder="Enter testimonial content"
+                                        placeholder={t("enter-testimonial-content")}
                                         rows={4}
                                         className="resize-none"
                                         required
@@ -264,7 +267,7 @@ export default function TestimonialsPage() {
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Rating *</label>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">{t("rating")} *</label>
                                         <div className="flex gap-1">
                                             {renderStars(formData.rating, true, (rating) => setFormData({ ...formData, rating }))}
                                         </div>
@@ -274,10 +277,10 @@ export default function TestimonialsPage() {
                                 <div className="flex gap-4 pt-4 border-t">
                                     <Button onClick={handleSave} className="bg-[#6c5dd3] hover:bg-[#6c5dd3]">
                                         <Save className="w-4 h-4 mr-2" />
-                                        {SaveAdd ? 'Almost there...' : '  Add Testimonial'}
+                                        {SaveAdd ? t('almost-there') : t('add-testimonial')}
                                     </Button>
                                     <Button variant="outline" onClick={handleCancel}>
-                                        Cancel
+                                        {t("cancel")}
                                     </Button>
                                 </div>
                             </CardContent>
@@ -292,20 +295,20 @@ export default function TestimonialsPage() {
                                 <Card>
                                     <CardContent className="p-4 text-center">
                                         <p className="text-2xl font-bold text-[#6c5dd3]">{testimonials.length}</p>
-                                        <p className="text-sm text-gray-600">Total Reviews</p>
+                                        <p className="text-sm text-gray-600">{t("total-reviews")}</p>
                                     </CardContent>
                                 </Card>
                                 <Card>
                                     <CardContent className="p-4 text-center">
                                         <p className="text-2xl font-bold text-green-600">{averageRating}</p>
-                                        <p className="text-sm text-gray-600">Average Rating</p>
+                                        <p className="text-sm text-gray-600">{t("average-rating")}</p>
                                     </CardContent>
                                 </Card>
 
                                 <Card>
                                     <CardContent className="p-4 text-center">
                                         <p className="text-2xl font-bold text-yellow-600">{testimonials.filter((t) => t.rating === 5).length}</p>
-                                        <p className="text-sm text-gray-600">5-Star Reviews</p>
+                                        <p className="text-sm text-gray-600">{t("five-star-reviews")}</p>
                                     </CardContent>
                                 </Card>
                             </div>
@@ -317,7 +320,7 @@ export default function TestimonialsPage() {
                                         <div className="relative flex-1">
                                             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                                             <Input
-                                                placeholder="Search testimonials..."
+                                                placeholder={t("search-testimonials")}
                                                 value={searchTerm}
                                                 onChange={(e) => setSearchTerm(e.target.value)}
                                                 className="pl-10"
@@ -330,12 +333,12 @@ export default function TestimonialsPage() {
                                                 onChange={(e) => setFilterRating(e.target.value)}
                                                 className="border rounded-md px-3 py-2 text-sm"
                                             >
-                                                <option value="all">All Ratings</option>
-                                                <option value="5">5 Stars</option>
-                                                <option value="4">4 Stars</option>
-                                                <option value="3">3 Stars</option>
-                                                <option value="2">2 Stars</option>
-                                                <option value="1">1 Star</option>
+                                                <option value="all">{t("all-ratings")}</option>
+                                                <option value="5">{t("five-stars")}</option>
+                                                <option value="4">{t("four-stars")}</option>
+                                                <option value="3">{t("three-stars")}</option>
+                                                <option value="2">{t("two-stars")}</option>
+                                                <option value="1">{t("one-star")}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -362,23 +365,23 @@ export default function TestimonialsPage() {
                                                                 <Input
                                                                     value={formData.clientName}
                                                                     onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
-                                                                    placeholder="Client name"
+                                                                    placeholder={t("client-name")}
                                                                 />
                                                                 <Input
                                                                     value={formData.position}
                                                                     onChange={(e) => setFormData({ ...formData, position: e.target.value })}
-                                                                    placeholder="Position"
+                                                                    placeholder={t("position")}
                                                                 />
                                                             </div>
                                                             <Input
                                                                 value={formData.company}
                                                                 onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                                                                placeholder="Company"
+                                                                placeholder={t("company")}
                                                             />
                                                             <Textarea
                                                                 value={formData.content}
                                                                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                                                                placeholder="Testimonial content"
+                                                                placeholder={t("testimonial-content")}
                                                                 rows={3}
                                                                 className="resize-none"
                                                             />
@@ -390,12 +393,12 @@ export default function TestimonialsPage() {
                                                             <div className="flex gap-2">
                                                                 <Button size="sm" onClick={handleSave} className="bg-[#6c5dd3] hover:bg-[#6c5dd3]">
                                                                     <Save className="w-3 h-3" />
-                                                                    {SaveAdd ? 'Almost there...' : 'Save'}
+                                                                    {SaveAdd ? t('almost-there') : t('save')}
 
                                                                 </Button>
                                                                 <Button size="sm" variant="outline" onClick={handleCancel}>
                                                                     <X className="w-3 h-3" />
-                                                                    Cancel
+                                                                    {t("cancel")}
                                                                 </Button>
                                                             </div>
                                                         </div>
@@ -436,7 +439,7 @@ export default function TestimonialsPage() {
                     {filteredTestimonials.length === 0 && !loading && (
                         <Card>
                             <CardContent className="p-8 text-center">
-                                <p className="text-gray-500">No testimonials found matching your criteria.</p>
+                                <p className="text-gray-500">{t("no-testimonials-found")}</p>
                             </CardContent>
                         </Card>
                     )}

@@ -13,11 +13,13 @@ import ImageUpload from "../../../components/ImageUpload"
 import { toast } from "sonner"
 import Image from "next/image"
 import { Spinner } from "../../../components/ui/spinner"
+import { useTranslations } from "next-intl"
 
 export default function PartnersPage() {
     const [partners, setPartners] = useState([
 
     ])
+    const t = useTranslations("Content-management")
 
     const [editingId, setEditingId] = useState(null)
     const [showAddForm, setShowAddForm] = useState(false)
@@ -46,7 +48,7 @@ export default function PartnersPage() {
                 let websiteRegex = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/\S*)?$/;
 
                 if (!websiteRegex.test(formData.websiteUrl)) {
-                    toast("Please enter a valid URL");
+                    toast(t("please-enter-valid-url"));
                     return;
                 }
                 setSaveloading(true);
@@ -58,7 +60,7 @@ export default function PartnersPage() {
                     setShowAddForm(false)
                     setSaveloading(false);
                     setEditingId(null)
-                    toast("Error editing partner")
+                    toast(t("error-editing-partner"))
 
 
                 } else {
@@ -67,7 +69,7 @@ export default function PartnersPage() {
                     setSaveloading(false);
                     getPartners()
                     setEditingId(null)
-                    toast("Partner edited successfully")
+                    toast(t("partner-edited-successfully"))
 
 
                 }
@@ -79,7 +81,7 @@ export default function PartnersPage() {
                 setSaveloading(false);
                 setEditingId(null)
 
-                toast("Network error")
+                toast(t("network-error"))
 
 
             }
@@ -92,19 +94,19 @@ export default function PartnersPage() {
                 let websiteRegexs = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/\S*)?$/;
 
                 if (!websiteRegexs.test(formData.websiteUrl)) {
-                    toast("Please enter a valid URL");
+                    toast(t("please-enter-valid-url"));
                     return;
                 }
 
                 if (URL === null) {
-                    toast("Partner Image is required");
+                    toast(t("partner-image-required"));
                     return;
                 }
 
 
 
                 if (formData?.name === '' || formData?.websiteUrl === '') {
-                    toast("All feilds are required")
+                    toast(t("all-fields-required"))
                     return
                 }
 
@@ -121,14 +123,14 @@ export default function PartnersPage() {
                 if (response?.success === false) {
                     setShowAddForm(false)
                     setSaveloading(false);
-                    toast("Error adding partner")
+                    toast(t("error-adding-partner"))
 
                 } else {
                     setPartners([...partners, { ...formData, id: Date.now() }])
                     setShowAddForm(false)
                     setSaveloading(false);
                     getPartners()
-                    toast("Partner added successfully")
+                    toast(t("partner-added-successfully"))
 
                 }
             } catch (error) {
@@ -137,7 +139,7 @@ export default function PartnersPage() {
                 setShowAddForm(false)
 
                 setSaveloading(false);
-                toast("Network error")
+                toast(t("network-error"))
 
 
             }
@@ -154,11 +156,11 @@ export default function PartnersPage() {
             const response = await GlobalApi.deleteParnter(token, id)
 
             if (response?.success === false) {
-                toast("Error deleting partner");
+                toast(t("error-deleting-partner"));
                 setloading(false);
 
             } else {
-                toast("Partner deleted successfully");
+                toast(t("partner-deleted-successfully"));
                 setPartners(partners.filter((p) => p.id !== id))
                 setloading(false);
 
@@ -166,7 +168,7 @@ export default function PartnersPage() {
 
         } catch (error) {
             console.log('error while deleting partner', error);
-            toast("Network Error");
+            toast(t("network-error"));
             setloading(false);
 
 
@@ -223,14 +225,14 @@ export default function PartnersPage() {
                     <div className="flex justify-between md:items-left md:gap-4 max-sm:flex-col max-sm:gap-4 
                     2xl:flex-row xl:flex-row lg:flex-col md:flex-col ">
                         <div>
-                            <h1 className="2xl:text-3xl max-sm:text-lg xl:text-3xl lg:text-lg   font-bold text-gray-900">Partners Management</h1>
-                            <p className="text-gray-600 mt-2">Manage your business partners and their information</p>
+                            <h1 className="2xl:text-3xl max-sm:text-lg xl:text-3xl lg:text-lg   font-bold text-gray-900">{t("partners-management")}</h1>
+                            <p className="text-gray-600 mt-2">{t("partners-management-description")}</p>
                         </div>
                         <div className="flex gap-3">
 
                             <Button onClick={() => setShowAddForm(true)} className="bg-[#6c5dd3] hover:bg-[#6c5dd3]">
                                 <Plus className="w-4 h-4 mr-2" />
-                                Add Partner
+                                {t("add-partner")}
                             </Button>
                         </div>
                     </div>
@@ -241,15 +243,15 @@ export default function PartnersPage() {
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
                                     <div>
                                         <p className="text-2xl font-bold text-[#6c5dd3]">{partners.length}</p>
-                                        <p className="text-sm text-[#6c5dd3]">Total Partners</p>
+                                        <p className="text-sm text-[#6c5dd3]">{t("total-partners")}</p>
                                     </div>
                                     <div>
                                         <p className="text-2xl font-bold text-[#6c5dd3]">{filteredPartners.length}</p>
-                                        <p className="text-sm text-[#6c5dd3]">Showing</p>
+                                        <p className="text-sm text-[#6c5dd3]">{t("showing")}</p>
                                     </div>
                                     <div>
                                         <p className="text-2xl font-bold text-[#6c5dd3]">100%</p>
-                                        <p className="text-sm text-[#6c5dd3]">Active</p>
+                                        <p className="text-sm text-[#6c5dd3]">{t("active")}</p>
                                     </div>
                                 </div>
                             </CardContent>
@@ -259,7 +261,7 @@ export default function PartnersPage() {
                                     <div className="relative">
                                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                                         <Input
-                                            placeholder="Search partners..."
+                                            placeholder={t("search-partners")}
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
                                             className="pl-10"
@@ -275,25 +277,25 @@ export default function PartnersPage() {
                     {showAddForm && (
                         <Card>
                             <CardHeader>
-                                <CardTitle>Add New Partner</CardTitle>
+                                <CardTitle>{t("add-new-partner")}</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Partner Name *</label>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">{t("partner-name")} *</label>
                                         <Input
                                             value={formData.name}
                                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                            placeholder="Enter partner name"
+                                            placeholder={t("enter-partner-name")}
                                             required
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Website URL *</label>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">{t("website-url")} *</label>
                                         <Input
                                             value={formData.websiteUrl}
                                             onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
-                                            placeholder="https://example.com"
+                                            placeholder={t("website-url-placeholder")}
                                             required
                                         />
                                     </div>
@@ -320,11 +322,11 @@ export default function PartnersPage() {
                                     <Button onClick={handleSave} className="bg-[#6c5dd3] hover:bg-[#6c5dd3]">
                                         <Save className="w-4 h-4 mr-2" />
                                         {
-                                            Saveloading ? 'Almost there...' : 'Add Partner'
+                                            Saveloading ? t('almost-there') : t('add-partner')
                                         }
                                     </Button>
                                     <Button variant="outline" onClick={handleCancel}>
-                                        Cancel
+                                        {t("cancel")}
                                     </Button>
                                 </div>
                             </CardContent>
@@ -348,7 +350,7 @@ export default function PartnersPage() {
                                                     <Input
                                                         value={formData.name}
                                                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                                        placeholder="Partner name"
+                                                        placeholder={t("partner-name")}
                                                     />
 
                                                     <Image
@@ -366,18 +368,18 @@ export default function PartnersPage() {
                                                     <Input
                                                         value={formData.websiteUrl}
                                                         onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
-                                                        placeholder="Website URL"
+                                                        placeholder={t("website-url")}
                                                     />
                                                     <div className="flex gap-2">
                                                         <Button size="sm" onClick={handleSave} className="bg-[#6c5dd3] hover:bg-[#6c5dd3]">
                                                             <Save className="w-3 h-3" />
                                                             {
-                                                                Saveloading ? 'Almost there...' : 'Save'
+                                                                Saveloading ? t('almost-there') : t('save')
                                                             }
                                                         </Button>
                                                         <Button size="sm" variant="outline" onClick={handleCancel}>
                                                             <X className="w-3 h-3" />
-                                                            Cancel
+                                                            {t("cancel")}
                                                         </Button>
                                                     </div>
                                                 </div>
@@ -425,7 +427,7 @@ export default function PartnersPage() {
                     {filteredPartners.length === 0 && !loading && !showAddForm && (
                         <Card>
                             <CardContent className="p-8 text-center">
-                                <p className="text-gray-500">No partners found matching your search.</p>
+                                <p className="text-gray-500">{t("no-partners-found")}</p>
                             </CardContent>
                         </Card>
                     )}

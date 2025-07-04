@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Layout from "../../../../components/layout/layout";
 import Layoutsettings from "../../../../pop-ups/layout-settings";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 const lang = [
   { language: "English", code: "en" },
@@ -14,7 +15,7 @@ export default function Languages() {
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [locale, setlocale] = useState("");
   const router = useRouter();
-
+  const t = useTranslations("Settings");
   useEffect(() => {
     const cookieLocale = document.cookie
       .split("; ")
@@ -44,16 +45,11 @@ export default function Languages() {
         <Layoutsettings />{" "}
         <div className="mx-6 w-auto border rounded-md pt-4 sm:w-full space-y-8 mt-16 sm:mt-0 mb-12 sm:mb-8 pb-4 sm:pb-0 shadow-lg ">
           <div className="flex px-6 items-center justify-between flex-col sm:flex-row">
-            <h1 className="text-xl font-semibold text-black">Language</h1>
+            <h1 className="text-xl font-semibold text-black">{t("language")}</h1>
           </div>
           <hr className="custom-hr" />
           <div className="px-6" style={{ marginTop: "13px" }}>
-            <p className="settings-p">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
-              bibendum laoreet massa quis viverra.Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit. Maecenas bibendum laoreet massa quis
-              viverra.
-            </p>
+            <p className="settings-p">{t("language-description")}</p>
           </div>
           <div className="flex px-6  flex-col" style={{ marginTop: "18px" }}>
             <div className="flex flex-col gap-2">

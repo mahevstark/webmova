@@ -13,7 +13,10 @@ import { toast } from "sonner"
 import Cookies from "js-cookie"
 import { Spinner } from "../../../components/ui/spinner"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 export default function HeroSection() {
+    const t = useTranslations("Content-management")
+    
     const [isEditing, setIsEditing] = useState(false)
     const [heroData, setHeroData] = useState({
         title: "",
@@ -44,7 +47,7 @@ export default function HeroSection() {
 
 
             if (editData?.title === '' || editData?.content === '' || editData?.ctaText === '' || editData?.ctaLink === '') {
-                toast("All feilds are required")
+                toast(t("all-fields-required"))
                 setloading(false);
 
                 return;
@@ -53,7 +56,7 @@ export default function HeroSection() {
             console.log(isValidLink(editData?.ctaLink));
 
             if (isValidLink(editData?.ctaLink) === false) {
-                toast("Invalid link ")
+                toast(t("invalid-link"))
                 setloading(false);
                 return;
             }
@@ -71,19 +74,19 @@ export default function HeroSection() {
 
             if (response?.success === false) {
                 setIsEditing(false)
-                toast(response?.message || "Error while saving Hero Section.")
+                toast(response?.message || t("error-saving-cta-section"))
                 setloading(false);
 
             } else {
                 setIsEditing(false)
-                toast("Hero Section saved.")
+                toast(t("cta-section-saved"))
                 setloading(false);
 
 
             }
         } catch (error) {
             console.log('error while saving Hero Section', error);
-            toast("Network Error.")
+            toast(t("network-error"))
             setloading(false);
 
         }
@@ -103,7 +106,7 @@ export default function HeroSection() {
 
 
             if (response?.success === false) {
-                toast("Error getting hero section content")
+                toast(t("error-getting-cta-content"))
                 setHeroData({
                     title: "",
                     content:
@@ -154,68 +157,68 @@ export default function HeroSection() {
                     2xl:flex-row xl:flex-row lg:flex-col md:flex-col 
                     ">
                         <div>
-                            <h1 className="2xl:text-3xl xl:text-3xl lg:text-lg max-sm:text-lg font-bold text-gray-900 md:text-2xl">CTA Section Management</h1>
-                            <p className="text-gray-600 mt-2">Manage your homepage call-to-action</p>
+                            <h1 className="2xl:text-3xl xl:text-3xl lg:text-lg max-sm:text-lg font-bold text-gray-900 md:text-2xl">{t("cta-section-management")}</h1>
+                            <p className="text-gray-600 mt-2">{t("cta-section-management-description")}</p>
                         </div>
                         <div className="flex gap-3">
 
                             <Button onClick={() => setIsEditing(!isEditing)} className="bg-[#6c5dd3] hover:bg-[#6c5dd3]">
                                 {isEditing ? <X className="w-4 h-4 mr-2" /> : <Edit className="w-4 h-4 mr-2" />}
-                                {isEditing ? "Cancel" : "Edit CTA"}
+                                {isEditing ? t("cancel") : t("edit-cta")}
                             </Button>
                         </div>
                     </div>
                     {isEditing && (
                         <Card>
                             <CardHeader>
-                                <CardTitle>Edit CTA Section</CardTitle>
+                                <CardTitle>{t("edit-cta-section")}</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-6">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">CTA Title *</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">{t("cta-title")} *</label>
                                     <Input
                                         value={editData.title}
                                         onChange={(e) => setEditData({ ...editData, title: e.target.value })}
-                                        placeholder="Enter hero title"
+                                        placeholder={t("enter-cta-title")}
                                         className="text-lg"
                                         required
                                     />
-                                    <p className="text-xs text-gray-500 mt-1">This will be the main headline on your homepage</p>
+                                    <p className="text-xs text-gray-500 mt-1">{t("cta-title-description")}</p>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">CTA Content *</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">{t("cta-content")} *</label>
                                     <Textarea
                                         value={editData.content}
                                         onChange={(e) => setEditData({ ...editData, content: e.target.value })}
-                                        placeholder="Enter hero content"
+                                        placeholder={t("enter-cta-content")}
                                         rows={4}
                                         className="resize-none"
                                         required
                                     />
-                                    <p className="text-xs text-gray-500 mt-1">Describe your main value proposition</p>
+                                    <p className="text-xs text-gray-500 mt-1">{t("cta-content-description")}</p>
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">CTA Button Text *</label>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">{t("cta-button-text")} *</label>
                                         <Input
                                             value={editData.ctaText}
                                             onChange={(e) => setEditData({ ...editData, ctaText: e.target.value })}
-                                            placeholder="Enter CTA text"
+                                            placeholder={t("enter-cta-button-text")}
                                             required
                                         />
-                                        <p className="text-xs text-gray-500 mt-1">Text for the call-to-action button</p>
+                                        <p className="text-xs text-gray-500 mt-1">{t("cta-button-text-description")}</p>
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">CTA Link *</label>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">{t("cta-link")} *</label>
                                         <Input
                                             value={editData.ctaLink}
                                             onChange={(e) => setEditData({ ...editData, ctaLink: e.target.value })}
-                                            placeholder="Enter CTA link (e.g., /signup)"
+                                            placeholder={t("enter-cta-link")}
                                             required
                                         />
-                                        <p className="text-xs text-gray-500 mt-1">Where the button should redirect</p>
+                                        <p className="text-xs text-gray-500 mt-1">{t("cta-link-description")}</p>
                                     </div>
                                 </div>
 
@@ -225,11 +228,11 @@ export default function HeroSection() {
 
 
                                         {
-                                            loading ? "Almost there..." : "  Save Changes"
+                                            loading ? t("almost-there") : t("save-changes")
                                         }
                                     </Button>
                                     <Button variant="outline" onClick={handleCancel}>
-                                        Cancel
+                                        {t("cancel")}
                                     </Button>
                                 </div>
                             </CardContent>
@@ -243,7 +246,7 @@ export default function HeroSection() {
                                 <CardHeader>
                                     <CardTitle className="flex items-center gap-2">
                                         <Eye className="w-5 h-5" />
-                                        Live Preview
+                                        {t("live-preview")}
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="space-y-6">
@@ -271,14 +274,14 @@ export default function HeroSection() {
 
                     <Card className="bg-blue-50 border-[#6c5dd3]">
                         <CardHeader>
-                            <CardTitle className="text-[#6c5dd3]">💡 Tips for Effective CTA Sections</CardTitle>
+                            <CardTitle className="text-[#6c5dd3]">{t("tips-for-effective-cta-sections")}</CardTitle>
                         </CardHeader>
                         <CardContent className="text-[#6c5dd3]">
                             <ul className="space-y-2 text-sm">
-                                <li>• Keep your title clear and compelling (under 10 words)</li>
-                                <li>• Focus on benefits, not just features</li>
-                                <li>• Use action-oriented CTA text (e.g., "Start Free Trial")</li>
-                                <li>• Test different versions to see what converts better</li>
+                                <li>• {t("keep-title-clear-compelling")}</li>
+                                <li>• {t("focus-on-benefits-not-features")}</li>
+                                <li>• {t("use-action-oriented-cta-text")}</li>
+                                <li>• {t("test-different-versions-converts")}</li>
                             </ul>
                         </CardContent>
                     </Card>
