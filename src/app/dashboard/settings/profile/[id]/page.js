@@ -107,9 +107,9 @@ export default function editprofile() {
                 <span className="flex items-center gap-2 border border-color-input rounded-lg px-3 py-1 md:px-4 md:py-2 sm:w-96 w-auto">
                   {/* <Image src={msg} alt="" /> */}
                   <input
-                    id="phone"
-                    name="phone"
-                    type="tel"
+                    id="firstName"
+                    name="firstName"
+                    type="text"
                     required
                     className="w-full focus:outline-none text-black focus:ring-0 border-0 placeholder:text-gray-400"
                     placeholder="Enter your First Name"
@@ -127,9 +127,9 @@ export default function editprofile() {
                 <span className="flex items-center gap-2 border border-color-input rounded-lg px-3 py-1 md:px-4 md:py-2 sm:w-96 w-auto">
                   {/* <Image src={msg} alt="" /> */}
                   <input
-                    id="phone"
-                    name="phone"
-                    type="tel"
+                    id="lastName"
+                    name="lastName"
+                    type="text"
                     required
                     className="w-full focus:outline-none focus:ring-0 border-0 text-black placeholder:text-gray-400"
                     placeholder="Enter your Last Name"
@@ -146,9 +146,9 @@ export default function editprofile() {
                 <span className="flex items-center gap-2 border border-color-input rounded-lg px-3 py-1 md:px-4 md:py-2 sm:w-96 w-auto">
                   {/* <Image src={msg} alt="" /> */}
                   <input
-                    id="phone"
-                    name="phone"
-                    type="tel"
+                    id="email"
+                    name="email"
+                    type="email"
                     required
                     className="w-full focus:outline-none focus:ring-0 border-0 text-black placeholder:text-gray-400"
                     placeholder="Enter your Email"
@@ -167,9 +167,9 @@ export default function editprofile() {
                 <span className="flex items-center gap-2 border border-color-input rounded-lg px-3 py-1 md:px-4 md:py-2 sm:w-96 ">
                   {/* <Image src={msg} alt="" /> */}
                   <input
-                    id="phone"
-                    name="phone"
-                    type="tel"
+                    id="dob"
+                    name="dob"
+                    type="date"
                     required
                     className="w-full focus:outline-none focus:ring-0 border-0 text-black placeholder:text-gray-400"
                     placeholder="DD/MM/YYYY"
@@ -186,9 +186,9 @@ export default function editprofile() {
                 <span className="flex items-center gap-2 border border-color-input rounded-lg px-3 py-1 md:px-4 md:py-2 sm:w-96 w-auto">
                   {/* <Image src={msg} alt="" /> */}
                   <input
-                    id="phone"
-                    name="phone"
-                    type="tel"
+                    id="address"
+                    name="address"
+                    type="text"
                     required
                     className="w-full focus:outline-none focus:ring-0 border-0 text-black placeholder:text-gray-400"
                     placeholder="Enter your Permanent Address"

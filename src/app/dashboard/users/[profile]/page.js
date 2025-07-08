@@ -186,9 +186,8 @@ export default function profile() {
                   </p>
                 </span>
                 <span className="flex gap-2">
-                  <p className=" text-muted-foreground">EMail: </p>
+                  <p className=" text-muted-foreground">Email: </p>
                   <p className="text-gray-600">
-                    ``
                     {employee?.user?.email
                       ? employee?.user?.email
                       : employee?.email || "Email"}

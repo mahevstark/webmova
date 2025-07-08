@@ -223,7 +223,7 @@ export default function WebAppsettings() {
                         </label>
                         {isEditing ? (
                           <input
-                            type="text"
+                            type="tel"
                             name="mobileNumber"
                             value={formData.mobileNumber}
                             onChange={handleChange}
@@ -239,7 +239,7 @@ export default function WebAppsettings() {
                         </label>
                         {isEditing ? (
                           <input
-                            type="text"
+                            type="url"
                             name="websiteUrl"
                             value={formData.websiteUrl}
                             onChange={handleChange}
