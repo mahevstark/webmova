@@ -4,7 +4,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../../components/Card";
+} from "../../components/ui/card";
 import Pin from "../../pop-ups/pin";
 import { Button } from "../../components/ui/button";
 import { useEffect, useState } from "react";

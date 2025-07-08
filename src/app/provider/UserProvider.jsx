@@ -15,12 +15,14 @@ export const UserProvider = ({ children }) => {
             const storedUser = localStorage.getItem('userData');
             const parsedUser = JSON.parse(storedUser);
             const storedToken = Cookies.get('token');
-            const role = Cookies.get('role')
+            const role = parsedUser?.role;
+            console.log("role", role);
 
 
             if (storedUser) {
                 setUser(parsedUser);
                 setRole(role)
+                
             }
 
             if (storedToken) {
@@ -34,10 +36,10 @@ export const UserProvider = ({ children }) => {
         }
     }, []);
 
-    const setlogin = (userData, tokenValue, role) => {
+        const setlogin = (userData, tokenValue, role) => {
         try {
 
-
+            console.log("role", role);
 
             localStorage.setItem('userData', JSON.stringify(userData));
             Cookies.set('token', tokenValue, { expires: 7 });

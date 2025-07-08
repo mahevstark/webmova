@@ -9,7 +9,8 @@
   "total-trans":"Total Transactions",
   "transfer":"Transfer",
   "admin-credit":"Admin Credit",
-  "users":"Users"
+  "users":"Users",
+  "view":"View"
 
 },
 "Users": {
@@ -31,7 +32,8 @@
   "delete-member": "Delete Member",
   "cancel": "Cancel",
   "view": "View",
-"delete": "Delete"
+"delete": "Delete",
+"reset": "Reset"
 
 },
 "Transactions":{
@@ -53,7 +55,9 @@
   "time": "Time",
   "type": "Type",
   "amount": "Amount",
-  "currency": "Currency"
+  "currency": "Currency",
+  "withdraw": "Withdraw",
+"reset": "Reset"
 },
 "Settings":{
   "profile": "Profile",
@@ -70,7 +74,7 @@
   "dashboard": "Dashboard",
   "users": "Users",
   "transaction-history": "Transaction History",
-  "setting": "Setting",
+  "settings": "Settings ",
   "content-management": "Content Management"
 },
 
@@ -101,6 +105,7 @@
   "focus-on-benefits-not-just-features": "Focus on benefits, not just features",
   "use-action-oriented-cta-text": "Use action-oriented CTA text",
   "test-different-versions-to-see-what-converts-better": "Test different versions to see what converts better",
+  "cancel": "Cancel",
 
   "faqs-management": "FAQs Management",
   "faqs-management-description": "Manage frequently asked questions and help content",

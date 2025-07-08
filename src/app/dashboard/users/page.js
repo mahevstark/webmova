@@ -24,6 +24,14 @@ import { toast } from "sonner";
 import { Spinner } from "../../../components/ui/spinner";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "use-intl";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../../../components/ui/dropdown-menu"
 
 const page = "Employees";
 
@@ -38,6 +46,8 @@ export default function Employee() {
   const [deactivatingEmployees, setDeactivatingEmployees] = useState({});
   const [activatingEmployees, setActivatingEmployees] = useState({});
   const [Role, setRole] = useState(null);
+  const [statusFilter, setStatusFilter] = useState(null);
+
   useEffect(() => {
     const role = Cookies.get("role");
     setRole(role);
@@ -106,13 +116,23 @@ export default function Employee() {
     setCurrentPage(pageNumber);
   };
 
-  const filteredEmployees = employees?.filter((employee) =>
-    Role === "admin"
-      ? employee?.firstName.toLowerCase().includes(searchTerm.toLowerCase())
-      : employee?.user?.firstName
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase())
-  );
+  const handleResetFilters = () => {
+    setSearchTerm("");
+    setStatusFilter(null);
+  };
+
+  const filteredEmployees = employees?.filter((employee) => {
+    const name = Role === "admin"
+      ? employee?.firstName
+      : employee?.user?.firstName;
+    const isActive = Role === "admin"
+      ? employee?.isActive
+      : employee?.user?.isActive;
+    const matchesSearch = name?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus =
+      statusFilter === null ? true : statusFilter === "active" ? isActive : !isActive;
+    return matchesSearch && matchesStatus;
+  });
 
   const indexOfLastEmployee = currentPage * itemsPerPage;
   const indexOfFirstEmployee = indexOfLastEmployee - itemsPerPage;
@@ -211,6 +231,44 @@ export default function Employee() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="ml-0 sm:ml-2 min-w-[140px]">
+                  {statusFilter === null
+                    ? "All Users"
+                    : statusFilter === "active"
+                    ? "Active Users"
+                    : "Inactive Users"}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="min-w-[140px]">
+                <DropdownMenuItem
+                  onClick={() => setStatusFilter(null)}
+                  className={statusFilter === null ? "font-semibold" : ""}
+                >
+                  All Users
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setStatusFilter("active")}
+                  className={statusFilter === "active" ? "font-semibold" : ""}
+                >
+                  Active Users
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setStatusFilter("inactive")}
+                  className={statusFilter === "inactive" ? "font-semibold" : ""}
+                >
+                  Inactive Users
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Button
+              variant="outline"
+              className="ml-0 sm:ml-2"
+              onClick={handleResetFilters}
+            >
+              {t("reset")}
+            </Button>
           </div>
           <Button
             className="button-border btn-txt-color bg-white hover:bg-white border"

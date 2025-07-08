@@ -44,7 +44,8 @@
   "delete-member": "Eliminar miembro",
   "cancel": "Cancelar",
   "view": "Ver",
-"delete": "Eliminar"
+"delete": "Eliminar",
+"reset": "Restablecer"
 
 },
 "Transactions":{
@@ -66,7 +67,9 @@
   "time": "Hora",
   "type": "Tipo",
   "amount": "Cantidad",
-  "currency": "Moneda"
+  "currency": "Moneda",
+  "withdraw": "Retiro",
+"reset": "Restablecer"
 }
 ,
 "Settings":{
@@ -84,7 +87,7 @@
  "dashboard": "Panel de control",
   "users": "Usuarios",
   "transaction-history": "Historial de transacciones",
-  "setting": "Configuración",
+  "settings": "Configuración",
   "content-management": "Gestión de contenido"
 },
 
@@ -292,6 +295,7 @@
   "sidebar-testimonials": "Testimonios",
   "sidebar-about": "Acerca de",
   "sidebar-contact": "Contacto",
-  "sidebar-cta-section": "Sección CTA"
+  "sidebar-cta-section": "Sección CTA",
+"cancel": "Cancelar"
 }
 }

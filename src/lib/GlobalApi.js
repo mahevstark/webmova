@@ -5,9 +5,10 @@ const axiosClient = axios.create({
 });
 
 const login = async (phn, pass, role) => {
+  console.log("role in globale API", role);
   try {
     let data =
-      role === "email"
+      role === "admin"
         ? JSON.stringify({
             email: phn,
             password: pass,
@@ -20,7 +21,7 @@ const login = async (phn, pass, role) => {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: role === "email" ? "auth/login" : "user/login-profile",
+      url: role === "admin" ? "auth/login" : "user/login-business",
       headers: {
         "Content-Type": "application/json",
       },
@@ -29,7 +30,7 @@ const login = async (phn, pass, role) => {
 
     const response = await axiosClient.request(config);
 
-    if (role === "email") {
+    if (role === "admin") {
       return response;
     } else {
       return response;

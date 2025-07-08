@@ -169,6 +169,14 @@ export default function TransactionHistory() {
     setCurrentPage(pageNumber);
   };
 
+  // Reset filters to default
+  const handleResetFilters = () => {
+    setSearchTerm("");
+    setCurrentPage(1);
+    setSelected("TRANSFER");
+    setSeletedType("COMPLETED");
+  };
+
   // Total pages
   const totalPages = Math.ceil(filteredEmployees.length / rowsPerPage);
   const t = useTranslations("Transactions");
@@ -216,6 +224,7 @@ export default function TransactionHistory() {
                     {" "}
                     {t("admin-credit")}
                   </SelectItem>
+                  <SelectItem value="WITHDRAW">{t("withdraw")}</SelectItem>
                 </SelectContent>
               ) : (
                 <SelectContent>
@@ -258,6 +267,14 @@ export default function TransactionHistory() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
+            {/* Reset button */}
+            <Button
+              variant="outline"
+              className="ml-0 sm:ml-2"
+              onClick={handleResetFilters}
+            >
+              {t("reset")}
+            </Button>
           </div>
           {role === "admin" && (
             <>

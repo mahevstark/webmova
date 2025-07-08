@@ -40,7 +40,7 @@ export default function Sidebar({ page }) {
     //   check: "paymentrequest",
     // },
     {
-      name: t("setting"),
+      name: t("settings"),
       icon: Activity,
       href: "/dashboard/settings/profile",
       activeicon: Active,
@@ -66,6 +66,7 @@ export default function Sidebar({ page }) {
     const role = Cookies.get("role");
     setRole(role);
   }, []);
+
 
   const handlelogout = () => {
     setloading(true);

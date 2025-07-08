@@ -28,11 +28,17 @@ export default function signin() {
 
   const { setlogin } = useUser();
   const checkType = (str) => {
-    return /\S+@\S+\.\S+/.test(str)
-      ? "Email"
-      : /^\+?\d{7,}$/.test(str)
-        ? "Phone"
-        : "Unknown";
+    if (!str || typeof str !== "string") return "Unknown";
+    const value = str.trim();
+
+    // Email: RFC 5322 Official Standard (simplified)
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // Phone: E.164 international format, e.g. +1234567890 (10-15 digits)
+    const phoneRegex = /^\+\d{10,15}$/;
+
+    if (emailRegex.test(value)) return "Email";
+    if (phoneRegex.test(value)) return "Phone";
+    return "Unknown";
   };
   const login = async (e) => {
     e.preventDefault();
@@ -44,12 +50,15 @@ export default function signin() {
         return;
       }
 
-      const role = checkType(phone) === "Email" ? "email" : "phone";
+
+      const role = checkType(phone) === "Email" ? "admin" : "businessUser";
+      console.log("role to sign in", role); 
       const response = await GlobalApi.login(phone, pass, role);
+      console.log("response", response);
 
 
       if (response?.status === 200) {
-        if (role === "email") {
+        if (role === "admin") {
 
           setlogin(response?.data?.user, response?.data?.token, "admin");
           setloading(false);
@@ -134,7 +143,7 @@ export default function signin() {
                   required
                   className="w-full focus:outline-none text-black focus:ring-0 border-0 placeholder:text-gray-400"
                   placeholder={
-                    isAdmin ? "Enter your Email" : "Enter Your Phone Number"
+                    isAdmin ? "Enter your Email" : "Enter Your Phone Number (e.g. +1234567890)"
                   }
                   value={phone || ""}
                   onChange={(e) => setphone(e.target.value)}
