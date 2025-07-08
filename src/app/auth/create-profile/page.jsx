@@ -43,38 +43,69 @@ export default function CreateProfile() {
     const validateForm = () => {
         const newErrors = {};
 
+        // First Name
         if (!formData.firstName.trim()) {
             newErrors.firstName = "First name is required";
         }
 
+        // Last Name
         if (!formData.lastName.trim()) {
             newErrors.lastName = "Last name is required";
         }
 
+        // Phone Number (E.164 international format, e.g. +1234567890)
         if (!formData.phoneNumber.trim()) {
             newErrors.phoneNumber = "Phone number is required";
-        } else if (!/^\+?[\d\s-()]+$/.test(formData.phoneNumber)) {
-            newErrors.phoneNumber = "Please enter a valid phone number";
+        } else if (!/^\+\d{10,15}$/.test(formData.phoneNumber)) {
+            newErrors.phoneNumber = "Please enter a valid phone number in international format (e.g. +1234567890)";
         }
 
+        // Date of Birth (YYYY-MM-DD, valid date, not in the future)
         if (!formData.dob) {
             newErrors.dob = "Date of birth is required";
+        } else {
+            // Check format
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(formData.dob)) {
+                newErrors.dob = "Date of birth must be in YYYY-MM-DD format";
+            } else {
+                const [year, month, day] = formData.dob.split("-");
+                if (year.length !== 4 || month.length !== 2 || day.length !== 2) {
+                    newErrors.dob = "Year must be 4 digits, month and day must be 2 digits each";
+                } else {
+                    const dobDate = new Date(formData.dob);
+                    const now = new Date();
+                    if (isNaN(dobDate.getTime())) {
+                        newErrors.dob = "Invalid date of birth";
+                    } else if (dobDate > now) {
+                        newErrors.dob = "Date of birth cannot be in the future";
+                    }
+                }
+            }
         }
 
+        // Permanent Address
         if (!formData.permanentAddress.trim()) {
             newErrors.permanentAddress = "Permanent address is required";
         }
 
+        // Password (min 8 chars, 1 special, 1 uppercase, 1 number)
         if (!formData.password) {
             newErrors.password = "Password is required";
         } else if (formData.password.length < 8) {
             newErrors.password = "Password must be at least 8 characters";
+        } else if (!/(?=.*[A-Z])/.test(formData.password)) {
+            newErrors.password = "Password must contain at least one uppercase letter";
+        } else if (!/(?=.*[0-9])/.test(formData.password)) {
+            newErrors.password = "Password must contain at least one number";
+        } else if (!/(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])/.test(formData.password)) {
+            newErrors.password = "Password must contain at least one special character";
         }
 
+        // Transaction PIN (6 digits)
         if (!formData.transactionPIN) {
             newErrors.transactionPIN = "Transaction PIN is required";
-        } else if (formData.transactionPIN.length !== 6) {
-            newErrors.transactionPIN = "Transaction PIN must be 6 digits";
+        } else if (!/^\d{6}$/.test(formData.transactionPIN)) {
+            newErrors.transactionPIN = "Transaction PIN must be exactly 6 digits";
         }
 
         setErrors(newErrors);
@@ -213,7 +244,7 @@ export default function CreateProfile() {
                                 name="phoneNumber"
                                 value={formData.phoneNumber}
                                 onChange={handleInputChange}
-                                placeholder="Phone Number"
+                                placeholder="Phone Number (e.g. +1234567890)"
                                 className={`w-full h-12 px-4 border-2 rounded-lg outline-none focus:ring-0 ${errors.phoneNumber ? 'border-red-500' : 'border-color-input'
                                     }`}
                             />

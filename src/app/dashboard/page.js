@@ -1,75 +1,63 @@
-"use client";
-import Layout from "../../components/layout/layout";
-import { Button } from "../../components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import GlobalApi from "../../lib/GlobalApi";
-import Cookies from "js-cookie";
-import { Spinner } from "../../components/ui/spinner";
-import CardMowa from "../../components/Card";
-import { toast } from "sonner";
-import Loading from "../../components/loading";
-import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+"use client"
+import Layout from "../../components/layout/layout"
+import { Button } from "../../components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../components/ui/table"
+import Link from "next/link"
+import { useEffect, useState } from "react"
+import GlobalApi from "../../lib/GlobalApi"
+import Cookies from "js-cookie"
+import { Spinner } from "../../components/ui/spinner"
+import CardMowa from "../../components/Card"
+import { toast } from "sonner"
+import Loading from "../../components/loading"
+import { useTranslations } from "next-intl"
+
 export default function Dashboard() {
-  var page = "Dashboard";
-  const t = useTranslations("Dashboard");
-  const s = useTranslations("Dashboard");
-  const [Role, setRole] = useState(null);
-  useEffect(() => {
-    const role = Cookies.get("role");
-    setRole(role);
-  }, []);
-
-  console.log("Role", Role);
-
-  const [user, setuser] = useState(null);
+  var page = "Dashboard"
+  const t = useTranslations("Dashboard")
+  const [Role, setRole] = useState(null)
 
   useEffect(() => {
-    setuser(JSON.parse(localStorage.getItem("userData")));
-  }, []);
+    const role = Cookies.get("role")
+    setRole(role)
+  }, [])
 
-  const [employee, setEmployee] = useState([]);
-  const [loading, setLoading] = useState(false);
+  console.log("Role", Role)
+  const [user, setuser] = useState(null)
 
-  const getTransactions = async (s) => {
+  useEffect(() => {
+    setuser(JSON.parse(localStorage.getItem("userData")))
+  }, [])
+
+  const [employee, setEmployee] = useState([])
+  const [loading, setLoading] = useState(false)
+
+  const getTransactions = async () => {
     try {
-      setLoading(true);
-
-      const token = Cookies.get("token");
+      setLoading(true)
+      const token = Cookies.get("token")
       if (!token) {
-        setLoading(false);
-        return;
+        setLoading(false)
+        return
       }
+      const data = JSON.parse(localStorage.getItem("userData"))
+      const response = await GlobalApi.getTransactions(token, data?.id, "weekly")
 
-      const data = JSON.parse(localStorage.getItem("userData"));
+      console.log("Full response:", response)
+      console.log("Recent transactions:", response?.data?.recentTransactions)
 
-      const response = await GlobalApi.getTransactions(
-        token,
-        data?.id,
-        "weekly"
-      );
+      if (response?.success === true && response?.data?.recentTransactions) {
+        const transactions = response.data.recentTransactions
+        console.log("Processing transactions:", transactions)
 
-      if (response?.success === true) {
-        const formatted = response?.data?.recentTransactions?.map((txn) => {
-          const date = new Date(txn.timestamp);
+        const formatted = transactions.map((txn) => {
+          console.log("Processing transaction:", txn)
+          const date = new Date(txn.timestamp)
+
           return {
             id: txn.id,
-            name: `User ${txn.id}`, // Replace with actual name if available
+            name: txn.otherUserInfo?.name || `User ${txn.id}`,
             accountNumber: txn.transactionId || "N/A",
             day: date.toLocaleDateString(),
             time: date.toLocaleTimeString([], {
@@ -78,105 +66,103 @@ export default function Dashboard() {
             }),
             type: txn.action,
             amount: `$${txn.amount}`,
-            action: s("view"),
-            currency: txn?.currency || "USA",
-          };
-        });
-        setEmployee(formatted);
+            action: t("view"),
+            currency: txn?.currency || "USD",
+            timestamp: txn.timestamp,
+            createdAt: txn.timestamp,
+          }
+        })
+
+        console.log("Formatted transactions:", formatted)
+        setEmployee(formatted)
       } else {
-        setEmployee([]);
+        console.log("No transactions found or API error")
+        setEmployee([])
       }
-      setLoading(false);
+      setLoading(false)
     } catch (error) {
-      console.log("Error getting transaction history:", error);
-      setEmployee([]);
-      setLoading(false);
+      console.log("Error getting transaction history:", error)
+      setEmployee([])
+      setLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    getTransactions();
-  }, []);
+    getTransactions()
+  }, [])
 
   const handleCard = () => {
-    toast("Your Card is already added");
-  };
+    toast("Your Card is already added")
+  }
 
-  const [Balance, setBalance] = useState(0);
+  const [Balance, setBalance] = useState(0)
 
   const getCarddetails = async () => {
     try {
-      const token = Cookies.get("token");
-      const response = await GlobalApi.getCardDetails(token, user?.id);
-
+      const token = Cookies.get("token")
+      const response = await GlobalApi.getCardDetails(token, user?.id)
       if (response?.success === true) {
-        setBalance(response?.data?.wallets[0]?.amount);
+        setBalance(response?.data?.wallets[0]?.amount)
       } else {
-        toast(response?.error || "Error fetching card details");
-        setBalance([]);
+        toast(response?.error || "Error fetching card details")
+        setBalance([])
       }
     } catch (error) {
-      console.log("error while fetching card", error);
-      toast("Network error while fetching card details");
-      setBalance([]);
+      console.log("error while fetching card", error)
+      toast("Network error while fetching card details")
+      setBalance([])
     }
-  };
+  }
 
   useEffect(() => {
     if (user?.id) {
-      getCarddetails();
+      getCarddetails()
     }
-  }, [user?.id]);
+  }, [user?.id])
 
-  const [dashboardStats, setdashboardStats] = useState(null);
-  const [TransStats, setTransStats] = useState([]);
-  const [recentTrans, setRecentTrans] = useState([]);
+  const [dashboardStats, setdashboardStats] = useState(null)
+  const [TransStats, setTransStats] = useState([])
+  const [recentTrans, setRecentTrans] = useState([])
 
   const getdashboardStats = async () => {
     try {
-      const token = Cookies.get("token");
-      const response = await GlobalApi.dashboardStats(token);
-
+      const token = Cookies.get("token")
+      const response = await GlobalApi.dashboardStats(token)
       if (response?.status === 200) {
-        setdashboardStats(response?.data?.overview);
-        setRecentTrans(response?.data?.recentActivity);
+        setdashboardStats(response?.data?.overview)
+        setRecentTrans(response?.data?.recentActivity)
       } else {
-        setdashboardStats(null);
+        setdashboardStats(null)
       }
     } catch (error) {
-      console.log("error getting dashboard", error);
-      setdashboardStats(null);
+      console.log("error getting dashboard", error)
+      setdashboardStats(null)
     }
-  };
+  }
 
   const getTrans = async () => {
     try {
-      const token = Cookies.get("token");
-      const response = await GlobalApi.transactioninsights(token);
-
+      const token = Cookies.get("token")
+      const response = await GlobalApi.transactioninsights(token)
       if (response?.status === 200) {
-        setTransStats(response?.data?.transactionsByType);
+        setTransStats(response?.data?.transactionsByType)
       } else {
-        setTransStats([]);
+        setTransStats([])
       }
     } catch (error) {
-      setTransStats([]);
+      setTransStats([])
     }
-  };
+  }
 
   useEffect(() => {
     if (Role === "admin") {
-      getdashboardStats();
-      getTrans();
+      getdashboardStats()
+      getTrans()
     }
-  }, [Role]);
-
-  // console.log(props());
-
-  // const t = () => {};
+  }, [Role])
 
   if (Role === null || loading) {
-    return <Loading />;
+    return <Loading />
   }
 
   return (
@@ -188,14 +174,10 @@ export default function Dashboard() {
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
                 <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between  sm:w-[38%] gap-2 sm:gap-0 2xl:justify-normal 2xl:gap-60 ">
                   <h1 className="text-2xl font-semibold">Card</h1>
-                  <button
-                    className="rounded-md font-semibold bg-[#544af1] text-white px-3 py-1"
-                    onClick={handleCard}
-                  >
+                  <button className="rounded-md font-semibold bg-[#544af1] text-white px-3 py-1" onClick={handleCard}>
                     Add New Card
                   </button>
                 </div>
-
                 <div className="flex 2xl:block xl:block lg:hidden md:hidden max-sm:hidden flex-wrap gap-2">
                   <Link href="/dashboard/send-money">
                     {" "}
@@ -215,7 +197,6 @@ export default function Dashboard() {
                   </Link>
                 </div>
               </div>
-
               <div
                 className="flex lg:flex-col md:flex-col max-sm:flex-col xl:flex-row 2xl:flex-row justify-between gap-4  lg:gap-0"
                 style={{ margin: 0 }}
@@ -223,15 +204,10 @@ export default function Dashboard() {
                 <div className="w-full">
                   <CardMowa
                     balance={user?.wallet?.balance ? user?.wallet?.balance : 0}
-                    date={
-                      user?.wallet?.createdAt
-                        ? user?.wallet?.createdAt
-                        : user?.business?.createdAt
-                    }
+                    date={user?.wallet?.createdAt ? user?.wallet?.createdAt : user?.business?.createdAt}
                     userid={user}
                   />
                 </div>
-
                 <div className="flex lg:block lg:mt-4 2xl:hidden xl:hidden md:block flex-wrap gap-2">
                   <Link href="/dashboard/send-money">
                     {" "}
@@ -250,52 +226,26 @@ export default function Dashboard() {
                     </Button>{" "}
                   </Link>
                 </div>
-
                 <Card className="mt-4 shadow-md border xl:w-[200%] 2xl:w-[135%]">
                   <CardHeader>
                     <CardTitle className="flex justify-between items-center">
-                      <p className="btn-txt-color font-semibold text-lg">
-                        Stats
-                      </p>
-                      {/* <select
-                    className="border px-4 py-2 cursor-pointer rounded-full font-medium btn-txt-color"
-                    style={{ background: "#cfccff69" }}
-                  >
-                    <option value="weekly">Weekly</option>
-                  </select> */}
+                      <p className="btn-txt-color font-semibold text-lg">Stats</p>
                     </CardTitle>
-                    <p className="text-sm text-muted-foreground">
-                      Showing Spending Recent Results
-                    </p>
+                    <p className="text-sm text-muted-foreground">Showing Spending Recent Results</p>
                   </CardHeader>
                   <CardContent>
-                    <div
-                      className="flex justify-normal 2xl:justify-around  md:justify-around  items-center 
-             2xl:flex-nowrap xl:flex-nowrap max-sm:flex-wrap   gap-5 sm:gap-auto"
-                    >
+                    <div className="flex justify-normal 2xl:justify-around  md:justify-around  items-center              2xl:flex-nowrap xl:flex-nowrap max-sm:flex-wrap   gap-5 sm:gap-auto">
                       <div className="flex  gap-3 items-center border shadow-md px-4 sm:px-5 pt-4 pb-4 rounded-lg ">
-                        <p className="text-2xl font-bold text-gray-700">
-                          ${Balance ? Balance : 0}
-                        </p>
                         <p className="text-sm text-gray-700">Balance</p>
+                        <p className="text-2xl font-bold text-gray-700">${Balance ? Balance : 0}</p>
                       </div>
                       <div className="flex border justify-between items-center px-4 gap-3 shadow-md sm:px-5 pt-4 pb-4 rounded-lg ">
-                        <p className="text-2xl font-bold">
-                          {user?.wallet?.type ? user?.wallet?.type : "None"}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          Wallet Type
-                        </p>
+                        <p className="text-sm text-muted-foreground">Wallet Type</p>
+                        <p className="text-2xl font-bold">{user?.wallet?.type ? user?.wallet?.type : "None"}</p>
                       </div>
                       <div className="flex border justify-between items-center px-4 gap-3 shadow-md sm:px-5 pt-4 pb-4 rounded-lg ">
-                        <p className="text-2xl font-bold">
-                          {user?.wallet?.provider
-                            ? user?.wallet?.provider
-                            : "None"}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          Provider
-                        </p>
+                        <p className="text-sm text-muted-foreground">Provider</p>
+                        <p className="text-2xl font-bold">{user?.wallet?.provider ? user?.wallet?.provider : "None"}</p>
                       </div>
                     </div>
                   </CardContent>
@@ -308,33 +258,24 @@ export default function Dashboard() {
               <Card className="mt-4 shadow-md border">
                 <CardHeader>
                   <CardTitle className="flex justify-between items-center">
-                    <p className="btn-txt-color font-semibold text-lg">
-                      {t("Insights")}
-                    </p>
+                    <p className="btn-txt-color font-semibold text-lg">{t("Insights")}</p>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Link
                     href="dashboard/users"
-                    className="flex justify-normal 2xl:justify-around  md:justify-around  items-center 
-             2xl:flex-nowrap xl:flex-nowrap max-sm:flex-wrap   gap-5 sm:gap-auto"
+                    className="flex justify-normal 2xl:justify-around  md:justify-around  items-center              2xl:flex-nowrap xl:flex-nowrap max-sm:flex-wrap   gap-5 sm:gap-auto"
                   >
                     <div className="flex  gap-3 items-center border shadow-md px-4 sm:px-5 pt-4 pb-4 rounded-lg ">
-                      <p className="text-sm text-gray-700">
-                        {t("total-users")}
-                      </p>
+                      <p className="text-sm text-gray-700">{t("total-users")}</p>
                       <p className="text-2xl font-bold text-gray-700">
-                        {dashboardStats?.totalUsers
-                          ? dashboardStats?.totalUsers
-                          : 0}
+                        {dashboardStats?.totalUsers ? dashboardStats?.totalUsers : 0}
                       </p>
                     </div>
                     <div className="flex  gap-3 items-center border shadow-md px-4 sm:px-5 pt-4 pb-4 rounded-lg ">
                       <p className="text-sm text-gray-700">{t("active")}</p>
                       <p className="text-2xl font-bold text-gray-700">
-                        {dashboardStats?.activeUsers
-                          ? dashboardStats?.activeUsers
-                          : 0}
+                        {dashboardStats?.activeUsers ? dashboardStats?.activeUsers : 0}
                       </p>
                     </div>
                   </Link>
@@ -343,25 +284,18 @@ export default function Dashboard() {
               <Card className="mt-4 shadow-md border">
                 <CardHeader>
                   <CardTitle className="flex justify-between items-center">
-                    <p className="btn-txt-color font-semibold text-lg">
-                      {t("Transactions")}
-                    </p>
+                    <p className="btn-txt-color font-semibold text-lg">{t("Transactions")}</p>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Link
                     href="/dashboard/transaction-history"
-                    className="flex justify-normal 2xl:justify-around  md:justify-around  items-center 
-             2xl:flex-nowrap xl:flex-nowrap max-sm:flex-wrap   gap-5 sm:gap-auto"
+                    className="flex justify-normal 2xl:justify-around  md:justify-around  items-center              2xl:flex-nowrap xl:flex-nowrap max-sm:flex-wrap   gap-5 sm:gap-auto"
                   >
                     <div className="flex  gap-3 items-center border shadow-md px-4 sm:px-5 pt-4 pb-4 rounded-lg ">
-                      <p className="text-sm text-gray-700">
-                        {t("total-trans")}
-                      </p>
+                      <p className="text-sm text-gray-700">{t("total-trans")}</p>
                       <p className="text-2xl font-bold text-gray-700">
-                        {dashboardStats?.totalTransactions
-                          ? dashboardStats?.totalTransactions
-                          : 0}
+                        {dashboardStats?.totalTransactions ? dashboardStats?.totalTransactions : 0}
                       </p>
                     </div>
                     <div className="flex  gap-3 items-center border shadow-md px-4 sm:px-5 pt-4 pb-4 rounded-lg ">
@@ -371,11 +305,9 @@ export default function Dashboard() {
                       </p>
                     </div>
                     <div className="flex  gap-3 items-center border shadow-md px-4 sm:px-5 pt-4 pb-4 rounded-lg ">
-                      <p className="text-sm text-gray-700">
-                        {t("admin-credit")}
-                      </p>
+                      <p className="text-sm text-gray-700">{t("admin-credit")}</p>
                       <p className="text-2xl font-bold text-gray-700">
-                        {TransStats[0]?._count ? TransStats[2]?._count : 0}
+                        {TransStats[2]?._count ? TransStats[2]?._count : 0}
                       </p>
                     </div>
                   </Link>
@@ -383,106 +315,59 @@ export default function Dashboard() {
               </Card>
             </div>
           )}
-
           <div className="flex flex-col lg:flex-row gap-7  sm:w-auto">
             <Card className="border-none shadow-none p-0 mt-5 mb-5 w-full ">
               <CardHeader className="p-0 py-2">
                 <CardTitle className="text-xl text-[#544AF1] ">
-                  {Role === "admin"
-                    ? "Recent User Transactions"
-                    : "    Recent Employee Transactions"}
+                  {Role === "admin" ? "Recent User Transactions" : "Recent Employee Transactions"}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0 overflow-x-auto">
                 <Table className="p-0">
                   <TableHeader className="tb-col">
                     <TableRow>
-                      <TableHead className="sm:table-cel font-semibold text-blackl">
-                        ID
-                      </TableHead>
-                      <TableHead className="font-semibold text-black">
-                        Name
-                      </TableHead>
-                      <TableHead className="sm:table-cell font-semibold text-black">
-                        Transaction ID
-                      </TableHead>
-                      <TableHead className="sm:table-cell font-semibold text-black">
-                        Day
-                      </TableHead>
-                      <TableHead className="font-semibold text-black">
-                        Time
-                      </TableHead>
-                      <TableHead className="sm:table-cell font-semibold text-black">
-                        Type
-                      </TableHead>
-                      <TableHead className="sm:table-cell font-semibold text-black">
-                        Amount
-                      </TableHead>
-                      <TableHead className="sm:table-cell font-semibold text-black">
-                        Currency
-                      </TableHead>
+                      <TableHead className="sm:table-cell font-semibold text-black">ID</TableHead>
+                      <TableHead className="font-semibold text-black">Name</TableHead>
+                      <TableHead className="sm:table-cell font-semibold text-black">Transaction ID</TableHead>
+                      <TableHead className="sm:table-cell font-semibold text-black">Day</TableHead>
+                      <TableHead className="font-semibold text-black">Time</TableHead>
+                      <TableHead className="sm:table-cell font-semibold text-black">Type</TableHead>
+                      <TableHead className="sm:table-cell font-semibold text-black">Amount</TableHead>
+                      <TableHead className="sm:table-cell font-semibold text-black">Currency</TableHead>
                     </TableRow>
                   </TableHeader>
                   {Role === "admin" ? (
                     <TableBody>
                       {loading ? (
                         <TableRow>
-                          <TableCell
-                            colSpan={8}
-                            className="text-center text-xl font-base text-gray-500"
-                          >
+                          <TableCell colSpan={8} className="text-center text-xl font-base text-gray-500">
                             <Spinner />
                           </TableCell>
                         </TableRow>
                       ) : recentTrans.length === 0 && !loading ? (
                         <TableRow>
-                          <TableCell
-                            colSpan={8}
-                            className="text-center text-lg font-base text-gray-500"
-                          >
+                          <TableCell colSpan={8} className="text-center text-lg font-base text-gray-500">
                             No Recent Transactions found.
                           </TableCell>
                         </TableRow>
                       ) : (
                         recentTrans
-                          ?.sort(
-                            (a, b) =>
-                              new Date(b.createdAt) - new Date(a.createdAt)
-                          )
+                          ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                           ?.slice(0, 7)
                           ?.map((employee) => (
-                            <TableRow
-                              key={employee.id}
-                              className="text-muted-foreground border-0"
-                            >
+                            <TableRow key={employee.id} className="text-muted-foreground border-0">
+                              <TableCell className="sm:table-cell">{employee.id}</TableCell>
+                              <TableCell>{employee.wallet?.user?.firstName}</TableCell>
+                              <TableCell className="sm:table-cell">{employee.transactionId}</TableCell>
                               <TableCell className="sm:table-cell">
-                                {employee.id}
-                              </TableCell>
-                              <TableCell>
-                                {employee.wallet?.user?.firstName}
+                                {new Date(employee.wallet?.createdAt).toLocaleTimeString("en-GB")}
                               </TableCell>
                               <TableCell className="sm:table-cell">
-                                {employee.transactionId}
+                                {new Date(employee.wallet?.createdAt).toLocaleDateString("en-CA")}
                               </TableCell>
-                              <TableCell className="sm:table-cell">
-                                {new Date(
-                                  employee.wallet?.createdAt
-                                ).toLocaleTimeString("en-GB")}
-                              </TableCell>
-                              <TableCell className="sm:table-cell">
-                                {new Date(
-                                  employee.wallet?.createdAt
-                                ).toLocaleDateString("en-CA")}
-                              </TableCell>
-                              <TableCell className="sm:table-cell">
-                                {employee.actions}
-                              </TableCell>
-                              <TableCell className="sm:table-cell">
-                                {employee.amount}
-                              </TableCell>
-                              <TableCell className="sm:table-cell">
-                                USD
-                              </TableCell>
+                              <TableCell className="sm:table-cell">{employee.actions}</TableCell>
+                              <TableCell className="sm:table-cell">{employee.amount}</TableCell>
+                              <TableCell className="sm:table-cell">USD</TableCell>
                             </TableRow>
                           ))
                       )}
@@ -491,56 +376,30 @@ export default function Dashboard() {
                     <TableBody>
                       {loading ? (
                         <TableRow>
-                          <TableCell
-                            colSpan={8}
-                            className="text-center text-xl font-base text-gray-500"
-                          >
+                          <TableCell colSpan={8} className="text-center text-xl font-base text-gray-500">
                             <Spinner />
                           </TableCell>
                         </TableRow>
-                      ) : employee.length === 0 && !loading ? (
+                      ) : employee.length === 0 ? (
                         <TableRow>
-                          <TableCell
-                            colSpan={8}
-                            className="text-center text-lg font-base text-gray-500"
-                          >
+                          <TableCell colSpan={8} className="text-center text-lg font-base text-gray-500">
                             No Recent Transactions found.
                           </TableCell>
                         </TableRow>
                       ) : (
                         employee
-                          ?.sort(
-                            (a, b) =>
-                              new Date(b.createdAt) - new Date(a.createdAt)
-                          )
+                          ?.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
                           ?.slice(0, 7)
-                          ?.map((employee) => (
-                            <TableRow
-                              key={employee.id}
-                              className="text-muted-foreground border-0"
-                            >
-                              <TableCell className="sm:table-cell">
-                                {employee.id}
-                              </TableCell>
-                              <TableCell>{employee.name}</TableCell>
-                              <TableCell className="sm:table-cell">
-                                {employee.accountNumber}
-                              </TableCell>
-                              <TableCell className="sm:table-cell">
-                                {employee.day}
-                              </TableCell>
-                              <TableCell className="sm:table-cell">
-                                {employee.time}
-                              </TableCell>
-                              <TableCell className="sm:table-cell">
-                                {employee.type}
-                              </TableCell>
-                              <TableCell className="sm:table-cell">
-                                {employee.amount}
-                              </TableCell>
-                              <TableCell className="sm:table-cell">
-                                {employee.currency}
-                              </TableCell>
+                          ?.map((transaction) => (
+                            <TableRow key={transaction.id} className="text-muted-foreground border-0">
+                              <TableCell className="sm:table-cell">{transaction.id}</TableCell>
+                              <TableCell>{transaction.name}</TableCell>
+                              <TableCell className="sm:table-cell">{transaction.accountNumber}</TableCell>
+                              <TableCell className="sm:table-cell">{transaction.day}</TableCell>
+                              <TableCell className="sm:table-cell">{transaction.time}</TableCell>
+                              <TableCell className="sm:table-cell">{transaction.type}</TableCell>
+                              <TableCell className="sm:table-cell">{transaction.amount}</TableCell>
+                              <TableCell className="sm:table-cell">{transaction.currency}</TableCell>
                             </TableRow>
                           ))
                       )}
@@ -553,5 +412,5 @@ export default function Dashboard() {
         </div>
       </div>
     </Layout>
-  );
+  )
 }
