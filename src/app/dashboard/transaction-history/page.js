@@ -1,4 +1,5 @@
 "use client"
+
 import { useEffect, useState } from "react"
 import Layout from "../../../components/layout/layout"
 import { Card, CardContent } from "../../../components/ui/card"
@@ -17,17 +18,17 @@ export default function TransactionHistory() {
   const [searchTerm, setSearchTerm] = useState("")
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
-  const [selected, setSelected] = useState("") // No default value
-  const [selectedType, setSeletedType] = useState("") // No default value
-  const rowsPerPage = 15 // Number of rows per page
+  const [selected, setSelected] = useState("") // Filter selection
+  const [selectedType, setSelectedType] = useState("") // Additional filter if needed
+  const rowsPerPage = 15
   const [modalDetails, setModalDetails] = useState(null)
-  const [employee, setEmployee] = useState([])
+  const [allTransactions, setAllTransactions] = useState([]) // Store all transactions
   const [loading, setLoading] = useState(false)
   const [showExpertise, setShowExpertise] = useState(false)
   const [isClient, setIsClient] = useState(false)
   const [totalTrans, setTotalTrans] = useState(null)
 
-  // Fix for hydration mismatch - ensure component is only fully rendered on client
+  // Fix for hydration mismatch
   useEffect(() => {
     setIsClient(true)
   }, [])
@@ -41,42 +42,68 @@ export default function TransactionHistory() {
   }, [searchTerm])
 
   const token = isClient ? Cookies.get("token") : null
+  const [role, setRole] = useState("")
+
+  useEffect(() => {
+    const userRole = Cookies.get("role")
+    setRole(userRole)
+  }, [])
 
   const toggleExpertise = (txn = null) => {
     setShowExpertise(!showExpertise)
     if (txn) setModalDetails(txn)
   }
 
-  const [role, setrole] = useState("")
-  useEffect(() => {
-    const role = Cookies.get("role")
-    setrole(role)
-  }, [])
+  // Helper function to format transaction types
+  const formatTransactionType = (type) => {
+    if (!type) return "Unknown"
 
-  const getTransactions = async (s, type) => {
+    // Handle concatenated types by splitting on capital letters
+    const formatted = type
+      .replace(/([A-Z])/g, " $1") // Add space before capital letters
+      .trim()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ")
+
+    // Handle specific cases
+    const typeMap = {
+      TRANSFER: "Transfer",
+      DEPOSIT: "Deposit",
+      ADMIN_CREDIT: "Admin Credit",
+      ADMIN_CREDITS: "Admin Credits",
+      ADMIN_ADD_BALANCE: "Admin Add Balance",
+      CARD_DEPOSIT: "Card Deposit",
+      SALARY_RECEIVED: "Salary Received",
+      WITHDRAW: "Withdraw",
+      REQUESTED: "Requested",
+    }
+
+    return typeMap[type] || formatted
+  }
+
+  // Fetch all transactions without server-side filtering
+  const getAllTransactions = async () => {
     try {
       setLoading(true)
       if (!token) {
         setLoading(false)
         return
       }
+
       const data = JSON.parse(localStorage.getItem("userData"))
-      const role = Cookies.get("role")
+      const userRole = Cookies.get("role")
 
-      // Keep the original API call structure - don't change parameters
-      const response = await GlobalApi.getTransactions(token, data?.id, s, role, type)
-      console.log("my data for transaction", response)
+      // Fetch all transactions without filters (pass empty strings or null for filters)
+      const response = await GlobalApi.getTransactions(token, data?.id, "", userRole, "")
+      console.log("All transactions data:", response)
 
-      if (role === "admin") {
-        // Handle admin response - check for both response.data and response.data.data
+      if (userRole === "admin") {
         const responseData = response?.data?.data || response?.data
-
         if (response?.status === 200 && responseData) {
           setTotalTrans(responseData)
-
-          // Check if transactions exist in the response
           const transactions = responseData?.transactions || []
-          console.log("Transactions found:", transactions.length)
+          console.log("Admin transactions found:", transactions.length)
 
           const formatted = transactions.map((txn) => {
             const date = new Date(txn.timestamp)
@@ -89,7 +116,8 @@ export default function TransactionHistory() {
                 hour: "2-digit",
                 minute: "2-digit",
               }),
-              type: txn.type === "ADMIN_CREDIT" ? "Admin Credit" : txn.type || txn.actions,
+              type: txn.type || txn.actions,
+              formattedType: formatTransactionType(txn.type || txn.actions),
               amount: `$${txn.amount}`,
               action: txn.actions,
               currency: txn?.currency || "USD",
@@ -97,19 +125,16 @@ export default function TransactionHistory() {
             }
           })
 
-          setLoading(false)
-          setEmployee(formatted)
-          console.log("Formatted transactions:", formatted.length)
+          setAllTransactions(formatted)
+          console.log("Formatted admin transactions:", formatted.length)
         } else {
           console.log("No transactions found in admin response")
-          setEmployee([])
-          setLoading(false)
+          setAllTransactions([])
         }
       } else {
-        // Handle non-admin response
         if (response?.success === true) {
           const transactions = response?.data?.recentTransactions || []
-          console.log("Recent transactions found:", transactions.length)
+          console.log("User transactions found:", transactions.length)
 
           const formatted = transactions.map((txn) => {
             const date = new Date(txn.timestamp)
@@ -123,6 +148,7 @@ export default function TransactionHistory() {
                 minute: "2-digit",
               }),
               type: txn.action || txn.type,
+              formattedType: formatTransactionType(txn.action || txn.type),
               amount: `$${txn.amount}`,
               action: "View",
               currency: txn?.currency || "USD",
@@ -130,40 +156,65 @@ export default function TransactionHistory() {
             }
           })
 
-          setLoading(false)
-          setEmployee(formatted)
-          console.log("Formatted recent transactions:", formatted.length)
+          setAllTransactions(formatted)
+          console.log("Formatted user transactions:", formatted.length)
         } else {
-          console.log("No recent transactions found")
-          setEmployee([])
-          setLoading(false)
+          console.log("No transactions found")
+          setAllTransactions([])
         }
       }
+      setLoading(false)
     } catch (error) {
       console.error("Error getting transaction history:", error)
-      setEmployee([])
+      setAllTransactions([])
       setLoading(false)
     }
   }
 
+  // Fetch all transactions on component mount
   useEffect(() => {
     if (isClient) {
-      getTransactions(selected, selectedType)
+      getAllTransactions()
     }
-  }, [isClient, selected, selectedType])
+  }, [isClient])
 
-  // Get the current page data - use debouncedSearchTerm for filtering
-  const filteredEmployees = employee.filter((emp) => {
-    if (!debouncedSearchTerm) return true;
-    return (
-      (emp.name && emp.name.toString().toLowerCase().includes(debouncedSearchTerm.toLowerCase())) ||
-      (emp.id && emp.id.toString().toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
-    );
-  });
+  // Client-side filtering logic
+  const getFilteredTransactions = () => {
+    let filtered = [...allTransactions]
 
-  const indexOfLastEmployee = currentPage * rowsPerPage
-  const indexOfFirstEmployee = indexOfLastEmployee - rowsPerPage
-  const currentEmployees = filteredEmployees.slice(indexOfFirstEmployee, indexOfLastEmployee)
+    // Filter by search term
+    if (debouncedSearchTerm) {
+      filtered = filtered.filter(
+        (txn) =>
+          (txn.name && txn.name.toString().toLowerCase().includes(debouncedSearchTerm.toLowerCase())) ||
+          (txn.id && txn.id.toString().toLowerCase().includes(debouncedSearchTerm.toLowerCase())) ||
+          (txn.accountNumber && txn.accountNumber.toString().toLowerCase().includes(debouncedSearchTerm.toLowerCase())),
+      )
+    }
+
+    // Filter by transaction type
+    if (selected) {
+      filtered = filtered.filter((txn) => {
+        const txnType = txn.type?.toUpperCase()
+        const selectedUpper = selected.toUpperCase()
+
+        // Handle exact matches and partial matches
+        return (
+          txnType === selectedUpper ||
+          txnType?.includes(selectedUpper) ||
+          txn.formattedType?.toUpperCase().includes(selectedUpper)
+        )
+      })
+    }
+
+    return filtered
+  }
+
+  // Get filtered and paginated data
+  const filteredTransactions = getFilteredTransactions()
+  const indexOfLastTransaction = currentPage * rowsPerPage
+  const indexOfFirstTransaction = indexOfLastTransaction - rowsPerPage
+  const currentTransactions = filteredTransactions.slice(indexOfFirstTransaction, indexOfLastTransaction)
 
   // Change page
   const handlePageChange = (pageNumber) => {
@@ -175,17 +226,22 @@ export default function TransactionHistory() {
     setSearchTerm("")
     setDebouncedSearchTerm("")
     setCurrentPage(1)
-    setSelected("") // Clear dropdown selection
-    setSeletedType("") // Clear dropdown selection
+    setSelected("")
+    setSelectedType("")
   }
 
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [selected, selectedType, debouncedSearchTerm])
+
   // Total pages
-  const totalPages = Math.ceil(filteredEmployees.length / rowsPerPage)
+  const totalPages = Math.ceil(filteredTransactions.length / rowsPerPage)
 
   const t = useTranslations("Transactions")
 
   if (!isClient) {
-    return null // Return null on server-side to prevent hydration mismatch
+    return null
   }
 
   return (
@@ -198,11 +254,12 @@ export default function TransactionHistory() {
           request={"transaction"}
         />
       )}
-      <div className=" px-4 sm:px-6 md:px-10 pb-12 2xl:w-full  sm:w-full">
+      <div className="px-4 sm:px-6 md:px-10 pb-12 2xl:w-full sm:w-full">
         <h1 className="text-2xl font-semibold mb-4">{t("transaction-history")}</h1>
+
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
           <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
-            {/* Search Input - Now First */}
+            {/* Search Input */}
             <div className="relative w-full">
               <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-600" size={18} />
               <Input
@@ -214,50 +271,43 @@ export default function TransactionHistory() {
               />
             </div>
 
-            {/* Dropdowns - Now After Search */}
+            {/* Transaction Type Filter */}
             <Select
               className="border-class-employee w-full sm:w-[180px]"
               value={selected}
-              onValueChange={(value) => {
-                setSelected(value)
-                setCurrentPage(1)
-              }}
+              onValueChange={(value) => setSelected(value)}
             >
               <SelectTrigger className="border-class-employee select-color font-medium">
                 <SelectValue placeholder={t("filter-type")} />
               </SelectTrigger>
-              { role === "admin" ? (
+              {role === "admin" ? (
                 <SelectContent>
-                  <SelectItem value="TRANSFER"> {t("transfer")}</SelectItem>
-                  <SelectItem value="DEPOSIT"> {t("deposit")}</SelectItem>
-                  <SelectItem value="ADMIN_CREDIT"> {t("admin-credit")}</SelectItem>
-                  {/* <SelectItem value="REQUESTED"> {t("requested")}</SelectItem> */}
-                  {/* <SelectItem value="WITHDRAW">{t("withdraw")}</SelectItem> */}
+                  <SelectItem value="TRANSFER">{t("transfer")}</SelectItem>
+                  <SelectItem value="DEPOSIT">{t("deposit")}</SelectItem>
+                  <SelectItem value="ADMIN_CREDIT">{t("admin-credit")}</SelectItem>
                 </SelectContent>
               ) : (
                 <SelectContent>
-                  <SelectItem value="TRANSFER"> {t("transfer")}</SelectItem>
-                  <SelectItem value="DEPOSIT"> {t("deposit")}</SelectItem>
-                  {/* <SelectItem value="REQUESTED"> {t("requested")}</SelectItem> */}
+                  <SelectItem value="TRANSFER">{t("transfer")}</SelectItem>
+                  <SelectItem value="DEPOSIT">{t("deposit")}</SelectItem>
                 </SelectContent>
               )}
             </Select>
-
 
             {/* Reset button */}
             <Button variant="outline" className="ml-0 sm:ml-2 bg-transparent" onClick={handleResetFilters}>
               {t("reset")}
             </Button>
           </div>
+
           {role === "admin" && (
-            <>
-              <div className=" px-4 py-2  rounded-md border-class-employee select-color font-medium  text-sm flex gap-2">
-                <span className="block">{t("total-amount")} : </span>
-                <span className="select-color font-semibold">${totalTrans?.totalAmount || 0}</span>
-              </div>
-            </>
+            <div className="px-4 py-2 rounded-md border-class-employee select-color font-medium text-sm flex gap-2">
+              <span className="block">{t("total-amount")} : </span>
+              <span className="select-color font-semibold">${totalTrans?.totalAmount || 0}</span>
+            </div>
           )}
         </div>
+
         <div className="border-t">
           <Card className="border-none shadow-none p-0 mt-5 mb-5">
             <CardContent className="p-0 overflow-x-auto">
@@ -275,25 +325,27 @@ export default function TransactionHistory() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {currentEmployees.length === 0 && !loading ? (
+                  {currentTransactions.length === 0 && !loading ? (
                     <TableRow>
                       <TableCell colSpan={8} className="text-center text-lg font-base text-gray-500">
-                        No Recent Transactions found.
+                        {filteredTransactions.length === 0 && allTransactions.length > 0
+                          ? "No transactions match your filters."
+                          : "No Recent Transactions found."}
                       </TableCell>
                     </TableRow>
                   ) : (
-                    currentEmployees
+                    currentTransactions
                       ?.sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt))
-                      .map((employee) => (
-                        <TableRow key={employee.id} className="text-muted-foreground border-0">
-                          <TableCell className="sm:table-cell">{employee.id}</TableCell>
-                          <TableCell>{employee.name}</TableCell>
-                          <TableCell className="sm:table-cell">{employee.accountNumber}</TableCell>
-                          <TableCell className="sm:table-cell">{employee.day}</TableCell>
-                          <TableCell className="sm:table-cell">{employee.time}</TableCell>
-                          <TableCell className="sm:table-cell">{employee.type}</TableCell>
-                          <TableCell className="sm:table-cell">{employee.amount}</TableCell>
-                          <TableCell className="sm:table-cell">{employee.currency}</TableCell>
+                      .map((transaction) => (
+                        <TableRow key={transaction.id} className="text-muted-foreground border-0">
+                          <TableCell className="sm:table-cell">{transaction.id}</TableCell>
+                          <TableCell>{transaction.name}</TableCell>
+                          <TableCell className="sm:table-cell">{transaction.accountNumber}</TableCell>
+                          <TableCell className="sm:table-cell">{transaction.day}</TableCell>
+                          <TableCell className="sm:table-cell">{transaction.time}</TableCell>
+                          <TableCell className="sm:table-cell">{transaction.formattedType}</TableCell>
+                          <TableCell className="sm:table-cell">{transaction.amount}</TableCell>
+                          <TableCell className="sm:table-cell">{transaction.currency}</TableCell>
                         </TableRow>
                       ))
                   )}
@@ -302,13 +354,14 @@ export default function TransactionHistory() {
             </CardContent>
           </Card>
         </div>
+
         {/* Pagination Controls */}
         {loading ? (
           <div className="mx-auto flex justify-center items-center">
             <Spinner />
           </div>
         ) : (
-          filteredEmployees.length > rowsPerPage && (
+          filteredTransactions.length > rowsPerPage && (
             <div className="flex justify-between items-center mt-4">
               <button
                 className="hover:bg-[#544af1] hover:text-white cursor-pointer border-[#544af1] border rounded-md px-4 text-[#544af1] py-1"
@@ -331,15 +384,12 @@ export default function TransactionHistory() {
           )
         )}
 
-        {/* Debug info - Remove this in production */}
+        {/* Debug info for development */}
         {/* <div className="mt-4 text-sm text-gray-500 bg-gray-100 p-2 rounded">
-          <div>API Response Status: {loading ? "Loading..." : "Loaded"}</div>
-          <div>Total Transactions from API: {totalTrans?.totalTransactions || 0}</div>
-          <div>Formatted Transactions: {employee.length}</div>
-          <div>Filtered Transactions: {filteredEmployees.length}</div>
-          <div>Current Page Transactions: {currentEmployees.length}</div>
+          <div>Total Transactions: {allTransactions.length}</div>
+          <div>Filtered Transactions: {filteredTransactions.length}</div>
+          <div>Current Page Transactions: {currentTransactions.length}</div>
           <div>Selected Filter: {selected || "None"}</div>
-          <div>Selected Type: {selectedType || "None"}</div>
           <div>Search Term: {debouncedSearchTerm || "None"}</div>
         </div> */}
       </div>

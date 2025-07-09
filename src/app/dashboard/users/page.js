@@ -330,7 +330,7 @@ export default function Employee() {
                       colSpan={8}
                       className="text-center text-lg font-base text-gray-500"
                     >
-                      No Employee found.
+                      No {Role === "admin" ? "Users" : "Employees"} found.
                     </TableCell>
                   </TableRow>
                 ) : Role === "admin" ? (
