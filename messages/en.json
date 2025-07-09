@@ -15,8 +15,9 @@
 },
 "Users": {
   "users": "Users",
+  "id" : "ID",
   "emp": "Employees",
-  "search-key": "Search Keyword",
+  "search-by-name-or-phone": "Search by Name or phone number",
   "add-user": "Add User",
   "add-emp": "Add Employee",
   "name": "Name",
@@ -39,6 +40,7 @@
 "Transactions":{
   "transaction-history": "Transaction History",
   "filter-type": "Filter Transaction Type",
+  "search-by-name-or-id": "Search by Name or ID",
   "transfer": "Transfer",
   "deposit": "Deposit",
   "requested": "Requested",

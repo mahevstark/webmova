@@ -37,6 +37,7 @@ const page = "Employees";
 
 export default function Employee() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isAddEmployeeDialogOpen, setIsAddEmployeeDialogOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -52,7 +53,16 @@ export default function Employee() {
     const role = Cookies.get("role");
     setRole(role);
   }, []);
-  const itemsPerPage = 10;
+
+  // Debounce searchTerm
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 700);
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
+
+  const itemsPerPage = 12;
 
   const token = Cookies.get("token");
 
@@ -128,15 +138,22 @@ export default function Employee() {
     const isActive = Role === "admin"
       ? employee?.isActive
       : employee?.user?.isActive;
-    const matchesSearch = name?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = name?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) || employee?.phoneNumber?.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
     const matchesStatus =
       statusFilter === null ? true : statusFilter === "active" ? isActive : !isActive;
     return matchesSearch && matchesStatus;
   });
 
+  // Sort filteredEmployees by createdAt descending (newest first)
+  const sortedEmployees = filteredEmployees?.slice().sort((a, b) => {
+    const dateA = new Date(Role === "admin" ? a.createdAt : a.user?.createdAt);
+    const dateB = new Date(Role === "admin" ? b.createdAt : b.user?.createdAt);
+    return dateB - dateA;
+  });
+
   const indexOfLastEmployee = currentPage * itemsPerPage;
   const indexOfFirstEmployee = indexOfLastEmployee - itemsPerPage;
-  const currentEmployees = filteredEmployees?.slice(
+  const currentEmployees = sortedEmployees?.slice(
     indexOfFirstEmployee,
     indexOfLastEmployee
   );
@@ -225,8 +242,8 @@ export default function Employee() {
               />
               <Input
                 type="text"
-                placeholder={t("search-key")}
-                className="pl-10 pr-4 py-2 w-full border-class-employee placeholder:text-[#c2c2c2] font-medium"
+                placeholder={t("search-by-name-or-phone")}
+                className="pl-10 pr-4 py-2  border-class-employee placeholder:text-[#c2c2c2] w-[300px] font-medium"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -284,6 +301,9 @@ export default function Employee() {
               <TableHeader className="tb-col">
                 <TableRow>
                   <TableHead className="font-semibold text-black">
+                    {t("id")}
+                  </TableHead>
+                  <TableHead className="font-semibold text-black">
                     {t("name")}
                   </TableHead>
                   <TableHead className="hidden sm:table-cell font-semibold text-black">
@@ -315,14 +335,12 @@ export default function Employee() {
                   </TableRow>
                 ) : Role === "admin" ? (
                   currentEmployees
-                    ?.sort(
-                      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-                    )
                     ?.map((employee, index) => (
                       <TableRow
                         key={employee.id || `employee-${index}`}
                         className="text-muted-foreground border-0"
                       >
+                        <TableCell>{employee?.id}</TableCell>
                         <TableCell>{`${employee?.firstName} ${employee?.lastName}`}</TableCell>
                         <TableCell className="hidden sm:table-cell">
                           {employee?.email}
@@ -372,14 +390,12 @@ export default function Employee() {
                     ))
                 ) : (
                   currentEmployees
-                    ?.sort(
-                      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-                    )
                     ?.map((employee, index) => (
                       <TableRow
                         key={employee.id || `employee-${index}`}
                         className="text-muted-foreground border-0"
                       >
+                        <TableCell>{employee?.user?.id}</TableCell>
                         <TableCell>{`${employee?.user?.firstName} ${employee?.user?.lastName}`}</TableCell>
                         <TableCell className="hidden sm:table-cell">
                           {employee?.user?.email}
