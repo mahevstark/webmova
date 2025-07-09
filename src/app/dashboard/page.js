@@ -241,11 +241,11 @@ export default function Dashboard() {
                       </div>
                       <div className="flex border justify-between items-center px-4 gap-3 shadow-md sm:px-5 pt-4 pb-4 rounded-lg ">
                         <p className="text-sm text-muted-foreground">Wallet Type</p>
-                        <p className="text-2xl font-bold">{user?.wallet?.type ? user?.wallet?.type : "None"}</p>
+                        <p className="text-2xl font-bold">MOWA</p>
                       </div>
                       <div className="flex border justify-between items-center px-4 gap-3 shadow-md sm:px-5 pt-4 pb-4 rounded-lg ">
                         <p className="text-sm text-muted-foreground">Provider</p>
-                        <p className="text-2xl font-bold">{user?.wallet?.provider ? user?.wallet?.provider : "None"}</p>
+                        <p className="text-2xl font-bold">MOWA</p>
                       </div>
                     </div>
                   </CardContent>
