@@ -243,7 +243,7 @@ export default function profile() {
                   </div>
                   <div className="flex gap-1 justify-between items-center  flex-col border px-12 pt-2 shadow pb-2 rounded-lg">
                     <p className="text-2xl font-bold text-gray-600">
-                      {employee?.wallet?.type || "Wallet Type"}
+                      MOWA
                     </p>
                     <p className="text-sm text-muted-foreground text-gray-500">
                       Wallet Type

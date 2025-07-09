@@ -28,7 +28,8 @@
   "Users": {
   "users": "Utilisateurs",
   "emp": "Employés",
-  "search-key": "Mot-clé de recherche",
+  "search-by-name-or-phone": "Rechercher par nom ou numéro de téléphone",
+  "id" : "ID",
   "add-user": "Ajouter un utilisateur",
   "add-emp": "Ajouter un employé",
   "name": "Nom",
@@ -52,6 +53,7 @@
 "Transactions":{
   "transaction-history": "Historique des transactions",
   "filter-type": "Filtrer par type de transaction",
+  "search-by-name-or-id": "Rechercher par nom ou ID",
   "transfer": "Transfert",
   "deposit": "Dépôt",
   "requested": "Demandé",

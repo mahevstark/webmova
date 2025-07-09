@@ -170,6 +170,7 @@ const registerEmp = async (formdata, token, id, role) => {
           lastName: formdata?.lastName,
           email: formdata?.email,
           phoneNumber: formdata?.phoneNumber,
+          profilePicture: formdata?.profilePicture,
           Role: "USER",
           isAdmin: false,
           password: formdata?.password,
@@ -180,6 +181,7 @@ const registerEmp = async (formdata, token, id, role) => {
           lastName: formdata?.lastName,
           email: formdata?.email,
           phoneNumber: formdata?.phoneNumber,
+          profilePicture: formdata?.profilePicture,
         }));
 
     console.log("data to go", data, "  ", token);

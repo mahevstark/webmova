@@ -53,11 +53,11 @@ export default function CreateProfile() {
             newErrors.lastName = "Last name is required";
         }
 
-        // Phone Number (E.164 international format, e.g. +1234567890)
+        // Phone Number (simple format, 10-15 digits, no + required)
         if (!formData.phoneNumber.trim()) {
             newErrors.phoneNumber = "Phone number is required";
-        } else if (!/^\+\d{10,15}$/.test(formData.phoneNumber)) {
-            newErrors.phoneNumber = "Please enter a valid phone number in international format (e.g. +1234567890)";
+        } else if (!/^\d{10,15}$/.test(formData.phoneNumber)) {
+            newErrors.phoneNumber = "Please enter a valid phone number (10-15 digits, numbers only)";
         }
 
         // Date of Birth (YYYY-MM-DD, valid date, not in the future)
@@ -244,7 +244,7 @@ export default function CreateProfile() {
                                 name="phoneNumber"
                                 value={formData.phoneNumber}
                                 onChange={handleInputChange}
-                                placeholder="Phone Number (e.g. +1234567890)"
+                                placeholder="Phone Number (e.g. 1234567890)"
                                 className={`w-full h-12 px-4 border-2 rounded-lg outline-none focus:ring-0 ${errors.phoneNumber ? 'border-red-500' : 'border-color-input'
                                     }`}
                             />

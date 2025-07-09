@@ -34,7 +34,7 @@ export default function signin() {
     // Email: RFC 5322 Official Standard (simplified)
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     // Phone: E.164 international format, e.g. +1234567890 (10-15 digits)
-    const phoneRegex = /^\+\d{10,15}$/;
+    const phoneRegex = /^\d{10,15}$/;
 
     if (emailRegex.test(value)) return "Email";
     if (phoneRegex.test(value)) return "Phone";
@@ -56,21 +56,29 @@ export default function signin() {
       const response = await GlobalApi.login(phone, pass, role);
       console.log("response", response);
 
+      // Enhanced security: check role and isAdmin from backend response
+      const userRole = response?.data?.user?.role || response?.data?.role;
+      const isAdminFlag = response?.data?.user?.isAdmin ?? response?.data?.isAdmin;
+
+      console.log("userRole", userRole);
+      console.log("isAdminFlag", isAdminFlag);
 
       if (response?.status === 200) {
-        if (role === "admin") {
-
+        if (userRole === "STANDARD" && isAdminFlag === true) {
           setlogin(response?.data?.user, response?.data?.token, "admin");
           setloading(false);
           toast("Login Success");
-        } else {
-          setlogin(response?.data?.data?.user, response?.data?.data?.token, "businessUser");
+        } else if (userRole === "BUSINESS" && isAdminFlag === false) {
+          setlogin(response?.data?.data?.user || response?.data?.user, response?.data?.data?.token || response?.data?.token, "businessUser");
           setloading(false);
           toast("Login Success");
+        } else {
+          setloading(false);
+          toast("Access Denied: Role mismatch or insufficient privileges", { description: "Please check your credentials or contact support." });
+          return;
         }
       } else {
         setloading(false);
-
         toast("Login Error", {
           description: response?.message,
         });
@@ -139,11 +147,11 @@ export default function signin() {
                 <input
                   id="phone"
                   name="phone"
-                  type="tel"
+                  type={isAdmin ? "email" : "tel"}
                   required
                   className="w-full focus:outline-none text-black focus:ring-0 border-0 placeholder:text-gray-400"
                   placeholder={
-                    isAdmin ? "Enter your Email" : "Enter Your Phone Number (e.g. +1234567890)"
+                    isAdmin ? "Enter your Email" : "Enter Your Phone Number (e.g. 1234567890)"
                   }
                   value={phone || ""}
                   onChange={(e) => setphone(e.target.value)}
