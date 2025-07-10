@@ -46,7 +46,8 @@
   "cancel": "Cancelar",
   "view": "Ver",
 "delete": "Eliminar",
-"reset": "Restablecer"
+"reset": "Restablecer",
+"role": "Rol"
 
 },
 "Transactions":{

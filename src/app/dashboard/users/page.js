@@ -48,6 +48,7 @@ export default function Employee() {
   const [activatingEmployees, setActivatingEmployees] = useState({});
   const [Role, setRole] = useState(null);
   const [statusFilter, setStatusFilter] = useState(null);
+  const [userTypeFilter, setUserTypeFilter] = useState(null); // NEW: filter for user type
 
   useEffect(() => {
     const role = Cookies.get("role");
@@ -61,6 +62,11 @@ export default function Employee() {
     }, 700);
     return () => clearTimeout(handler);
   }, [searchTerm]);
+
+  // Reset page to 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearchTerm, statusFilter, userTypeFilter]);
 
   const itemsPerPage = 12;
 
@@ -129,6 +135,8 @@ export default function Employee() {
   const handleResetFilters = () => {
     setSearchTerm("");
     setStatusFilter(null);
+    setUserTypeFilter(null); // NEW: reset user type filter
+    setCurrentPage(1); // Reset pagination to page 1
   };
 
   const filteredEmployees = employees?.filter((employee) => {
@@ -138,10 +146,12 @@ export default function Employee() {
     const isActive = Role === "admin"
       ? employee?.isActive
       : employee?.user?.isActive;
+    const roleValue = Role === "admin" ? employee?.role : employee?.user?.role; // NEW: get role
     const matchesSearch = name?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) || employee?.phoneNumber?.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
     const matchesStatus =
       statusFilter === null ? true : statusFilter === "active" ? isActive : !isActive;
-    return matchesSearch && matchesStatus;
+    const matchesUserType = userTypeFilter === null ? true : userTypeFilter === roleValue; // UPDATED: filter by 'STANDARD'/'BUSIENSS'
+    return matchesSearch && matchesStatus && matchesUserType;
   });
 
   // Sort filteredEmployees by createdAt descending (newest first)
@@ -279,6 +289,50 @@ export default function Employee() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            {/* User Type Filter Dropdown - Only for Admin */}
+            {Role === "admin" && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="ml-0 sm:ml-2 min-w-[160px]">
+                    {userTypeFilter === null
+                      ? "All Types"
+                      : userTypeFilter === "STANDARD"
+                      ? "Standard Users"
+                      : userTypeFilter === "BUSINESS"
+                      ? "Business Users"
+                      : userTypeFilter === "EMPLOYEE"
+                      ? "Employee Users"
+                      : "All Types"}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="min-w-[160px]">
+                  <DropdownMenuItem
+                    onClick={() => setUserTypeFilter(null)}
+                    className={userTypeFilter === null ? "font-semibold" : ""}
+                  >
+                    All Types
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setUserTypeFilter("STANDARD")}
+                    className={userTypeFilter === "STANDARD" ? "font-semibold" : ""}
+                  >
+                    Standard Users
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setUserTypeFilter("BUSINESS")}
+                    className={userTypeFilter === "BUSINESS" ? "font-semibold" : ""}
+                  >
+                    Business Users
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setUserTypeFilter("EMPLOYEE")}
+                    className={userTypeFilter === "EMPLOYEE" ? "font-semibold" : ""}
+                  >
+                    Employee Users
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
             <Button
               variant="outline"
               className="ml-0 sm:ml-2"
@@ -314,6 +368,10 @@ export default function Employee() {
                   </TableHead>
                   <TableHead className="font-semibold text-black">
                     {t("status")}
+                  </TableHead>
+                  {/* NEW: Role column visible to all */}
+                  <TableHead className="font-semibold text-black">
+                    {t("role")}
                   </TableHead>
                   <TableHead className="hidden sm:table-cell font-semibold text-black">
                     {t("balance")}
@@ -359,6 +417,9 @@ export default function Employee() {
                             {employee?.isActive ? <Active /> : <Nonactive />}{" "}
                             {employee?.isActive ? "Active" : "Inactive"}
                           </button>
+                        </TableCell>
+                        <TableCell>
+                          {employee?.role}
                         </TableCell>
                         <TableCell className="hidden sm:table-cell">
                           {employee?.wallet?.balance}
@@ -418,6 +479,9 @@ export default function Employee() {
                             )}{" "}
                             {employee?.user?.isActive ? "Active" : "Inactive"}
                           </button>
+                        </TableCell>
+                        <TableCell>
+                          {employee?.user?.role}
                         </TableCell>
                         <TableCell className="hidden sm:table-cell">
                           {employee?.user?.wallet?.balance}
