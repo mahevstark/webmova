@@ -16,6 +16,7 @@ import {
   ScrollText,
   Shield,
   User,
+  DollarSign,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
@@ -88,6 +89,11 @@ export default function Settings({ page }) {
         href: "/dashboard/settings/webApp-settings",
         icon: LayoutGrid,
         label: t("webapp-settings"),
+      },
+      {
+        href: "/dashboard/settings/service-charges",
+        icon: DollarSign,
+        label: "Service Charges",
       },
     ];
   } else {

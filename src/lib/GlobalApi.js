@@ -1346,6 +1346,71 @@ const getCta = async () => {
   }
 };
 
+// Service Charges API functions
+const setServiceCharges = async (token, formData) => {
+  try {
+    let data = JSON.stringify({
+      domesticCharge: parseFloat(formData.domesticCharge),
+      internationalCharge: parseFloat(formData.internationalCharge),
+    });
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "admin/set-service-charges",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while setting service charges", error);
+    return error?.response?.data;
+  }
+};
+
+const getServiceCharges = async (token) => {
+  try {
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: "admin/get-service-charges",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while getting service charges", error);
+    return error?.response?.data;
+  }
+};
+
+const getServiceChargesHistory = async (token) => {
+  try {
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: "admin/service-charges-history",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axiosClient.request(config);
+    return response?.data;
+  } catch (error) {
+    console.log("error while getting service charges history", error);
+    return error?.response?.data;
+  }
+};
+
 export default {
   login,
   getAllUsers,
@@ -1399,4 +1464,7 @@ export default {
   transactioninsights,
   createCTA,
   getCta,
+  setServiceCharges,
+  getServiceCharges,
+  getServiceChargesHistory,
 };
